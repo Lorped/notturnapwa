@@ -1,0 +1,60 @@
+<ion-header>
+
+	<ion-toolbar color="medium">
+		<ion-buttons slot="start">
+			<ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Modifica Contatto</ion-title>
+	</ion-toolbar>
+
+</ion-header>
+
+
+<ion-content color="dark" class="master" padding >
+		
+	<form (ngSubmit)="change()" #changeForm="ngForm">
+	  <ion-row >
+      <ion-col  >
+        <ion-item class="master" color="black" >
+          <ion-input style="color:#ff0000; font-size:1.3em;" type="text" placeholder="Nome" name="contatto" [(ngModel)]="tochange.contatto" required></ion-input>
+        </ion-item>	
+		  </ion-col>
+	  </ion-row>			
+		<ion-row >
+		  <ion-col >
+			  <ion-item class="master" color="black" >
+				  <ion-checkbox name="cell"  [(ngModel)]="cell.checked" color="danger" >Cellulare</ion-checkbox>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row >
+		  <ion-col >				
+			  <ion-item class="master" color="black" >
+				  <ion-checkbox name="email"  [(ngModel)]="email.checked" color="danger" >Email</ion-checkbox>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row >			
+			<ion-col >				
+				<ion-item class="master" color="black" >
+					<ion-checkbox name="home"  [(ngModel)]="home.checked" color="danger" >Rifugio</ion-checkbox>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+    <ion-row >
+      <ion-col >	
+        <ion-item class="master" color="black" >
+          <ion-input name="note" type="text" placeholder="Altre annotazioni" [(ngModel)]="tochange.note" ></ion-input>
+        </ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col>
+				<ion-button color="danger" class="submit-btn" shape="round" expand="full" type="submit" [disabled]="!changeForm.form.valid">Modifica</ion-button>
+			</ion-col>
+		</ion-row>
+	</form>
+				
+</ion-content>
+
+

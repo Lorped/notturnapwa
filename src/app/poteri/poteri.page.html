@@ -1,0 +1,31 @@
+<ion-header>
+  
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Poteri di {{nomed}}</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="master" color="dark" padding>
+
+  <ion-row *ngFor="let p of mypoteri">
+    <ion-col *ngIf="p.attivo=='N' && p.livellopot<5 " >
+      <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+    </ion-col>
+    <ion-col *ngIf="p.attivo=='N' && p.livellopot==5 " >
+      <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+    </ion-col>
+    <ion-col *ngIf="p.attivo=='X'  " >
+      <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.psvuoti==0 || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+    </ion-col>
+    <ion-col *ngIf="p.attivo=='Y'  " >
+      <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.psvuoti==0 || user.fulldata.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+    </ion-col>
+    <ion-col *ngIf="p.attivo=='S'"  style="font-size: 1.1em; text-align: center;">
+      - {{p.livellopot}}.{{p.nomepotere}} (attivo) -
+    </ion-col>
+  </ion-row>
+</ion-content>

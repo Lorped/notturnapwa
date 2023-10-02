@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Morte Ultima</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding class="master" color="dark">
+
+  <ion-row class="master" color="dark">
+    <ion-col>
+      <span style="font-size:1.2em; border-bottom: 5px; text-align: center;"><br><p>Premere solo se il PG ha raggiunto la</p> <p>Morte Ultima</p></span> 
+    </ion-col>
+  </ion-row>
+  
+  <form (ngSubmit)="morte()" #registerForm="ngForm" >
+  <ion-button class="submit-btn2" shape="round" size="full" color="danger" type="submit" >Morte Ultima<br>Conferma</ion-button>
+  </form>
+
+</ion-content>

@@ -1,0 +1,72 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Rubrica</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<ion-content color="dark" class="master">
+
+
+
+  <ion-list class="master" color="dark">
+    <ion-item-sliding *ngFor="let item of rubrica" style="background-color:#000000">
+		
+      <ion-item color="dark" class="master" (click)="edit(item)">
+        <ion-label>
+			    <h2 style="color:#ff0000;">{{item.contatto}}</h2>
+
+			    <p class="mymed">{{item.note}}</p>
+        </ion-label>
+        <ion-icon *ngIf="item.cell==1"  name="call"  slot="end"></ion-icon>
+        <ion-icon *ngIf="item.email==1" name="mail"  slot="end"></ion-icon>
+        <ion-icon *ngIf="item.home==1" name="home"  slot="end"></ion-icon>
+	    </ion-item>
+
+		<ion-item-options>
+			<ion-button color="medium" (click)="edit(item)">
+				<ion-icon name="create-outline"></ion-icon>
+				Edit
+			</ion-button>
+		</ion-item-options>
+		<ion-item-options side="start">
+			<ion-button color="danger" (click)="delete(item)">
+				<ion-icon name="trash-outline"></ion-icon>
+				Delete
+			</ion-button>
+		</ion-item-options>
+	</ion-item-sliding>
+  </ion-list>
+
+  <ion-list class="master" color="dark">
+	  <ion-item class="master" color="dark">
+	  </ion-item>
+  </ion-list>
+
+
+
+	<ion-fab  slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button  color="danger" (click)="add()"><ion-icon name="add"></ion-icon></ion-fab-button>
+  </ion-fab>
+
+    <!--
+  <div class="ion-text-end"color="dark">
+    <ion-button color="danger" (click)="add()"  shape="round">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+  </div>
+  -->
+
+
+</ion-content>
+
+
+  <!--
+	<ion-fab bottom right>
+    <button ion-fab color="danger" (click)="add()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+  -->
+

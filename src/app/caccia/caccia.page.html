@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Caccia</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<ion-content padding class="master" color="dark">
+
+  <ion-row style="align-items: center;" *ngIf="hidevalue==false && BS==1">
+    <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Bacio Selvaggio</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==false && gregge > 0">
+    <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Gregge</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==false && metab==1">
+    <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Metabolismo Efficiente</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==false">
+    <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia Restante</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==false">
+    <ion-col style="color:#FFFFFF; text-align: center; font-size: 2.1em; font-family: 'MyFont';">{{minuti}}:{{secondi}}</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==true">
+    <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Caccia terminata!</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==true">
+    <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Saziati {{recuperati}} livelli di Sete</ion-col>
+  </ion-row>
+  <ion-row style="align-items: center;" *ngIf="hidevalue==true && toxic==1">
+    <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Caccia sfortunata!!</ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col *ngIf="hidevalue==false" >
+      <ion-button color="danger" (click)="goback()"  class="submit-btn2" shape="round" expand="full" type="submit"  >Cancella la caccia</ion-button>
+    </ion-col>
+    <ion-col *ngIf="hidevalue==true" >
+      <ion-button  color="danger" (click)="goback()"  class="submit-btn2" shape="round" expand="full" type="submit"  >Torna</ion-button>
+    </ion-col>
+  </ion-row >
+
+</ion-content>

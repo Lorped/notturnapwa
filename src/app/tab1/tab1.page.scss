@@ -1,0 +1,29 @@
+.mypad ion-grid ion-row ion-col ion-item  {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.mypad2 {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.mypad3 {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+ 
+  // ion-grid ion-row ion-col {
+  //   padding: 10px 10px 0px 0px;
+  //  }
+ 
+br {
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: -5px; /* change this to whatever height you want it */
+}
+

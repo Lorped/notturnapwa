@@ -1,0 +1,187 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Personaggio</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="logoutx()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content color="dark" class="master" no-padding >
+
+	<!-- <ion-spinner *ngIf="loading" id="feed-spinner"></ion-spinner> -->
+	<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
+  <h3 class="mypad2">{{user.fulldata['nomepg']}}</h3>
+
+    <div style="background-color: #222222; border: 1px solid #ff0000;  align: center; border-radius: 2px; margin-left:5px; margin-right:5px;" >
+      <ion-grid class="mypad">
+        <ion-row>
+          <ion-col size="3" style="color:#FF0000;">Clan</ion-col>
+          <ion-col size="4" >{{user.fulldata['nomeclan']}}</ion-col>
+          <ion-col size="4" style="color:#FF0000;">Generazione</ion-col>
+          <ion-col size="1" >{{user.fulldata['generazione']}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="3" style="color:#FF0000;">Status</ion-col>
+          <ion-col size="4" >{{user.fulldata['status']}}</ion-col>
+          <ion-col size="4" style="color:#FF0000;">Blood Potency</ion-col>
+          <ion-col size="1" >{{user.fulldata['bloodp']}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="3" style="color:#FF0000;">Sentiero</ion-col>
+          <ion-col style="text-align:left;">{{user.fulldata['sentiero']}}&nbsp;&nbsp;<span style="color:#FF0000;">-</span>&nbsp;&nbsp;{{user.fulldata['valsentiero']}}/10</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="5" style="color:#FF0000;">Forza di Volontà</ion-col>
+          <ion-col size="2" >{{user.fulldata['fdv']}}/{{user.fulldata['fdvmax']}}</ion-col>
+          <ion-col size="2" style="color:#FF0000;">XP <span style="color:#ffffff;">{{user.fulldata['xp']}}</span></ion-col>
+          <ion-col size="3" style="color:#FF0000;">Spesi <span style="color:#ffffff;">{{user.fulldata['xpspesi']}}</span></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" style="color:#FF0000;">Fama in città</ion-col>
+          <!-- <ion-col><img src="assets/img/5b/{{user.fulldata['fama1']}}.png"></ion-col> -->
+          <ion-col><i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mymedicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata['fama1']}"></i></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" style="color:#FF0000;">Fama tra i Vampiri</ion-col>
+          <!-- <ion-col><img src="assets/img/5b/{{user.fulldata['fama2']}}.png"></ion-col> -->
+          <ion-col><i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mymedicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata['fama2']}"></i></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" style="color:#FF0000;">Fama nel Mondo Oscuro</ion-col>
+          <!-- <ion-col><img src="assets/img/5b/{{user.fulldata['fama3']}}.png"></ion-col> -->
+          <ion-col><i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mymedicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata['fama3']}"></i></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="3" style="color:#FF0000;" >Livello Sete: </ion-col>
+          <ion-col size="2" >{{user.fulldata['PScorrenti']}}/{{user.fulldata['setetot']}}</ion-col>
+          <!-- <ion-col><img *ngFor="let item of user.fulldata['PScorrenti']|times" src="assets/img/red.png"><img *ngFor="let item of user.fulldata['psvuoti']|times" src="assets/img/white.png"></ion-col> -->
+          <ion-col><i *ngFor="let item of user.fulldata['PScorrenti']|times ; let ix = index" class="fa fa-circle mysmallicon myred2"></i><i *ngFor="let item of user.fulldata['psvuoti']|times ; let ix = index" class="fa fa-circle mysmallicon mywhite"></i></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="3" style="color:#FF0000;" >Punti Ferita</ion-col>
+          <ion-col size="1">{{user.fulldata['pf']}}</ion-col>
+          <ion-col size="1" style="color:#FF0000; font-size:0.9em;">RD</ion-col>
+          <ion-col size="1">{{user.fulldata['rd']}}</ion-col>
+          <ion-col size="1" style="color:#FF0000; font-size:0.9em;">RP</ion-col>
+          <ion-col size="1">{{user.fulldata['rp']}}</ion-col>
+          <ion-col size="2" style="color:#FF0000; font-size:0.9em;">Bane</ion-col>
+          <ion-col size="1">+{{user.fulldata['bane']}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+<!--
+  <ion-grid>
+    <ion-row>
+      <ion-col><hr/></ion-col>
+      <ion-col style="color:#FFFFFF; font-size: 1.5em; text-align: center;">Attributi</ion-col>
+      <ion-col><hr/></ion-col>
+    </ion-row>
+  </ion-grid>
+-->
+<p>
+  <div style="  alig: center; margin-left:10px; margin-right:10px;" >
+  <ion-grid no-padding >
+    <ion-row style="align-items: center;">
+      <ion-col size="1" ><hr/></ion-col>
+      <ion-col size="5" style="text-align: center;">Attributi Fisici </ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Forza</ion-col>
+      <ion-col>Destrezza</ion-col>
+      <ion-col>Attutimento</ion-col>
+    </ion-row>
+    <ion-row>
+      <!--
+        <ion-col><img src="assets/img/10/{{user.fulldata.forza}}.png"></ion-col>
+        <ion-col><img src="assets/img/10/{{user.fulldata.destrezza}}.png"></ion-col>
+        <ion-col><img src="assets/img/10/{{user.fulldata.attutimento}}.png"></ion-col>
+      -->
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.forza}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.forza}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.destrezza}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.destrezza}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.attutimento}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.attutimento}"></i>
+      </ion-col>
+    </ion-row>
+    <ion-row style="align-items: center;">
+      <ion-col size="1" ><hr/></ion-col>
+      <ion-col size="5" style="text-align: center;">Attributi Sociali</ion-col>
+      <ion-col><hr/></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Carisma</ion-col>
+      <ion-col>Persuasione</ion-col>
+      <ion-col>Saggezza</ion-col>
+    </ion-row>
+    <ion-row>
+      <!--
+      <ion-col><img src="assets/img/10/{{user.fulldata.carisma}}.png"></ion-col>
+      <ion-col><img src="assets/img/10/{{user.fulldata.persuasione}}.png"></ion-col>
+      <ion-col><img src="assets/img/10/{{user.fulldata.saggezza}}.png"></ion-col>
+      -->
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.carisma}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.carisma}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.persuasione}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.persuasione}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.saggezza}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.saggezza}"></i>
+      </ion-col>
+    </ion-row>
+    <ion-row style="align-items: center;">
+      <ion-col size="1" ><hr/></ion-col>
+      <ion-col size="5" style="text-align: center;">Attributi Mentali</ion-col>
+      <ion-col><hr/></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Percezione</ion-col>
+      <ion-col>Intelligenza</ion-col>
+      <ion-col>Prontezza</ion-col>
+    </ion-row>
+    <ion-row>
+      <!--
+      <ion-col><img src="assets/img/10/{{user.fulldata.percezione}}.png"></ion-col>
+      <ion-col><img src="assets/img/10/{{user.fulldata.intelligenza}}.png"></ion-col>
+      <ion-col><img src="assets/img/10/{{user.fulldata.prontezza}}.png"></ion-col>
+      -->
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.percezione}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.percezione}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.intelligenza}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.intelligenza}"></i>
+      </ion-col>
+      <ion-col>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.prontezza}"></i><br>
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.prontezza}"></i>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </div>
+
+</ion-content>
+
