@@ -1,0 +1,11 @@
+{
+<<<<<<< HEAD
+  "name": "notturnapwa",
+=======
+  "name": "Notturna4",
+>>>>>>> ca450520b995e6564f2160982fbe451b5a270bba
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
