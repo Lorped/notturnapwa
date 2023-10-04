@@ -41,6 +41,7 @@ export class OggettoPage implements OnInit {
       // console.log (data)
 			this.nomeoggetto=data[0];
 			this.descrizione=data[1];
+      this.ifdomanda  = 0 ;
 			// console.log(this.descrizione);
       // console.log (data.length);
       if(data.length >2  ) {

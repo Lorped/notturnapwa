@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Notturna</string>
+    <string name="title_activity_main">Notturna</string>
+    <string name="package_name">notturna.gdr.larp</string>
+    <string name="custom_url_scheme">notturna.gdr.larp</string>
+</resources>

@@ -77,6 +77,10 @@ export class PoteriPage implements OnInit {
 
         this.showalert(pot);
 
+        if ( this.disc == 2 && livellopot == 5) {  //MAESTA
+          this.user.fulldata.nummaesta = this.user.fulldata.nummaesta - 1 ;
+        }
+
         if (this.user.fulldata['PScorrenti']==0) {
           // VAI VIA
           this.router.navigate(['/tabs/tab5']);

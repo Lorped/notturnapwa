@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "842960782494",
+    "firebase_url": "https://notturna-93b8f.firebaseio.com",
+    "project_id": "notturna-93b8f",
+    "storage_bucket": "notturna-93b8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842960782494:android:5708acf419d8038a",
+        "android_client_info": {
+          "package_name": "notturna.gdr.larp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842960782494-0sor4j8q6o3gfub8d6ges8h6v4sg9t1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhu7mQO6cl77A6zwpJx_deCvsx4ZPqxxc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
