@@ -1,0 +1,39 @@
+<ion-header>
+  
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/poteri"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Telepatia</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="master" color="dark" padding>
+
+  <form (ngSubmit)="invia()" #modificaForm="ngForm">
+
+    <ion-list color="dark" class="master">
+      <ion-item color="dark"  style="background-color: #444444">
+        <ion-icon name="contact" item-start color="danger" ></ion-icon>
+        <ion-select label = "PG" [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
+          <ion-select-option *ngFor="let pg of listautenti" value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+		<ion-item class=master color="dark">
+			<ion-label stacked style="font-size:1.2em;">Messaggio</ion-label>
+			<ion-textarea class=master label="Messaggio"  type="text" rows="12" [(ngModel)]="messaggio" name="newmessaggio" autofocus style="font-size:1.3em;" required></ion-textarea>
+		</ion-item>
+  </ion-list>
+
+	</form>
+
+		<ion-footer color="dark" class="master">
+      <div color="dark">
+				<ion-button color="danger" class="submit-btn" shape="round" size="full"  type="button" [disabled]="!modificaForm.form.valid" (click)="invia()">Invia</ion-button>
+			</div>
+		</ion-footer>
+
+</ion-content>
+

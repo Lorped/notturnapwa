@@ -45,6 +45,7 @@
     "@capacitor/core": "5.2.2",
     "@capacitor/haptics": "5.0.6",
     "@capacitor/keyboard": "5.0.6",
+    "@capacitor/push-notifications": "^5.1.0",
     "@capacitor/splash-screen": "^5.0.6",
 >>>>>>> ca450520b995e6564f2160982fbe451b5a270bba
     "@capacitor/status-bar": "5.0.6",

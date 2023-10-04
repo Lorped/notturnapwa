@@ -72,6 +72,10 @@ const routes: Routes = [
         path: 'addpx',
         loadChildren: () => import('../addpx/addpx.module').then( m => m.AddpxPageModule)
       },
+      {
+        path: 'telepatia',
+        loadChildren: () => import('../telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
+      },
     
         
       {
