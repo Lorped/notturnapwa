@@ -94,6 +94,8 @@ export class afulldata  {
     public rd = 0;              // calcolato
     public rp = 0;              // calcolato
     public note = '';
+    public nummaesta = 0;
+    public lastmaesta = ''; //non usato
 }
 
 @Injectable()

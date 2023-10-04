@@ -69,7 +69,13 @@ export class CacciaPage implements OnInit {
         }
       }
 
+      
       this.maxTime = 600 - 60*this.gregge + 60*this.user.fulldata.addcaccia; 
+
+      if ( this.user.fulldata['idclan'] == "2" ) {  //ventrue
+        this.maxTime = this.maxTime  + 60*3 ;     // 3 min. addizionali
+      }
+
 
       if ( this.metab == 1 ) {
         this.maxTime = 1*this.maxTime - 3*60 ;
