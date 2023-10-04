@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+	<ion-buttons slot="start">
+		<ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
+	</ion-buttons>
+    <ion-title>Modifica Annotazioni</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<ion-content color="dark" padding class=master>
+
+	<ion-item class=master color="dark">
+      <ion-textarea class=master label="Note" type="text" rows="20" [(ngModel)]="this.user.fulldata.note" name="newaanotazioni" autofocus ></ion-textarea>
+	</ion-item>
+
+</ion-content>
+
+<ion-footer color="dark" class="master" >	
+	<div color="dark">
+		<ion-button id="modif-note" color="danger" class="submit-btn" shape="round" expand="full" type="submit" (click)="modifica()" >Modifica</ion-button>
+	</div>
+</ion-footer>		
+
+	
+
+

@@ -1,0 +1,7 @@
+{
+  "name": "notturnapwa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

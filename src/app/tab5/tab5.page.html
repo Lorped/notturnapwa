@@ -1,0 +1,83 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Poteri e Messaggi</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="master" color="dark" >
+
+  <!--
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" class="master">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+-->
+
+
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn2" expand="full" shape="round" color="danger" type="submit" (click)="tiraildado()">Tira un dado</ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn2" expand="full" shape="round" color="danger" type="submit" (click)="addpx()">Aggiungi PX</ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn3" expand="full" shape="round" type="submit" [disabled]="user.fulldata.fdv==0" (click)="usafdv()">Usa Forza di Volontà</ion-button>
+    </ion-col>
+  </ion-row>
+  
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button id="cura" class="submit-btn2" color="danger" expand="full" shape="round" type="submit" [disabled]="user.fulldata.PScorrenti==0" (click)="menops()">Cura Ferite - {{this.user.fulldata.rigen}}</ion-button>
+    </ion-col>
+  </ion-row>
+  
+  <ion-alert
+  trigger="cura"
+  header="Attenzione"
+  subHeader="Cura ferite"
+  [buttons]="alertButtons"
+  message="{{user.fulldata.rigen}}  ferite curate" ></ion-alert>
+
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn3" color="danger" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.psvuoti==0" (click)="gocaccia()">Vai a caccia</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn2" color="danger" expand="full" shape="round" type="submit" (click)="golegami()">Legame di Sangue</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="master" color="dark" >
+    <ion-col>
+      <ion-button class="submit-btn" expand="full" shape="round" type="submit" (click)="gomorte()">Morte Ultima</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="master" color="dark">
+    <ion-col size="6" *ngFor="let pot of this.user.poteri">
+      <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
+    </ion-col>
+  </ion-row>
+  
+
+
+	<ion-list color="dark" class="master"> 
+    <ion-item *ngFor="let tiri of tiridado"  color="dark" class="master" >
+      <ion-label class="ion-text-wrap" >
+        <p style="color: #707070">{{tiri.data}} {{tiri.ora}}</p><div>{{tiri.pg}} {{tiri.testo}} </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

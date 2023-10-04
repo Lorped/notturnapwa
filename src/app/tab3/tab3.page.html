@@ -1,0 +1,128 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Background</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content color="dark" class="master" padding>
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col col-6 style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Background</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row *ngFor="let desc of this.user.skill">
+    <ion-col size="7" *ngIf="desc.tipologia == 5 ">{{ desc.nomeskill }}</ion-col>
+    <ion-col *ngIf="desc.tipologia == 5 && desc.nomeskill != 'Contatti' ">
+      <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
+    </ion-col>
+    <!-- <ion-col *ngIf="desc.tipologia == 5 && desc.nomeskill == 'Contatti' " stype="text-align:left;">{{ desc.livello }}/20</ion-col>  -->
+  </ion-row>
+
+  <ion-row *ngFor="let desc of this.user.skill">
+      <ion-col size="7" *ngIf="desc.tipologia == 7  ">&nbsp;&nbsp;- {{ desc.nomeskill }}</ion-col>
+      <ion-col *ngIf="desc.tipologia == 7  ">
+        <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
+        <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
+    </ion-col>
+  </ion-row>
+
+  <ion-row style="align-items: center;" >
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Pregi</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row *ngFor="let desc of this.user.skill" >
+    <ion-col *ngIf="desc.tipologia == 8 && desc.livello > 0 ">{{ desc.nomeskill}}</ion-col>
+  </ion-row>
+
+  <ion-row style="align-items: center;" >
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Difetti</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+	<ion-row *ngFor="let desc of this.user.skill" >
+    <ion-col *ngIf="desc.tipologia == 8 && desc.livello < 0 ">{{ desc.nomeskill}}</ion-col>
+  </ion-row>
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Rifugio</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+  
+  <ion-row >
+    <ion-col >{{this.user.fulldata.rifugio}}</ion-col>
+  </ion-row>
+
+	<ion-row style="align-items: center;" >
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Conoscenze di Clan</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col style="text-align: center;"><ion-button color="tertiary" shape="round" fill="outline" (click)="openUrl()">Open</ion-button></ion-col>
+  </ion-row>
+
+
+  <ion-row style="align-items: center;" >
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Manuale</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col style="text-align: center;"><ion-button color="tertiary" shape="round" fill="outline" (click)="openUrl2()">Open</ion-button></ion-col>
+  </ion-row>
+
+  <ion-row style="align-items: center;" >
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">DownTime</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+  <ion-row >
+    <ion-col style="text-align: center;"><ion-button color="tertiary" shape="round" fill="outline" (click)="openUrlDT()" [disabled]="this.user.fulldata.urldt==''">Open</ion-button></ion-col>
+  </ion-row>
+
+  <ion-row style="align-items: center;" *ngIf="this.user.fulldata.notemaster != ''">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Annotazioni oggetti</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+  <ion-row >
+          <ion-col style="color:#FFFFFF; text-align: justify; font-size: 1.1em;"><span [innerHTML]="this.notemaster"></span></ion-col>
+        </ion-row>
+	<ion-row style="align-items: center;" *ngIf="this.user.fulldata.note != ''">
+      <ion-col ><hr/></ion-col>
+      <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Annotazioni</ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+	<ion-row >
+    <ion-col style="color:#FFFFFF; text-align: justify; font-size: 1.1em;"><span [innerHTML]="this.note"></span></ion-col>
+  </ion-row>
+
+
+
+    <div class="ion-text-end">
+      <ion-button color="danger" (click)="modifica()"  shape="round">
+        <ion-icon name="pencil-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+	<!--
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="danger" (click)="modifica()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+-->
+
+</ion-content>

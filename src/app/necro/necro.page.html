@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Necromanzie</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="master" color="dark" padding>
+  <ion-row *ngFor="let p of user.necro">
+    <ion-col size="2"><hr/></ion-col>
+    <ion-col size="8" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">{{p.nomenecro}}</ion-col>
+    <ion-col size="2"><hr/></ion-col>
+
+    <ion-col size="12" *ngFor="let pp of p.poteri" text-center>
+      <ion-button  *ngIf="pp.attivo=='N'" (click)="gonecro(pp.livello, pp.nomenecro2, p.nomenecro)"  class="submit-btn2" shape="round" size="full" color="danger" type="submit" [disabled]="(user.fulldata.PScorrenti==0)||(user.fulldata.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nomenecro2}}</ion-button>
+      <span  *ngIf="pp.attivo=='S'"  style="font-size: 1.1em;">{{pp.livello}} - {{pp.nomenecro2}} (attivo)</span>
+    </ion-col>
+
+  </ion-row>
+</ion-content>
+

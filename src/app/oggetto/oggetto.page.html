@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Oggetto</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="master" color="dark" padding>
+
+	<ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Analisi Oggetto</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;"><h3 class="mypad2">{{nomeoggetto}}</h3></ion-col>
+  </ion-row>
+  <ion-row >
+    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" class="selectable">{{descrizione}}</ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="ifdomanda != 0" >
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+  <ion-row *ngIf="ifdomanda != 0" >
+    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" ><h3 class="mypad2">{{domanda}}</h3></ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="ifdomanda != 0" >
+    <ion-col style="text-align: center;" *ngIf="esito != 2" ><ion-button color="tertiary" shape="round" fill="outline" (click)="rispSI()" >SI</ion-button></ion-col>
+    <ion-col style="text-align: center;" *ngIf="esito != 1" ><ion-button color="tertiary" shape="round" fill="outline" (click)="rispNO()" >NO</ion-button></ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="ifdomanda != 0 && esito !=0 " >
+    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" class="selectable">{{esitotext}}</ion-col>
+  </ion-row>
+
+</ion-content>

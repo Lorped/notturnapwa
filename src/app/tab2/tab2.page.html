@@ -1,0 +1,150 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-title>Skill e Conoscenze</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content color="dark" class="master" padding>
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Discipline e Taumaturgie</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col size="7">Bonus attivazione</ion-col>
+	  <ion-col>+{{ this.user.fulldata.attivazione }}</ion-col>
+  </ion-row>
+
+
+  <ion-row *ngFor="let desc of this.user.skill">
+    <ion-col size="7" *ngIf="desc.tipologia == 2 ">{{ desc.nomeskill }}</ion-col>
+    <ion-col *ngIf="desc.tipologia == 2 ">
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i><br>
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix+5 >= desc.livello}"></i>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngFor="let desc of this.user.skill">
+    <ion-col size="7" *ngIf="desc.tipologia == 3 "><span stype="color:#FF0000;">&nbsp;&nbsp;- </span> {{ desc.nomeskill }}</ion-col>
+    <ion-col *ngIf="desc.tipologia == 3 ">
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
+      <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
+    </ion-col>
+  </ion-row>
+
+	<ion-row style="align-items: center;" *ngIf="rituali == 1">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="text-align: center; font-size: 1em;">Rituali</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+	<ion-row *ngFor="let desc of this.user.skill">
+    <ion-col *ngIf="desc.tipologia == 11 "><span stype="color:#FF0000;"></span> {{ desc.nomeskill }}</ion-col>
+	</ion-row>
+
+
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="text-align: center; font-size: 1em;">Competenze del Personaggio</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+	<ion-row *ngFor="let desc of this.user.skill">
+    <ion-col size="7" *ngIf="desc.tipologia == 0 ">{{ desc.nomeskill }}</ion-col>
+    <ion-col *ngIf="desc.tipologia == 0 ">
+      <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="5" style="text-align: center;">Skill di Combattimento</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row *ngFor="let desc of this.user.skill">
+    <ion-col size="7" *ngIf="desc.tipologia == 1 ">{{ desc.nomeskill }}</ion-col>
+    <ion-col *ngIf="desc.tipologia == 1 ">
+      <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
+      <i *ngFor="let item of 5|times ; let ix = index" class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
+    </ion-col>
+  </ion-row>
+
+ 	<ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Analizza Oggetto</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row >
+    <ion-col style="text-align: center;"><ion-button color="danger" shape="round" outline (click)="openbarcode()">Scan</ion-button></ion-col>
+  </ion-row>
+
+	<ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Danni delle Armi</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="7" >Pugno/Calcio</ion-col>
+    <ion-col >{{ foripot2  }} </ion-col>
+	</ion-row>
+	<ion-row *ngIf="artigli == 1">
+    <ion-col size="7" >Artigli della Bestia</ion-col>
+    <ion-col >{{ 1*forza +  1*rissa + 1*potenza +1 }} </ion-col>
+	</ion-row>
+  <ion-row>
+    <ion-col size="7" >Pugnale/Paletto</ion-col>
+    <ion-col >{{ 1*fomipot2 +1 }} </ion-col>
+  </ion-row>
+	<ion-row>
+    <ion-col size="7" >Spada corta/Mazza</ion-col>
+    <ion-col >{{ 1*fomipot2 +2 }} </ion-col>
+	</ion-row>
+  <ion-row>
+    <ion-col size="7" >Spada lunga</ion-col>
+    <ion-col >{{ 1*fomipot2 +3 }} </ion-col>
+  </ion-row>
+	<ion-row>
+    <ion-col size="7" >Pugnale da lancio</ion-col>
+    <ion-col >{{ 1*folapot2 +1 }} </ion-col>
+	</ion-row>
+	<ion-row>
+    <ion-col size="7" >Balestra</ion-col>
+    <ion-col >{{ treti2 +1 }} </ion-col>
+	</ion-row>
+
+	<ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Armi da Fuoco</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+	<ion-row *ngIf="fuoco > 0">
+    <ion-col size="7" >Revolver/Pistola leggera</ion-col>
+    <ion-col >{{ trefuoco2  }} </ion-col>
+	</ion-row>
+	<ion-row *ngIf="fuoco > 0">
+    <ion-col size="7" >Revolver/Pistola pesante</ion-col>
+    <ion-col >{{ trefuoco2 +1 }} </ion-col>
+	</ion-row>
+	<ion-row *ngIf="fuoco > 1">
+    <ion-col size="7" >Mitra leggero</ion-col>
+    <ion-col >{{ trefuoco2 +2 }} </ion-col>
+	</ion-row>
+	<ion-row *ngIf="fuoco > 2">
+    <ion-col size="7" >Mitra pesante/d'assalto</ion-col>
+    <ion-col >{{ trefuoco2 +3 }} </ion-col>
+	</ion-row>
+
+
+</ion-content>

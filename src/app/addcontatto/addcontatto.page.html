@@ -1,0 +1,59 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+	<ion-buttons slot="start">
+		<ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+	</ion-buttons>
+    <ion-title>Aggiungi Contatto</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content color="dark" class ="master" padding >
+	
+	<form (ngSubmit)="add()" #addForm="ngForm">
+		<ion-row >
+			<ion-col >
+				<ion-item class="master" color="black" >		
+			  		<ion-input style="color:#ff0000; font-size:1.3em;"  type="text" placeholder="Nome del Contatto" name="contatto" [(ngModel)]="nuovoContatto.contatto" autofocus required></ion-input>
+				</ion-item>
+			</ion-col>
+		</ion-row>			
+		<ion-row >
+			<ion-col >
+				<ion-item class="master" color="black">
+					<ion-checkbox name="cell" [(ngModel)]="nuovoContatto.cell" color="danger" >Cellulare</ion-checkbox>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row >
+			<ion-col >			
+				<ion-item class="master" color="black">
+					<ion-checkbox name="email" [(ngModel)]="nuovoContatto.email" color="danger" >Email</ion-checkbox>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row >
+			<ion-col >		
+				<ion-item class="master" color="black">
+					<ion-checkbox name="home" [(ngModel)]="nuovoContatto.home" color="danger" >Rifugio</ion-checkbox>
+				</ion-item>
+			</ion-col>			
+		</ion-row>
+		<ion-row >
+			<ion-col >
+				<ion-item class="master" color="black">
+					<ion-input name="note" type="text" placeholder="Altre annotazioni" [(ngModel)]="nuovoContatto.note" ></ion-input>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+		<ion-row >
+			<ion-col>
+				<ion-button color="danger" class="submit-btn" shape="round" expand="full" type="submit" [disabled]="!addForm.form.valid">Aggiungi</ion-button>
+			</ion-col>
+		</ion-row>
+	</form>
+				
+
+</ion-content>
