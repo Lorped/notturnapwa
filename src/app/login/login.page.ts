@@ -8,6 +8,13 @@ import { AuthserviceService } from '../services/authservice.service';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from '@capacitor/push-notifications';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -32,6 +39,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    
   }
 
   public login() {
@@ -167,7 +175,9 @@ export class LoginPage implements OnInit {
                     // all done
                     this.loadingCtrl.dismiss();
 
-                    this.router.navigate(['tabs']);
+                    this.pushsetup();
+
+                    //this.router.navigate(['tabs']);
 
                   },
                   error => {
@@ -220,5 +230,58 @@ export class LoginPage implements OnInit {
   		return (str + '')
     		.replace(/(\r\n|\n\r|\r|\n)/g, breakTag + '$1')
 	}
+
+
+  pushsetup() {
+    // Request permission to use push notifications
+    
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === 'granted') {
+        // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {
+        // Show some error
+      }
+    });
+
+    PushNotifications.addListener('registration', (token: Token) => {
+      //alert('Push registration success, token: ' + token.value);
+
+      let updateurl = 'https://www.roma-by-night.it/ionicPHP/updateid.php?userid='+ this.user.userid+'&id='+token.value;
+			this.http.get(updateurl)
+			.subscribe(res =>  {
+					// updated
+					//alert('Device registered '+token.value);
+			});
+
+    });
+
+    PushNotifications.addListener('registrationError', (error: any) => {
+      alert('Error on registration: ' + JSON.stringify(error));
+    });
+
+    PushNotifications.addListener(
+      'pushNotificationReceived',
+      (notification: PushNotificationSchema) => {
+        //alert('Push received: ' + JSON.stringify(notification));
+      },
+    );
+
+    PushNotifications.addListener(
+      'pushNotificationActionPerformed',
+      (notification: ActionPerformed) => {
+        //alert('Push action performed: ' + JSON.stringify(notification));
+      },
+    );
+
+    this.router.navigate(['tabs']);
+
+  }
+
+
+
+
+
+	
 
 }

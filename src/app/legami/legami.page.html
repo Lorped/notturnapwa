@@ -16,8 +16,7 @@
   <ion-list color="dark" class="master">
     <ion-item color="dark"  style="background-color: #444444">
       <ion-icon name="contact" item-start color="danger" ></ion-icon>
-      <ion-label>PG</ion-label>
-      <ion-select [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
+      <ion-select label="PG" [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
         <ion-select-option *ngFor="let pg of listautenti" value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
       </ion-select>
       </ion-item>
