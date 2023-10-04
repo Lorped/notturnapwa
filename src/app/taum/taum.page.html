@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Taumaturgie</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="master" color="dark" padding>
+  <ion-row *ngFor="let p of user.taum">
+    <ion-col size="2"><hr/></ion-col>
+    <ion-col size="8" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">{{p.nometaum}}</ion-col>
+    <ion-col size="2"><hr/></ion-col>
+
+    <ion-col size="12" *ngFor="let pp of p.poteri">
+      <ion-button  *ngIf="pp.idtaum2!=5" (click)="gotaum(pp.livello, pp.nometaum2, p.nometaum)"  class="submit-btn2" shape="round" color="danger" size="full" type="submit" [disabled]="(user.fulldata.PScorrenti==0)||(user.fulldata.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
+      <ion-button  *ngIf="pp.idtaum2==5" (click)="gofurto()" class="submit-btn2" shape="round" color="danger" size="full" type="submit" [disabled]="(user.fulldata.psvuoti==0)||(FurtoVitae==0 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
+    </ion-col>
+
+  </ion-row>
+</ion-content>

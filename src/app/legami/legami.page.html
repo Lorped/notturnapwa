@@ -1,0 +1,50 @@
+<ion-header>
+
+	<ion-toolbar color="medium">
+		<ion-buttons slot="start">
+			<ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Legami di Sangue</ion-title>
+	</ion-toolbar>
+
+</ion-header>
+
+<ion-content color="dark" padding class="master">
+
+  <form (ngSubmit)="invia()" #modificaForm="ngForm">
+
+  <ion-list color="dark" class="master">
+    <ion-item color="dark"  style="background-color: #444444">
+      <ion-icon name="contact" item-start color="danger" ></ion-icon>
+      <ion-label>PG</ion-label>
+      <ion-select [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
+        <ion-select-option *ngFor="let pg of listautenti" value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
+      </ion-select>
+      </ion-item>
+  		<ion-item  color="dark">
+      <!-- <ion-button color="danger" class="submit-btn" shape="round" size="full" type="submit" [disabled]="!modificaForm.form.valid" >Accetta</ion-button> -->  			
+        <ion-button color="danger" class="submit-btn" shape="round" size="full" type="submit" [disabled]="pgscelto==0" >Accetta</ion-button>
+  		</ion-item>
+    </ion-list>
+  </form>
+
+  <ion-grid no-padding *ngIf="listalegami ">
+    <ion-row style="align-items: center;">
+      <ion-col size="1" ><hr/></ion-col>
+      <ion-col size="6" style="text-align: center;">Legami esistenti</ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <ion-list class="master"  color="black">
+   <ion-item *ngFor="let item of listalegami" style="background-color:#000000" class="master"  color="black" >
+
+       <h2 style="color:#ff0000;">{{item.nomepg}} - Livello {{item.livello}}</h2>
+       <p class="mymed">{{item.dataultima}}</p>
+
+   </ion-item>
+  </ion-list>
+
+</ion-content>

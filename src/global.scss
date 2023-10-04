@@ -1,0 +1,121 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+
+@import 'font-awesome';
+//$fa-font-path: "../node_modules/font-awesome/fonts";
+// @import "~font-awesome/scss/font-awesome.scss";
+//@import '~font-awesome/css/font-awesome.css';
+
+
+.master {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 1em;
+}
+.mysmall {
+    color: #999999;
+    font-size: 0.8em;
+}
+.mymed {
+    color: #CCCCCC;
+    font-size: 0.9em;
+}
+.myred {
+    color: #ff0000;
+}
+.mymedicon {
+    font-size: 0.9em;
+    padding-right: 2px;
+}
+.mysmallicon {
+    font-size: 0.75em;
+    padding-right: 2px;
+}
+.myxsmallicon {
+    font-size: 0.65em;
+    padding-right: 2px;
+}
+.myred2 {
+    color: #d90028;
+}
+.mywhite {
+    color: #ffffff;
+}
+.alertCustomCss{
+    background-color: #333333;
+    color: blue;
+    button{
+        color: blue;
+    }
+}
+.submit-btn {
+    background: #ff1010;
+    border-radius: 30px !important;
+    border: 1px solid #ffffff;
+    color: #FFFFFF;
+}
+.submit-btn2 {
+    background: #ff3030;
+    border-radius: 30px !important;
+    border: 1px solid #ffffff;
+}
+.submit-btn3 {
+    background: #3030ff;
+    border-radius: 30px !important;
+    border: 1px solid #ffffff;
+}
+.login-box {
+    background: #090909;
+    padding: 20px 20px 0px 20px;
+    margin-top: 20px;
+}
+.signup-col {
+    margin: 0px 16px 0px 16px;
+    padding-bottom: 20px;
+}
+hr {
+    color: #ff0000;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #f00;
+    margin: 1em 0;
+    padding: 0;
+}
+.selectable {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.mysmaller{
+    font-size: 0.9em;
+}
+
+

@@ -1,0 +1,7 @@
+{
+  "name": "Notturna4",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
