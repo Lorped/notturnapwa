@@ -69,6 +69,8 @@ export class Tab2Page {
   }
 
   async openbarcode() {
+     this.router.navigate(['/qrscanner']);
+     return;
 
     // this.oggetto.id='504756580060';
     // this.router.navigate(['/tabs/oggetto']);
