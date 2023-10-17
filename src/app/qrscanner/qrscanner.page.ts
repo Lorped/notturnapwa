@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
+import { Oggetto } from '../globals';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-qrscanner',
@@ -19,10 +21,14 @@ export class QrscannerPage implements OnInit {
   scanResult: any  = null;
   loading?: HTMLIonLoadingElement;
 
+
+
   constructor(
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private plt: Platform
+    private plt: Platform,
+    public oggetto: Oggetto,
+    private router: Router
   ) { 
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
@@ -41,6 +47,7 @@ export class QrscannerPage implements OnInit {
     this.videoElement = this.video?.nativeElement;
   }
 
+  /*
   async showQrToast() {
     const toast = await this.toastCtrl.create({
       message: `Open ${this.scanResult}?`,
@@ -56,6 +63,7 @@ export class QrscannerPage implements OnInit {
     });
     toast.present();
   }
+  */
 
   reset() {
     this.scanResult = null;
@@ -113,7 +121,9 @@ export class QrscannerPage implements OnInit {
       if (code) {
         this.scanActive = false;
         this.scanResult = code.data;
-        this.showQrToast();
+        this.oggetto.id=this.scanResult;
+        this.router.navigate(['/tabs/oggetto']);
+        //this.showQrToast();
       } else {
         if (this.scanActive) {
           requestAnimationFrame(this.scan.bind(this));
@@ -124,7 +134,8 @@ export class QrscannerPage implements OnInit {
     }
   }
 
-
+  /***   NON SRVE IMMAGINE FISSA  */
+  /*
   captureImage() {
     this.fileinput?.nativeElement.click();
   }
@@ -148,11 +159,13 @@ export class QrscannerPage implements OnInit {
   
       if (code) {
         this.scanResult = code.data;
-        this.showQrToast();
+        //this.showQrToast();
+        this.oggetto.id=this.scanResult;
+        this.router.navigate(['/tabs/oggetto']);
       }
     };
     img.src = URL.createObjectURL(file);
   }
-
+  */
 
 }

@@ -4,20 +4,26 @@
 		<ion-buttons slot="start">
 			<ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
 		</ion-buttons>
-		<ion-title>qrscanner</ion-title>
+		<ion-title>jsQRscanner</ion-title>
 	</ion-toolbar>
 
 </ion-header>
 
 <ion-content color="dark" padding class="master">
 
+  <!--  PER IMMAGINE FISSA -->
+  <!--
   <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event)">
-  
+  -->
+
+
   <!-- Trigger the file input -->
+  <!--
   <ion-button expand="full" (click)="captureImage()">
     <ion-icon slot="start" name="camera"></ion-icon>
     Capture Image
   </ion-button>
+  -->
 
   <ion-button expand="full" (click)="startScan()">
     <ion-icon slot="start" name="qr-scanner"></ion-icon>
@@ -36,6 +42,7 @@
   <canvas #canvas hidden></canvas>
 
   <!-- Stop our scanner preview if active -->
+  <!--
   <ion-button expand="full" (click)="stopScan()" color="danger" *ngIf="scanActive">
     <ion-icon slot="start" name="close"></ion-icon>
     Stop scan
@@ -49,6 +56,7 @@
       {{ scanResult }}
     </ion-card-content>
   </ion-card>
+  -->
 
 </ion-content>
 

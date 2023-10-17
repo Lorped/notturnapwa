@@ -34,7 +34,7 @@ export class Tab2Page {
 
   constructor( public oggetto: Oggetto , public user: User , private router: Router, public alertController: AlertController  ) {
     
-    this.initialstuff();
+    // this.initialstuff();
   }
 
   async initialstuff(){
