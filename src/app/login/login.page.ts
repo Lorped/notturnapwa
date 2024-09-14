@@ -9,11 +9,28 @@ import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 import {
+  FirebaseMessaging,
+  GetTokenOptions,
+} from "@capacitor-firebase/messaging";
+import { Capacitor } from "@capacitor/core";
+import { IonicModule } from "@ionic/angular";
+import { environment } from "src/environments/environment";
+
+import { CapacitorConfig } from '@capacitor/cli';
+import { FCM } from "@capacitor-community/fcm";
+
+import {
   ActionPerformed,
   PushNotificationSchema,
   PushNotifications,
   Token,
 } from '@capacitor/push-notifications';
+
+
+export class Clan {
+  idclan = 0;
+  nomeclan = '';
+}
 
 @Component({
   selector: 'app-login',
@@ -24,6 +41,8 @@ export class LoginPage implements OnInit {
 
   username = '' ;
 	userid = 0 ;
+
+  listaclan: Array<Clan>=[];
 
 	saveme= {
 		checked: false
@@ -169,6 +188,19 @@ export class LoginPage implements OnInit {
                     }
                     this.user.fulldata.rigen = cura;
 
+                    this.authentication.listamalgame(this.user.userid).subscribe(
+                      (data: any) => {
+                        this.user.amalgame = data.amalgame;
+                        //console.log(this.user.amalgame);
+                        this.user.amalgame.forEach(element => {
+                          element.fdv = Number (element.fdv);
+                          element.ps = Number (element.ps);
+                        });
+                        //console.log(this.user.amalgame);
+
+                      }
+                    );
+
                     // console.log ('user finale: ', this.user);
 
 
@@ -204,11 +236,11 @@ export class LoginPage implements OnInit {
       },
       error => {
         this.loadingCtrl.dismiss();
-        switch ( error['statusText'] ) {
-          case "Unauthorized":
+        switch ( error['status'] ) {
+          case 401:
             alert("Non autorizzato");
           break;
-          case "Not Found":
+          case 404:
             alert("Scheda non trovata");
           break;
           default:
@@ -234,15 +266,78 @@ export class LoginPage implements OnInit {
 
   pushsetup() {
     // Request permission to use push notifications
+
+    FirebaseMessaging.addListener("notificationReceived", (event) => {
+      console.log("notificationReceived: ", { event });
+    });
+    FirebaseMessaging.addListener("notificationActionPerformed", (event) => {
+      console.log("notificationActionPerformed: ", { event });
+    });
+    if (Capacitor.getPlatform() === "web") {
+      navigator.serviceWorker.addEventListener("message", (event: any) => {
+        console.log("serviceWorker message: ", { event });
+        const notification = new Notification(event.data.notification.title, {
+          body: event.data.notification.body,
+        });
+        notification.onclick = (event) => {
+          console.log("notification clicked: ", { event });
+        };
+      });
+    }
     
-    PushNotifications.requestPermissions().then(result => {
-      if (result.receive === 'granted') {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
+    FirebaseMessaging.requestPermissions().then( result => {
+      if (result.receive === 'granted') { 
+
+        console.log("granted");
+
+        this.getToken().then( (token: any) => {
+
+          console.log(token);
+
+          let updateurl = 'https://www.roma-by-night.it/ionicPHP/updateid.php?userid='+ this.user.userid+'&id='+token;
+          this.http.get(updateurl)
+          .subscribe(res =>  {
+              // updated
+              //alert('Device registered '+token);
+          });
+
+        });
+
       } else {
-        // Show some error
+          // OK 
       }
     });
+
+
+    /** 
+    
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === 'granted') {  // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {  // Show some error
+      }
+    });
+
+     
+
+    PushNotifications.createChannel(
+      {
+        name: 'Notturna Channel',
+        id: 'PushPluginChannel',
+        description: 'Notturna Channel',
+        importance: 5,
+        sound: 'notturna_sound'
+      }
+    );
+
+    const config: CapacitorConfig = {
+      plugins: {
+        PushNotifications: {
+          presentationOptions: ["badge", "sound", "alert"],
+        },
+      },
+    };
+    
 
     PushNotifications.addListener('registration', (token: Token) => {
       //alert('Push registration success, token: ' + token.value);
@@ -274,11 +369,51 @@ export class LoginPage implements OnInit {
       },
     );
 
+    */
+
+    /*
+    FCM.subscribeTo({ topic: 'user' })
+    .then(r => console.log(`subscribed to topic: user `))
+    .catch(err => console.log(err));
+
+    this.http.get('https://www.roma-by-night.it/Notturna2/wsPHP/getregistra.php' ).subscribe( (data:any) => {
+      this.listaclan = data.clan;
+
+      this.listaclan.forEach(element => {
+        if ( element.idclan != Number(this.user.fulldata.idclan)){
+          FCM.unsubscribeFrom({ topic: element.nomeclan });
+          //console.log(`unsubscribed from topic: `, element.nomeclan);
+        }
+      });
+    });
+
+    var atopic2 =  this.user.fulldata.nomeclan;
+    FCM.subscribeTo({ topic: atopic2 })
+    .then(r => console.log(`subscribed to topic: `, atopic2))
+    .catch(err => console.log(err));
+
+    */
+
     this.router.navigate(['tabs']);
 
   }
 
 
+
+  public async getToken(): Promise<any> {
+
+    console.log(environment.firebase);
+    const options: GetTokenOptions = {
+      vapidKey: environment.firebase.vapidKey,
+    };
+    if (Capacitor.getPlatform() === "web") {
+      options.serviceWorkerRegistration =
+        await navigator.serviceWorker.register("firebase-messaging-sw.js");
+    }
+    const { token } = await FirebaseMessaging.getToken(options);
+    console.log ("token ", token);
+    return token;
+  }
 
 
 

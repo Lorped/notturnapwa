@@ -17,7 +17,8 @@ const routes: Routes = [
   {
     path: 'telepatia',
     loadChildren: () => import('./telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
-  },  {
+  },
+  {
     path: 'qrscanner',
     loadChildren: () => import('./qrscanner/qrscanner.module').then( m => m.QrscannerPageModule)
   },
