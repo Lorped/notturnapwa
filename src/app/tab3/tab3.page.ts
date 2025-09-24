@@ -36,26 +36,30 @@ export class Tab3Page {
 
   	openUrl() {
 		//const browser = this.iab.create(this.link);
-		this.iab.create(this.link,'_system');
+		//this.iab.create(this.link,'_system');
+		window.open(this.link, "_blank");
 	}
 
   	openUrl2() {
     	const link = 'https://drive.google.com/file/d/0BwbyMyT-GT-UZFBwNmp4SHZ6SFk/view';
 		//const browser = this.iab.create(this.link);
-		this.iab.create(link,'_system');
+		//this.iab.create(link,'_system');
+		window.open(link, "_blank");
 	}
 
   	openUrl3() {
     	const link = 'https://drive.google.com/file/d/1RoDz3IopLmZtTK_7zDms7ClkcBlZdI31/view';
 		//const browser = this.iab.create(this.link);
-		this.iab.create(link,'_system');
+		//this.iab.create(link,'_system');
+		window.open(link, "_blank");
 	}
 
 	openUrlDT() {
     	//console.log (this.myuser);
     	var link = this.user.fulldata['urldt'];
 		//const browser = this.iab.create(this.link);
-		this.iab.create(link,'_system');
+		//this.iab.create(link,'_system');
+		window.open(link, "_blank");
 	}
 
 	modifica(){
@@ -111,11 +115,14 @@ export class Tab3Page {
 			case "13":	// Setiti
 				this.link = "https://drive.google.com/file/d/0BwbyMyT-GT-UOUo0dll2NjRDOHc/view";
 			break;
-		case "14":		// Cappadoci
+			case "14":		// Cappadoci
 			this.link = "https://drive.google.com/file/d/1WqSxecMNGQ0ayh6MLGM-FHCP1LaL0khZ/view";
-		break;
+			break;
 			case "20":	// vili
 				this.link = "https://drive.google.com/file/d/0BwbyMyT-GT-UOWhsMExKd2YzTVU/view";
+			break;
+			case "21":		// Gangrel - city
+				this.link = "https://drive.google.com/file/d/0BwbyMyT-GT-UcFRxVFRkNnRLb28/view";
 			break;
 		}
 
