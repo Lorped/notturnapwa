@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-morte',
-  templateUrl: './morte.page.html',
-  styleUrls: ['./morte.page.scss'],
+    selector: 'app-morte',
+    templateUrl: './morte.page.html',
+    styleUrls: ['./morte.page.scss'],
+    standalone: false
 })
 export class MortePage implements OnInit {
 

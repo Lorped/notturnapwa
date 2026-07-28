@@ -5,9 +5,10 @@ import { AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-necro',
-  templateUrl: './necro.page.html',
-  styleUrls: ['./necro.page.scss'],
+    selector: 'app-necro',
+    templateUrl: './necro.page.html',
+    styleUrls: ['./necro.page.scss'],
+    standalone: false
 })
 export class NecroPage implements OnInit {
 

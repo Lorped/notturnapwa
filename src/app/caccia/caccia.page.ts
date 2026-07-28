@@ -4,9 +4,10 @@ import { User } from '../globals';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-caccia',
-  templateUrl: './caccia.page.html',
-  styleUrls: ['./caccia.page.scss'],
+    selector: 'app-caccia',
+    templateUrl: './caccia.page.html',
+    styleUrls: ['./caccia.page.scss'],
+    standalone: false
 })
 export class CacciaPage implements OnInit {
 

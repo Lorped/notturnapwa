@@ -3,9 +3,10 @@ import { User, Oggetto } from '../globals';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-oggetto',
-  templateUrl: './oggetto.page.html',
-  styleUrls: ['./oggetto.page.scss'],
+    selector: 'app-oggetto',
+    templateUrl: './oggetto.page.html',
+    styleUrls: ['./oggetto.page.scss'],
+    standalone: false
 })
 export class OggettoPage implements OnInit {
 

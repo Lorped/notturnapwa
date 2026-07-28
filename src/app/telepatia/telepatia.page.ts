@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-telepatia',
-  templateUrl: './telepatia.page.html',
-  styleUrls: ['./telepatia.page.scss'],
+    selector: 'app-telepatia',
+    templateUrl: './telepatia.page.html',
+    styleUrls: ['./telepatia.page.scss'],
+    standalone: false
 })
 export class TelepatiaPage implements OnInit {
 

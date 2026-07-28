@@ -4,9 +4,10 @@ import { RubricaItem, ToChange } from '../globals';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-changecontatto',
-  templateUrl: './changecontatto.page.html',
-  styleUrls: ['./changecontatto.page.scss'],
+    selector: 'app-changecontatto',
+    templateUrl: './changecontatto.page.html',
+    styleUrls: ['./changecontatto.page.scss'],
+    standalone: false
 })
 export class ChangecontattoPage implements OnInit {
 	cell = {

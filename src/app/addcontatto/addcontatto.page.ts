@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-addcontatto',
-  templateUrl: './addcontatto.page.html',
-  styleUrls: ['./addcontatto.page.scss'],
+    selector: 'app-addcontatto',
+    templateUrl: './addcontatto.page.html',
+    styleUrls: ['./addcontatto.page.scss'],
+    standalone: false
 })
 export class AddcontattoPage implements OnInit {
 

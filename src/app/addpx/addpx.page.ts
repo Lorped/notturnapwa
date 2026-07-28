@@ -3,9 +3,10 @@ import { User } from '../globals';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-addpx',
-  templateUrl: './addpx.page.html',
-  styleUrls: ['./addpx.page.scss'],
+    selector: 'app-addpx',
+    templateUrl: './addpx.page.html',
+    styleUrls: ['./addpx.page.scss'],
+    standalone: false
 })
 export class AddpxPage implements OnInit {
 
