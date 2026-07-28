@@ -13,7 +13,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" class="master">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
--->
+  -->
 
 
   <ion-row class="master" color="dark" >
@@ -31,18 +31,18 @@
       <ion-button class="submit-btn3" expand="full" shape="round" type="submit" [disabled]="user.fulldata.fdv==0" (click)="usafdv()">Usa Forza di Volontà</ion-button>
     </ion-col>
   </ion-row>
-  
+
   <ion-row class="master" color="dark" >
     <ion-col>
       <ion-button id="cura" class="submit-btn2" color="danger" expand="full" shape="round" type="submit" [disabled]="user.fulldata.PScorrenti==0" (click)="menops()">Cura Ferite - {{this.user.fulldata.rigen}}</ion-button>
     </ion-col>
   </ion-row>
-  
+
   <ion-alert
-  trigger="cura"
-  header="Attenzione"
-  subHeader="Cura ferite"
-  [buttons]="alertButtons"
+    trigger="cura"
+    header="Attenzione"
+    subHeader="Cura ferite"
+    [buttons]="alertButtons"
   message="{{user.fulldata.rigen}}  ferite curate" ></ion-alert>
 
   <ion-row class="master" color="dark" >
@@ -64,25 +64,31 @@
   </ion-row>
 
   <ion-row class="master" color="dark">
-    <ion-col size="6" *ngFor="let pot of this.user.poteri">
-      <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
-    </ion-col>
+    @for (pot of this.user.poteri; track pot) {
+      <ion-col size="6">
+        <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
+      </ion-col>
+    }
   </ion-row>
 
   <ion-row class="master" color="dark">
-    <ion-col size="6" *ngIf="this.user.amalgame.length>0">
-      <ion-button color="danger" (click)="goamalgame()"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >Amalgame</ion-button>
-    </ion-col>
+    @if (this.user.amalgame.length>0) {
+      <ion-col size="6">
+        <ion-button color="danger" (click)="goamalgame()"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >Amalgame</ion-button>
+      </ion-col>
+    }
   </ion-row>
-  
 
 
-	<ion-list color="dark" class="master"> 
-    <ion-item *ngFor="let tiri of tiridado"  color="dark" class="master" >
-      <ion-label class="ion-text-wrap" >
-        <p style="color: #707070">{{tiri.data}} {{tiri.ora}}</p><div>{{tiri.pg}} {{tiri.testo}} </div>
-      </ion-label>
-    </ion-item>
+
+  <ion-list color="dark" class="master">
+    @for (tiri of tiridado; track tiri) {
+      <ion-item  color="dark" class="master" >
+        <ion-label class="ion-text-wrap" >
+          <p style="color: #707070">{{tiri.data}} {{tiri.ora}}</p><div>{{tiri.pg}} {{tiri.testo}} </div>
+        </ion-label>
+      </ion-item>
+    }
   </ion-list>
 
 
