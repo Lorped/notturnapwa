@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-modificanote',
-  templateUrl: './modificanote.page.html',
-  styleUrls: ['./modificanote.page.scss'],
+    selector: 'app-modificanote',
+    templateUrl: './modificanote.page.html',
+    styleUrls: ['./modificanote.page.scss'],
+    standalone: false
 })
 export class ModificanotePage implements OnInit {
 

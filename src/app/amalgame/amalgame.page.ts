@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-amalgame',
-  templateUrl: './amalgame.page.html',
-  styleUrls: ['./amalgame.page.scss'],
+    selector: 'app-amalgame',
+    templateUrl: './amalgame.page.html',
+    styleUrls: ['./amalgame.page.scss'],
+    standalone: false
 })
 export class AmalgamePage implements OnInit {
 

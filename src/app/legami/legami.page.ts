@@ -5,9 +5,10 @@ import { map } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-legami',
-  templateUrl: './legami.page.html',
-  styleUrls: ['./legami.page.scss'],
+    selector: 'app-legami',
+    templateUrl: './legami.page.html',
+    styleUrls: ['./legami.page.scss'],
+    standalone: false
 })
 export class LegamiPage implements OnInit {
 

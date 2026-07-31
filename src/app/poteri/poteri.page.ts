@@ -5,9 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-poteri',
-  templateUrl: './poteri.page.html',
-  styleUrls: ['./poteri.page.scss'],
+    selector: 'app-poteri',
+    templateUrl: './poteri.page.html',
+    styleUrls: ['./poteri.page.scss'],
+    standalone: false
 })
 export class PoteriPage implements OnInit {
 

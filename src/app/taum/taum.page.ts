@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-taum',
-  templateUrl: './taum.page.html',
-  styleUrls: ['./taum.page.scss'],
+    selector: 'app-taum',
+    templateUrl: './taum.page.html',
+    styleUrls: ['./taum.page.scss'],
+    standalone: false
 })
 export class TaumPage implements OnInit {
 

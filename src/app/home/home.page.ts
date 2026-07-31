@@ -3,9 +3,10 @@ import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
+    standalone: false
 })
 export class HomePage {
   @ViewChild('video', { static: false }) video: ElementRef;

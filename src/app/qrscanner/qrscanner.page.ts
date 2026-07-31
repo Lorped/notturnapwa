@@ -5,9 +5,10 @@ import { Oggetto } from '../globals';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-qrscanner',
-  templateUrl: './qrscanner.page.html',
-  styleUrls: ['./qrscanner.page.scss'],
+    selector: 'app-qrscanner',
+    templateUrl: './qrscanner.page.html',
+    styleUrls: ['./qrscanner.page.scss'],
+    standalone: false
 })
 export class QrscannerPage implements OnInit {
   @ViewChild('video', { static: false }) video?: ElementRef;
