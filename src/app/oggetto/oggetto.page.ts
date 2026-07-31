@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, Oggetto } from '../globals';
 import { HttpClient } from '@angular/common/http';
 
@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-oggetto',
     templateUrl: './oggetto.page.html',
     styleUrls: ['./oggetto.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class OggettoPage implements OnInit {

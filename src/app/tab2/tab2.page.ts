@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { User, Oggetto } from '../globals';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
@@ -9,6 +9,7 @@ import { AlertController } from '@ionic/angular';
     selector: 'app-tab2',
     templateUrl: 'tab2.page.html',
     styleUrls: ['tab2.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class Tab2Page {

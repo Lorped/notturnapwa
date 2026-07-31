@@ -7,7 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 import { User, Oggetto, ToChange } from './globals';
 import { PipesModule } from './pipes/pipes.module';
@@ -21,5 +21,5 @@ import { ServiceWorkerModule } from '@angular/service-worker';
             // Register the ServiceWorker as soon as the application is stable
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
-        })], providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, User, Oggetto, BarcodeScanner, InAppBrowser, ToChange, provideHttpClient(withInterceptorsFromDi())] })
+        })], providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, User, Oggetto, BarcodeScanner, InAppBrowser, ToChange, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
 export class AppModule {}

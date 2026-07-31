@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-addcontatto',
     templateUrl: './addcontatto.page.html',
     styleUrls: ['./addcontatto.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AddcontattoPage implements OnInit {

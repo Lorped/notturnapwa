@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { Oggetto } from '../globals';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
     selector: 'app-qrscanner',
     templateUrl: './qrscanner.page.html',
     styleUrls: ['./qrscanner.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class QrscannerPage implements OnInit {

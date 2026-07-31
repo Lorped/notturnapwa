@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Amalgama, User } from '../globals';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-amalgame',
     templateUrl: './amalgame.page.html',
     styleUrls: ['./amalgame.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AmalgamePage implements OnInit {

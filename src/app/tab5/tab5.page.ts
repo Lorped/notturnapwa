@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { HttpClient } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
     selector: 'app-tab5',
     templateUrl: './tab5.page.html',
     styleUrls: ['./tab5.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class Tab5Page implements OnInit {

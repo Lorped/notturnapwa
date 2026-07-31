@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, apoteri2 } from '../globals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -8,6 +8,7 @@ import { AlertController } from '@ionic/angular';
     selector: 'app-poteri',
     templateUrl: './poteri.page.html',
     styleUrls: ['./poteri.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PoteriPage implements OnInit {

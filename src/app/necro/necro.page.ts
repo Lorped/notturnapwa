@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-necro',
     templateUrl: './necro.page.html',
     styleUrls: ['./necro.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NecroPage implements OnInit {

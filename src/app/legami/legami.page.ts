@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Legame, Utente , User  } from '../globals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
     selector: 'app-legami',
     templateUrl: './legami.page.html',
     styleUrls: ['./legami.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LegamiPage implements OnInit {
