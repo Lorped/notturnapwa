@@ -21,10 +21,12 @@
     Start scan
   </ion-button>
 
-  <ion-button expand="full" (click)="reset()" color="warning" *ngIf="scanResult">
-    <ion-icon slot="start" name="refresh"></ion-icon>
-    Reset
-  </ion-button>
+  @if (scanResult) {
+    <ion-button expand="full" (click)="reset()" color="warning">
+      <ion-icon slot="start" name="refresh"></ion-icon>
+      Reset
+    </ion-button>
+  }
 
   <!-- Shows our camera stream -->
   <video #video [hidden]="!scanActive" width="100%"></video>
@@ -33,18 +35,22 @@
   <canvas #canvas hidden></canvas>
 
   <!-- Stop our scanner preview if active -->
-  <ion-button expand="full" (click)="stopScan()" color="danger" *ngIf="scanActive">
-    <ion-icon slot="start" name="close"></ion-icon>
-    Stop scan
-  </ion-button>
+  @if (scanActive) {
+    <ion-button expand="full" (click)="stopScan()" color="danger">
+      <ion-icon slot="start" name="close"></ion-icon>
+      Stop scan
+    </ion-button>
+  }
 
-  <ion-card *ngIf="scanResult">
-    <ion-card-header>
-      <ion-card-title>QR Code</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ scanResult }}
-    </ion-card-content>
-  </ion-card>
+  @if (scanResult) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>QR Code</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{ scanResult }}
+      </ion-card-content>
+    </ion-card>
+  }
 
 </ion-content>
