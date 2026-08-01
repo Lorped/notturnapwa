@@ -28,6 +28,11 @@
           <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2 || user.fulldata.nummaesta == 0 " >{{p.livellopot}} - {{p.nomepotere}} [{{user.fulldata.nummaesta}}]</ion-button>
         </ion-col>
       }
+      @if (p.attivo=='N' && p.livellopot >5 ) {
+        <ion-col >
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+        </ion-col>
+      }
       @if (p.attivo=='X'  ) {
         <ion-col >
           <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.psvuoti==0 || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
