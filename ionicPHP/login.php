@@ -20,71 +20,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 
-
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-
-$username = $request->username;
-$password = $request->password;
-
-//$username = "user";
-//$password = "secret";
-
-//$version = $request->version;
-
-if (isset($postdata) && $username != "" && $password !="" ) {
-
-  include ('db2.inc.php');  // NEW MYSQL //
-
-	// pulizia periodica
-	$MM="DELETE FROM dadi WHERE DATE_ADD( Ora , INTERVAL 24 HOUR )<NOW()";
-	mysqli_query($db, $MM);
+require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
 
-  $MySql = "SELECT idutente FROM utente WHERE nome = '".addslashes($username)."' AND password = '".addslashes($password)."'";
-  $Result = mysqli_query($db, $MySql);
-  if ( $res = mysqli_fetch_array($Result)   ) {
-    $idutente = $res['idutente'];
-
-
-    $MySql = "UPDATE utente set lastlogin=NOW() where idutente='$idutente'";
-    mysqli_query($db, $MySql);
-
-    
-
-      controlla_ps ( $idutente, $db) ;
-      controlla_fdv ( $idutente, $db ) ;
-      controlla_legami ($idutente, $db ) ;
-      controlla_maesta ($idutente, $db ) ;
-
-      $MySql = "SELECT *  FROM personaggio
-            LEFT JOIN clan ON personaggio.idclan=clan.idclan
-            LEFT JOIN statuscama ON personaggio.idstatus=statuscama.idstatus
-            LEFT JOIN sentieri ON personaggio.idsentiero=sentieri.idsentiero
-            LEFT JOIN generazione ON personaggio.generazione=generazione.generazione
-            LEFT JOIN blood ON personaggio.bloodp=blood.bloodp
-            WHERE idutente = '$idutente' ";
-
-      $Result = mysqli_query($db, $MySql);
-      if ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-        $output = json_encode($res);
-        echo $output;
-      } else {
-          header("HTTP/1.1 404 Not Found");
-      }
-
-    
-
-  } else {  // WRONG PWD
-    header("HTTP/1.1 401 Unauthorized");
-  }
-
-} else { // NO post data (!!)
-    header("HTTP/1.1 401 Unauthorized");
-}
 
 
 //  ================================  //
+
+
+function controlla_ps ( $idutente, $db ) {  //inizio test su ps
+
+  $Mysql="SELECT PScorrenti, maxps, lastps FROM personaggio
+    LEFT JOIN generazione ON personaggio.generazione = generazione.generazione
+    LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+  WHERE idutente=$idutente";
+  $Result=mysqli_query ($db, $Mysql);
+  $res=mysqli_fetch_array($Result);
+
+  $PScorrenti=$res['PScorrenti'];
+  $setetot=$res['maxps'];
+  $lastps=$res['lastps'];
+
+  if ( $PScorrenti == $setetot ) {  // tutto ok
+    //
+  } else {
+    $now=time();
+    $qlastps=strtotime($lastps);
+
+    $diff =  ($now - $qlastps) / (12*60*60);
+
+    if ( $diff > 1 ) {
+      $newlastps=date("Y-m-d H:i:s",$now );
+      $Mysql="UPDATE personaggio SET PScorrenti = $setetot , lastps = '$newlastps' WHERE idutente=$idutente";
+      $Result=mysqli_query ($db, $Mysql);
+    }
+  }
+}  //fine test su ps
 
 function controlla_fdv ( $idutente , $db ) {    //controllo-aggiorno fdv
 
@@ -129,34 +100,7 @@ function controlla_fdv ( $idutente , $db ) {    //controllo-aggiorno fdv
 
 
 
-function controlla_ps ( $idutente, $db ) {  //inizio test su ps
 
-  $Mysql="SELECT PScorrenti, sete, addsete, lastps FROM personaggio
-    LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-    LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
-  WHERE idutente=$idutente";
-  $Result=mysqli_query ($db, $Mysql);
-  $res=mysqli_fetch_array($Result);
-
-  $PScorrenti=$res['PScorrenti'];
-  $setetot=$res['sete']+$res['addsete'];
-  $lastps=$res['lastps'];
-
-  if ( $PScorrenti == $setetot ) {  // tutto ok
-    //
-  } else {
-    $now=time();
-    $qlastps=strtotime($lastps);
-
-    $diff =  ($now - $qlastps) / (12*60*60);
-
-    if ( $diff > 1 ) {
-      $newlastps=date("Y-m-d H:i:s",$now );
-      $Mysql="UPDATE personaggio SET PScorrenti = $setetot , lastps = '$newlastps' WHERE idutente=$idutente";
-      $Result=mysqli_query ($db, $Mysql);
-    }
-  }
-}  //fine test su ps
 
 function controlla_legami ($idutente, $db) {   /** 2 - 5 - 10 mesi + 5gg di sfrido */
   // legami
@@ -194,5 +138,81 @@ function controlla_maesta ( $idutente, $db) {  //inizio test su ps
     }
   }
 }  //fine test su ps
+
+
+
+
+
+$postdata = file_get_contents("php://input");
+$request = json_decode($postdata);
+
+$username = $request->username;
+$password = $request->password;
+
+$username = mysqli_real_escape_string($db, $username);
+$password = mysqli_real_escape_string($db, $password);
+
+//$username = "user";
+//$password = "secret";
+
+//$version = $request->version;
+
+if (isset($postdata) && $username != "" && $password !="" ) {
+
+
+
+	// pulizia periodica
+	$MM="DELETE FROM dadi WHERE DATE_ADD( Ora , INTERVAL 24 HOUR )<NOW()";
+	mysqli_query($db, $MM);
+
+
+  $MySql = "SELECT idutente FROM utente WHERE nome = '$username' AND password = '$password'";
+  $Result = mysqli_query($db, $MySql);
+  if ( $res = mysqli_fetch_array($Result)   ) {
+    $idutente = $res['idutente'];
+
+
+    $MySql = "UPDATE utente set lastlogin=NOW() where idutente='$idutente'";
+    mysqli_query($db, $MySql);
+
+    
+      /* controllo e aggiornamento fdv, ps, legami, maesta */
+
+      controlla_ps ( $idutente, $db) ;
+      controlla_fdv ( $idutente, $db ) ;
+      controlla_legami ($idutente, $db ) ;
+      controlla_maesta ($idutente, $db ) ;
+      
+
+      $MySql = "SELECT *  FROM personaggio
+            LEFT JOIN clan ON personaggio.idclan=clan.idclan
+            LEFT JOIN statuscama ON personaggio.idstatus=statuscama.idstatus
+            LEFT JOIN sentieri ON personaggio.idsentiero=sentieri.idsentiero
+            LEFT JOIN generazione ON personaggio.generazione=generazione.generazione
+            LEFT JOIN blood ON personaggio.bloodp=blood.bloodp
+            WHERE idutente = '$idutente' ";
+
+      $Result = mysqli_query($db, $MySql);
+      if ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+        $output = json_encode($res);
+        echo $output;
+      } else {
+          header("HTTP/1.1 404 Not Found");
+      }
+
+    
+
+  } else {  // WRONG PWD
+    header("HTTP/1.1 401 Unauthorized");
+  }
+
+} else { // NO post data (!!)
+    header("HTTP/1.1 401 Unauthorized");
+}
+
+
+
+
+
 
 ?>
