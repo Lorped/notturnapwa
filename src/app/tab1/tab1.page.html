@@ -13,7 +13,7 @@
 
 </ion-header>
 
-<ion-content color="dark" class="master" no-padding >
+<ion-content  no-padding >
 
   <!-- <ion-spinner *ngIf="loading" id="feed-spinner"></ion-spinner> -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -22,7 +22,7 @@
 
   <h3 class="mypad2">{{user.fulldata['nomepg']}}</h3>
 
-  <div style="background-color: #222222; border: 1px solid #ff0000;  align: center; border-radius: 2px; margin-left:5px; margin-right:5px;" >
+  <div style="background-color: #222222; border: 1px solid #ff0000;   border-radius: 2px; margin-left:5px; margin-right:5px;" >
     <ion-grid class="mypad">
       <ion-row>
         <ion-col size="3" style="color:#FF0000;">Clan</ion-col>
@@ -121,10 +121,10 @@
           -->
           <ion-col>
             @for (item of 5|times ; track item; let ix = $index) {
-              <i class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix >= user.fulldata.forza}"></i>
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.fulldata.forza}"></i>
               }<br>
               @for (item of 5|times ; track item; let ix = $index) {
-                <i class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.fulldata.forza}"></i>
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.fulldata.forza}"></i>
               }
             </ion-col>
             <ion-col>

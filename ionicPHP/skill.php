@@ -33,7 +33,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   if (isset($postdata)  ) {
 
-    include ('db2.inc.php');  // NEW MYSQL //
+    require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
     $out1 = [];
 
@@ -168,6 +168,15 @@ header('Content-Type: text/html; charset=utf-8');
 
       $out1[] =  $res;
     }
+    $MySql = "SELECT  nomealleato as nomeskill  ,livello,tipologia  FROM alleati
+          WHERE idutente = '$userid'
+          ORDER BY livello DESC";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+
+      $out1[] =  $res;
+    }
 
     $MySql = "SELECT  nomepregio as nomeskill  ,valore as livello,tipologia  FROM pregidifetti
       LEFT JOIN pregidifetti_main ON pregidifetti_main.idpregio=pregidifetti.idpregio
@@ -198,7 +207,7 @@ header('Content-Type: text/html; charset=utf-8');
       $out1[] =  $res;
     }
 
-    // amalgame
+    /*
 
     $MySql = "SELECT  nomeamalgama as nomeskill  , '0' as livello, '12' as tipologia  FROM amalgame
     LEFT JOIN amalgame_main ON amalgame_main.idamalgama=amalgame.idamalgama
@@ -209,10 +218,12 @@ header('Content-Type: text/html; charset=utf-8');
 
       $out1[] =  $res;
     }
+      */
 
     // influenze
 
-    $MySql = "SELECT  nomeinfluenza as nomeskill  ,  livello, '13' as tipologia  FROM influenze
+    /*
+    $MySql = "SELECT  nomealleato as nomeskill  ,  livello, '13' as tipologia  FROM influenze
     LEFT JOIN influenze_main ON influenze_main.idinfluenza=influenze.idinfluenza
              WHERE idutente = '$userid' ";
 
@@ -221,6 +232,7 @@ header('Content-Type: text/html; charset=utf-8');
 
       $out1[] =  $res;
     }
+    */
 
 
     $output = json_encode ($out1, JSON_UNESCAPED_UNICODE);
