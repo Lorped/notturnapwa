@@ -66,9 +66,9 @@ export class CacciaPage implements OnInit {
         }
       }
 
-      this.maxTime = 600 - 60 * this.gregge + 60 * this.user.fulldata.addcaccia;
+      this.maxTime = this.user.fulldata.tempocaccia * 60 - this.gregge * 60  ;
 
-      if (this.user.fulldata['idclan'] == '2') {
+      if (this.user.fulldata['idclan'] == 2) {
         //ventrue
         this.maxTime = this.maxTime + 60 * 3; // 3 min. addizionali
       }
@@ -96,7 +96,7 @@ export class CacciaPage implements OnInit {
       }
 
       this.recuperati =
-        this.user.fulldata['setetot'] - this.user.fulldata['PScorrenti'];
+        this.user.fulldata['maxps'] - this.user.fulldata['PScorrenti'];
 
       if (this.tossico == 1 && Math.random() * 100 < 30) {
         this.recuperati = Math.ceil(this.recuperati / 2);
@@ -182,11 +182,10 @@ export class CacciaPage implements OnInit {
       this.user.fulldata['PScorrenti'] + this.recuperati;
     this.user.incaccia = 0;
 
-    if (this.user.fulldata['PScorrenti'] > this.user.fulldata['setetot']) {
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['setetot'];
+    if (this.user.fulldata['PScorrenti'] > this.user.fulldata['maxps']) {
+      this.user.fulldata['PScorrenti'] = this.user.fulldata['maxps'];
     }
-    this.user.fulldata['psvuoti'] =
-      this.user.fulldata['setetot'] - this.user.fulldata['PScorrenti'];
+
 
     //console.log(this.myuser.fulldata);
 

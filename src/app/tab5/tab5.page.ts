@@ -73,7 +73,6 @@ export class Tab5Page implements OnInit {
 
     this.http.get<any>(link).subscribe((res) => {
       this.user.fulldata.PScorrenti--;
-      this.user.fulldata.psvuoti++;
 
       setTimeout(this.loadDadi(), 1000);
     });

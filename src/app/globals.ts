@@ -37,66 +37,78 @@ export class apoteri  {
 
 @Injectable()
 export class afulldata  {
-    public PScorrenti = 0;
-    public addbp = 0;           // non usato
-    public addcaccia = 0;
-    public addsete = 0;         
-    public attivazione = 0;
-    public attutimento = 0;
-    public bane = 0;
-    public bgbase = 0 ;
-    public bio = '';
-    public bloodp = 0 ;               
-    public bloodpmax = 0;       // non usato
-    public carisma = 0;
-    public destrezza = 0;
-    public fama1 = 0;
-    public fama2 = 0;
-    public fama3 = 0;
-    public fdv = 0;
-    public fdvbase = 0;         // non usato
-    public fdvmax = 0;
-    public forza = 0;
-    public generazione = 0;
-    public idclan = '';          
-    public idsentiero = 0 ;     // non usato
-    public idstatus = 0;        // non usato
-    public idutente = 0;
-    public intelligenza = 0;
-    public lastcaccia = '';
-    public lastfdv = '';
-    public lastps = '';
-    public lastvitae = '';
-    public maxstat = 0 ;        // non usato
-    public nomeclan = '';
-    public nomepg = '';
-    public nomeplayer = '';
-    public notemaster = '';
-    public percezione = 0;
-    public persuasione = 0;
-    public prontezza = 0;
-    public ps = 0;              // non usato
-    public psturno = 0;         // non usato
-    public rifugio = '';
-    public rigen = 0;
-    public saggezza = 0;
-    public sentiero = '';
-    public sete = 0;
-    public status = '';
-    public urldt = '';
-    public valsentiero = 0;     // non usato
-    public xp = 0;
-    public xpspesi = 0;
-    public zona = '';
-    public psvuoti = 0;         // calcolato
-    public setetot = 0;         // calcolato
-    public pf = 0;              // calcolato
-    public rd = 0;              // calcolato
-    public rp = 0;              // calcolato
-    public note = '';
-    public nummaesta = 0;
-    public lastmaesta = ''; //non usato
-    public contanti = 0 ;
+public idutente = 0 ;
+  public nomeplayer = '' ;
+  public nomepg = '';
+  public idclan = 0;
+  public nomeclan = ''; // from LEFT JOIN
+  public idlds = 0 ;
+  public nomelds = ''; // fron left join
+  public generazione = 0;
+  public forza = 0;
+  public destrezza = 0;
+  public attutimento = 0;
+  public carisma = 0;
+  public persuasione = 0;
+  public saggezza = 0;
+  public percezione = 0;
+  public prontezza = 0;
+  public intelligenza = 0;
+  public fdv = 0;
+  public fdvmax = 0;
+  public idstatus = 0;
+  public status = ''; // da LEFT JOIN
+  public attivazione = 0  ; // da LEFT JOIN
+  public maxps = 0  ; // da LEFT JOIN
+  public PScorrenti = 0 ;
+  public bonusrigen = 0 ; // da left join
+  public rigen = 0 ; // da left join
+  public lastvitae = '' ; 
+  public notemaster = '' ; 
+  public lastcaccia = '' ;
+
+  public nummaesta = 0 ;
+
+
+
+  public frenesia = 0 ;      // da LEFT JOIN
+  public cacciaobbligata = 0; // da LEFT JOIN
+  public tempocaccia = 0;   // da LEFT JOIN
+
+  public idsentiero = 0;
+  public sentiero = ''; // da LEFT JOIN
+  public valsentiero = 0 ;
+  public fama1 = 0 ;
+  public fama2 = 0 ;
+  public fama3 = 0 ;
+
+  public xp = 0 ;
+  public xpspesi = 0 ;
+
+  public bio = '';
+  public note = '';
+  public rifugio = '';
+  public zona = '';
+
+  public bloodp = 0;
+  public maxdisc = 0 ; //da LEFT JOIN
+
+  public bane = 0 ;
+  public urldt = '';
+  public contanti = 0 ;
+
+  public maxstat = 0 ; // from LEFT JOIN
+
+  public IDcronaca = 0 ;
+  public Descrizione = ''; // da LEFT JOIN
+
+  public pregiolds = '';
+  public difettolds = '';
+
+  // valori calcolati
+  public rd = 0;  //res dominazione
+  public pf = 0;  //punti ferita
+  public rp = 0;  //res paletto
 }
 
 @Injectable()

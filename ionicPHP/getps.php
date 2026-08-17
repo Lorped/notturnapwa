@@ -25,13 +25,11 @@
 
 
 
-	include ('db2.inc.php');  // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
  	$idutente=$_GET['id'];
 
- 	$Mysql="SELECT PScorrenti, sete+addsete-PScorrenti as 'psvuoti' FROM personaggio 
-		LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-		LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+ 	$Mysql="SELECT PScorrenti FROM personaggio 
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db,$Mysql);
 	$res=mysqli_fetch_array($Result,MYSQLI_ASSOC);

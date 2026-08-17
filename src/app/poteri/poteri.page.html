@@ -35,12 +35,12 @@
       }
       @if (p.attivo=='X'  ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.psvuoti==0 || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==user.fulldata.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='Y'  ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.psvuoti==0 || user.fulldata.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==user.fulldata.maxps || user.fulldata.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='S') {

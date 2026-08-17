@@ -90,11 +90,8 @@ export class LoginPage implements OnInit {
           this.user.fulldata = data;
 
           // fix
-          this.user.fulldata['sete'] = Number(this.user.fulldata['sete']);
-          this.user.fulldata['addsete'] = Number(this.user.fulldata['addsete']);
-          this.user.fulldata['PScorrenti'] = Number(
-            this.user.fulldata['PScorrenti']
-          );
+
+          this.user.fulldata['PScorrenti'] = Number(this.user.fulldata['PScorrenti']);
 
           this.user.fulldata['forza'] = Number(this.user.fulldata['forza']);
           this.user.fulldata['destrezza'] = Number(
@@ -121,6 +118,7 @@ export class LoginPage implements OnInit {
           );
 
           this.user.fulldata['fdv'] = Number(this.user.fulldata['fdv']);
+          this.user.fulldata['fdvmax'] = Number(this.user.fulldata['fdvmax']);
           this.user.fulldata['fama1'] = Number(this.user.fulldata['fama1']);
           this.user.fulldata['fama2'] = Number(this.user.fulldata['fama2']);
           this.user.fulldata['fama3'] = Number(this.user.fulldata['fama3']);
@@ -134,13 +132,12 @@ export class LoginPage implements OnInit {
           // this.user.fulldata['notemaster']=this.nl2br(this.user.fulldata['notemaster']);
           //
 
-          this.user.fulldata['psvuoti'] =
-            this.user.fulldata['sete'] +
-            this.user.fulldata['addsete'] -
-            this.user.fulldata['PScorrenti'];
+         
+            
+        this.user.fulldata['PScorrenti'] = Number(this.user.fulldata['PScorrenti']);
+         this.user.fulldata['maxps'] = Number(this.user.fulldata['maxps']);
 
-          this.user.fulldata['setetot'] =
-            this.user.fulldata['sete'] + this.user.fulldata['addsete'];
+
 
           this.authentication.skill(this.user.userid).subscribe(
             (data) => {

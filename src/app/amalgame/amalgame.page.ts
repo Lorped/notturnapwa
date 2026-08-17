@@ -42,7 +42,7 @@ export class AmalgamePage implements OnInit {
         idamalgama: idamalgama,
       })
       .subscribe((data: any) => {
-        this.user.fulldata.psvuoti = this.user.fulldata.psvuoti + ps;
+
         this.user.fulldata.PScorrenti = this.user.fulldata.PScorrenti - ps;
         this.user.fulldata.fdv = this.user.fulldata.fdv - fdv;
 

@@ -77,9 +77,7 @@ export class PoteriPage implements OnInit {
         let ps = res.ps;
         //console.log(ps);
         //this.navParams.get("parentPage").loadDadi();
-        this.user.fulldata['psvuoti'] = this.user.fulldata['psvuoti'] + ps;
-        this.user.fulldata['PScorrenti'] =
-          this.user.fulldata['PScorrenti'] - ps;
+        this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] - ps;
 
         this.showalert(pot);
 
@@ -114,11 +112,9 @@ export class PoteriPage implements OnInit {
 
     this.http.get<any>(link).subscribe((res) => {
       this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] + 3;
-      if (this.user.fulldata['PScorrenti'] > this.user.fulldata['setetot']) {
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['setetot'];
+      if (this.user.fulldata['PScorrenti'] > this.user.fulldata['maxps']) {
+        this.user.fulldata['PScorrenti'] = this.user.fulldata['maxps'];
       }
-      this.user.fulldata['psvuoti'] =
-        this.user.fulldata['setetot'] - this.user.fulldata['PScorrenti'];
 
       this.user.fulldata['lastcaccia'] = res.last;
 

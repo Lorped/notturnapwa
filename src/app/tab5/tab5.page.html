@@ -47,7 +47,7 @@
 
   <ion-row class="master" color="dark" >
     <ion-col>
-      <ion-button class="submit-btn3" color="danger" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.psvuoti==0" (click)="gocaccia()">Vai a caccia</ion-button>
+      <ion-button class="submit-btn3" color="danger" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti<this.user.fulldata.maxps" (click)="gocaccia()">Vai a caccia</ion-button>
     </ion-col>
   </ion-row>
 

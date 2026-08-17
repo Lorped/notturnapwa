@@ -59,9 +59,8 @@ export class TelepatiaPage implements OnInit {
 
     this.http.post(url, mypost).subscribe((res) => {
       //this.navParams.get("parentPage").loadDadi();
-      this.user.fulldata['psvuoti'] = 1 * this.user.fulldata['psvuoti'] + 1;
-      this.user.fulldata['PScorrenti'] =
-        1 * this.user.fulldata['PScorrenti'] - 1;
+      this.user.fulldata['PScorrenti'] -- ;
+
       this.router.navigate(['/tabs/poteri', 3, 'Auspex']);
     });
 

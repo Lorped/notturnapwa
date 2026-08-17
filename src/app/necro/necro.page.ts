@@ -37,7 +37,7 @@ export class NecroPage implements OnInit {
       let ps = res.ps;
       //console.log(ps);
 
-      this.user.fulldata['psvuoti'] = this.user.fulldata['psvuoti'] + ps;
+
       this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] - ps;
 
       this.showalert(pot2, pot);

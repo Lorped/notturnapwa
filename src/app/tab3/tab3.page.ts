@@ -73,67 +73,67 @@ export class Tab3Page {
   ionViewWillEnter() {
     // console.log(this.fulldata['idclan']);
     switch (this.user.fulldata['idclan']) {
-      case '1': //  Toreador
+      case 1: //  Toreador
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UZ2pKb0RzRlZoaVU/view';
         break;
-      case '2': //  Ventrue
+      case 2: //  Ventrue
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UTTRodGZXdzdCVXM/view';
         break;
-      case '3': // Nosferatu
+      case 3: // Nosferatu
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UUDNmT3llNjZ3UXM/view';
         break;
-      case '4': // Brujah
+      case 4: // Brujah
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UNFZURFpYR2pfNVk/view';
         break;
-      case '5': // Gangrel
+      case 5: // Gangrel
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UcFRxVFRkNnRLb28/view';
         break;
-      case '6': // Malkavian
+      case 6: // Malkavian
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UZ2dRSW1VOGFWNDQ/view';
         break;
-      case '7': // Tremere
+      case 7: // Tremere
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-US3d3OEpnbV9Ccjg/view';
         break;
-      case '8': // Lasombra
+      case 8: // Lasombra
         this.link =
           'https://drive.google.com/file/d/1veEpi_TDGZz-xIFbO1PeVfHrprrDISWF/view';
         break;
-      case '9': // Tzimisce
+      case 9: // Tzimisce
         this.link =
           'https://drive.google.com/file/d/1AyN-Ofnhw-m5LQcNMFEHYOnLclb-3N_0/view';
         break;
-      case '10': // Assamiti
+      case 10: // Assamiti
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-ULXpGWkxLNWZhaDg/view';
         break;
-      case '11': // Giovanni
+      case 11: // Giovanni
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UYTVUZFlNeEo2N0k/view';
         break;
-      case '12': // Ravnos
+      case 12: // Ravnos
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UVTF3QWJ2TzNXZk0/view';
         break;
-      case '13': // Setiti
+      case 13: // Setiti
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UOUo0dll2NjRDOHc/view';
         break;
-      case '14': // Cappadoci
+      case 14: // Cappadoci
         this.link =
           'https://drive.google.com/file/d/1WqSxecMNGQ0ayh6MLGM-FHCP1LaL0khZ/view';
         break;
-      case '20': // vili
+      case 20: // vili
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UOWhsMExKd2YzTVU/view';
         break;
-      case '21': // Gangrel - city
+      case 21: // Gangrel - city
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UcFRxVFRkNnRLb28/view';
         break;

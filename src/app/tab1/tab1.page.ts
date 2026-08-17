@@ -28,7 +28,6 @@ export class Tab1Page {
         .loadpscorrenti(this.user.userid)
         .subscribe((data: any) => {
           this.user.fulldata.PScorrenti = data.PScorrenti;
-          this.user.fulldata.psvuoti = data.psvuoti;
         });
 
       event.target.complete();
