@@ -25,7 +25,7 @@ export class TelepatiaPage implements OnInit {
 
   ngOnInit() {
     //console.log(this.myuser);
-    this.loadUtenti(this.user.userid);
+    this.loadUtenti(this.user.idutente);
   }
 
   loadUtenti(a: number) {
@@ -48,7 +48,7 @@ export class TelepatiaPage implements OnInit {
   invia() {
     var url = 'https://www.roma-by-night.it/ionicPHP/inviamessaggioutente.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
+      idutente: this.user.idutente,
       destinatario: this.pgscelto,
       messaggio: this.messaggio,
     });
@@ -59,7 +59,7 @@ export class TelepatiaPage implements OnInit {
 
     this.http.post(url, mypost).subscribe((res) => {
       //this.navParams.get("parentPage").loadDadi();
-      this.user.fulldata['PScorrenti'] -- ;
+      this.user['PScorrenti'] -- ;
 
       this.router.navigate(['/tabs/poteri', 3, 'Auspex']);
     });

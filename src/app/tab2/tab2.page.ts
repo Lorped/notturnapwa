@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { User, Oggetto } from '../globals';
+import { User, Userskill, Oggetto } from '../globals';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Router } from '@angular/router';
@@ -37,6 +37,7 @@ export class Tab2Page {
   constructor(
     public oggetto: Oggetto,
     public user: User,
+    public userskill: Userskill,
     private router: Router,
     public alertController: AlertController
   ) {
@@ -91,14 +92,14 @@ export class Tab2Page {
   ionViewWillEnter() {
     this.rituali = 0;
 
-    for (var j = 0; j < this.user.skill.length; j++) {
-      if (this.user.skill[j].tipologia == 11) {
+    for (var j = 0; j < this.userskill.skill.length; j++) {
+      if (this.userskill.skill[j].tipologia == 11) {
         this.rituali = 1;
         break;
       }
     }
-    for (var j = 0; j < this.user.skill.length; j++) {
-      if (this.user.skill[j].tipologia == 12) {
+    for (var j = 0; j < this.userskill.skill.length; j++) {
+      if (this.userskill.skill[j].tipologia == 12) {
         this.amalgame = 1;
         break;
       }
@@ -112,31 +113,31 @@ export class Tab2Page {
     this.potenza = 0;
     this.artigli = 0;
 
-    for (var i = 0; i < this.user.skill.length; i++) {
-      if (this.user.skill[i].nomeskill == 'Rissa') {
-        this.rissa = this.user.skill[i].livello;
+    for (var i = 0; i < this.userskill.skill.length; i++) {
+      if (this.userskill.skill[i].nomeskill == 'Rissa') {
+        this.rissa = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Mischia') {
-        this.mischia = this.user.skill[i].livello;
+      if (this.userskill.skill[i].nomeskill == 'Mischia') {
+        this.mischia = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Armi da lancio') {
-        this.lancio = this.user.skill[i].livello;
+      if (this.userskill.skill[i].nomeskill == 'Armi da lancio') {
+        this.lancio = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Armi da tiro') {
-        this.tiro = this.user.skill[i].livello;
+      if (this.userskill.skill[i].nomeskill == 'Armi da tiro') {
+        this.tiro = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Armi da fuoco') {
-        this.fuoco = this.user.skill[i].livello;
+      if (this.userskill.skill[i].nomeskill == 'Armi da fuoco') {
+        this.fuoco = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Potenza') {
-        this.potenza = this.user.skill[i].livello;
+      if (this.userskill.skill[i].nomeskill == 'Potenza') {
+        this.potenza = this.userskill.skill[i].livello;
       }
-      if (this.user.skill[i].nomeskill == 'Proteide') {
-        if (this.user.skill[i].livello > 1) this.artigli = 1;
+      if (this.userskill.skill[i].nomeskill == 'Proteide') {
+        if (this.userskill.skill[i].livello > 1) this.artigli = 1;
       }
     }
 
-    this.forza = this.user.fulldata['forza'];
+    this.forza = this.user['forza'];
 
     // console.log( "forza:" , this.forza);
     // console.log( "rissa:" , this.rissa);

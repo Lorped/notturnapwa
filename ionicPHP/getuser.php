@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $idutente=$_GET['id'];
 
 
-  include ('db2.inc.php');  //NEW MYSQL //
+  require_once __DIR__ . '/db2.inc.php';  //NEW MYSQL //
 
 
 		//controllo-aggiorno fdv
@@ -73,18 +73,17 @@ $idutente=$_GET['id'];
 
     //inizio test su ps
 
-    $Mysql="SELECT PScorrenti, sete, addsete, lastps FROM personaggio
-      LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-      LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+    $Mysql="SELECT PScorrenti, maxps, lastps FROM personaggio
+      LEFT JOIN generazione ON generazione.generazione = personaggio.generazione
     WHERE idutente=$idutente";
     $Result=mysqli_query ($db, $Mysql);
     $res=mysqli_fetch_array($Result);
 
     $PScorrenti=$res['PScorrenti'];
-    $setetot=$res['sete']+$res['addsete'];
+    $maxps=$res['maxps'];
     $lastps=$res['lastps'];
 
-    if ( $PScorrenti == $setetot ) {  // tutto ok
+    if ( $PScorrenti == $maxps ) {  // tutto ok
       //
     } else {
       $now=time();
@@ -94,7 +93,7 @@ $idutente=$_GET['id'];
 
       if ( $diff > 1 ) {
         $newlastps=date("Y-m-d H:i:s",$now );
-        $Mysql="UPDATE personaggio SET PScorrenti = $setetot , lastps = '$newlastps' WHERE idutente=$idutente";
+        $Mysql="UPDATE personaggio SET PScorrenti = $maxps , lastps = '$newlastps' WHERE idutente=$idutente";
         $Result=mysqli_query ($db, $Mysql);
       }
 

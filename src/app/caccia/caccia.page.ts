@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { User, Userskill } from '../globals';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -31,6 +31,7 @@ export class CacciaPage implements OnInit {
   constructor(
     private http: HttpClient,
     public user: User,
+    public userskill: Userskill,
     public router: Router,
     public activatedroute: ActivatedRoute
   ) {}
@@ -52,23 +53,23 @@ export class CacciaPage implements OnInit {
       this.tossico = 0;
       this.metab = 0;
 
-      for (let i = 0; i < this.user.skill.length; i++) {
-        if (this.user.skill[i].nomeskill == 'Gregge') {
-          if (this.user.skill[i].livello > 0) {
-            this.gregge = this.user.skill[i].livello;
+      for (let i = 0; i < this.userskill.skill.length; i++) {
+        if (this.userskill.skill[i].nomeskill == 'Gregge') {
+          if (this.userskill.skill[i].livello > 0) {
+            this.gregge = this.userskill.skill[i].livello;
           }
         }
-        if (this.user.skill[i].nomeskill == 'Tossicodipendente') {
+        if (this.userskill.skill[i].nomeskill == 'Tossicodipendente') {
           this.tossico = 1;
         }
-        if (this.user.skill[i].nomeskill == 'Metabolismo Efficiente') {
+        if (this.userskill.skill[i].nomeskill == 'Metabolismo Efficiente') {
           this.metab = 1;
         }
       }
 
-      this.maxTime = this.user.fulldata.tempocaccia * 60 - this.gregge * 60  ;
+      this.maxTime = this.user.tempocaccia * 60 - this.gregge * 60  ;
 
-      if (this.user.fulldata['idclan'] == 2) {
+      if (this.user['idclan'] == 2) {
         //ventrue
         this.maxTime = this.maxTime + 60 * 3; // 3 min. addizionali
       }
@@ -96,7 +97,7 @@ export class CacciaPage implements OnInit {
       }
 
       this.recuperati =
-        this.user.fulldata['maxps'] - this.user.fulldata['PScorrenti'];
+        this.user['maxps'] - this.user['PScorrenti'];
 
       if (this.tossico == 1 && Math.random() * 100 < 30) {
         this.recuperati = Math.ceil(this.recuperati / 2);
@@ -170,7 +171,7 @@ export class CacciaPage implements OnInit {
   msginizio() {
     var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
     var mypost = JSON.stringify({
-      idutente: this.user['userid'],
+      idutente: this.user['idutente'],
       messaggio: 'ha iniziato la caccia',
     });
 
@@ -178,27 +179,27 @@ export class CacciaPage implements OnInit {
   }
 
   msgfine() {
-    this.user.fulldata['PScorrenti'] =
-      this.user.fulldata['PScorrenti'] + this.recuperati;
+    this.user['PScorrenti'] =
+      this.user['PScorrenti'] + this.recuperati;
     this.user.incaccia = 0;
 
-    if (this.user.fulldata['PScorrenti'] > this.user.fulldata['maxps']) {
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['maxps'];
+    if (this.user['PScorrenti'] > this.user['maxps']) {
+      this.user['PScorrenti'] = this.user['maxps'];
     }
 
 
-    //console.log(this.myuser.fulldata);
+    //console.log(this.myuser);
 
     var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
     var mypost = JSON.stringify({
-      idutente: this.user['userid'],
+      idutente: this.user['idutente'],
       messaggio: 'ha terminato la caccia',
     });
 
     this.http.post(link, mypost).subscribe((res) => {
       var link =
         'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-        this.user['userid'] +
+        this.user['idutente'] +
         '&recuperati=' +
         this.recuperati +
         '&anim=0' +

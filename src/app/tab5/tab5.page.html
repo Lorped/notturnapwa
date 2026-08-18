@@ -28,13 +28,13 @@
   </ion-row>
   <ion-row class="master" color="dark" >
     <ion-col>
-      <ion-button class="submit-btn3" expand="full" shape="round" type="submit" [disabled]="user.fulldata.fdv==0" (click)="usafdv()">Usa Forza di Volontà</ion-button>
+      <ion-button class="submit-btn3" expand="full" shape="round" type="submit" [disabled]="user.fdv==0" (click)="usafdv()">Usa Forza di Volontà</ion-button>
     </ion-col>
   </ion-row>
 
   <ion-row class="master" color="dark" >
     <ion-col>
-      <ion-button id="cura" class="submit-btn2" color="danger" expand="full" shape="round" type="submit" [disabled]="user.fulldata.PScorrenti==0" (click)="menops()">Cura Ferite - {{this.user.fulldata.rigen}}</ion-button>
+      <ion-button id="cura" class="submit-btn2" color="danger" expand="full" shape="round" type="submit" [disabled]="user.PScorrenti==0" (click)="menops()">Cura Ferite - {{this.user.rigen}}</ion-button>
     </ion-col>
   </ion-row>
 
@@ -43,11 +43,11 @@
     header="Attenzione"
     subHeader="Cura ferite"
     [buttons]="alertButtons"
-  message="{{user.fulldata.rigen}}  ferite curate" ></ion-alert>
+  message="{{user.rigen}}  ferite curate" ></ion-alert>
 
   <ion-row class="master" color="dark" >
     <ion-col>
-      <ion-button class="submit-btn3" color="danger" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti<this.user.fulldata.maxps" (click)="gocaccia()">Vai a caccia</ion-button>
+      <ion-button class="submit-btn3" color="danger" expand="full" shape="round" type="submit" [disabled]="this.user.PScorrenti<this.user.maxps" (click)="gocaccia()">Vai a caccia</ion-button>
     </ion-col>
   </ion-row>
 
@@ -64,20 +64,13 @@
   </ion-row>
 
   <ion-row class="master" color="dark">
-    @for (pot of this.user.poteri; track pot) {
+    @for (pot of this.userskill.discipline; track pot) {
       <ion-col size="6">
-        <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
+        <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
       </ion-col>
     }
   </ion-row>
 
-  <ion-row class="master" color="dark">
-    @if (this.user.amalgame.length>0) {
-      <ion-col size="6">
-        <ion-button color="danger" (click)="goamalgame()"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.fulldata.PScorrenti==0" >Amalgame</ion-button>
-      </ion-col>
-    }
-  </ion-row>
 
 
 

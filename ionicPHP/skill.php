@@ -35,23 +35,64 @@ header('Content-Type: text/html; charset=utf-8');
 
     require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
-    $out1 = [];
 
-    $MySql = "SELECT nomeskill,livello,tipologia  FROM skill
+    /*********************    SKILL  */
+    $skill = [];
+
+    $MySql = "SELECT nomeskill,livello, skill.idskill, tipologia  FROM skill
           LEFT JOIN skill_main ON skill_main.idskill=skill.idskill
-          WHERE idutente = '$userid' ";
-
-
+          WHERE idutente = '$userid' and subskill = 0 and tipologia = 0
+          order by nomeskill";
 
     $Result = mysqli_query($db, $MySql);
     while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-      //print_r ($res);
+      
+      $nomeskill = $res['nomeskill'];
+      $livello = $res['livello'];
+      $idx= $res['idskill'];
+      $subskill = [];
 
-      $out1[] =  $res;
+      $mysql2 = "SELECT skill.idskill, nomeskill, livello from skill
+        left join skill_main ON skill_main.idskill=skill.idskill
+          where idutente = $userid and subskill = $idx"; 
+      $Result2 = mysqli_query($db, $mysql2);
+      while ( $res2 = mysqli_fetch_array($Result2,MYSQLI_ASSOC) ) {
+        $subskill[] = $res2;
+      }
+
+      $skill [] = [
+        'idskill' => $idx,
+        'nomeskill' => $nomeskill,
+        'livello' => $livello,
+        'tipologia' => 0,
+        'subskill' => $subskill
+      ]; 
+      
     }
 
+    /*********************    OTHERSKILL  */
+    $otherskill = [];
 
-    $MySql = "SELECT  nomedisc as nomeskill  ,livello,tipologia  FROM discipline
+    $MySql = "SELECT skill.idskill, nomeskill,livello , tipologia FROM skill
+          LEFT JOIN skill_main ON skill_main.idskill=skill.idskill
+          WHERE idutente = '$userid' and (tipologia = 1 or tipologia = 2)
+          order by nomeskill";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+      
+      $otherskill [] = $res;
+      
+    }
+
+    /******************    Discipline  */
+
+
+
+
+    $discipline = [];
+
+    $MySql = "SELECT  discipline.iddisciplina , nomedisc ,livello   FROM discipline
           LEFT JOIN discipline_main ON discipline_main.iddisciplina=discipline.iddisciplina
           WHERE idutente = '$userid'
           ORDER BY discipline.iddisciplina";
@@ -59,59 +100,44 @@ header('Content-Type: text/html; charset=utf-8');
     $Result = mysqli_query($db, $MySql);
     while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
 
-      $out1[] =  $res;
+      $idisciplina = $res['iddisciplina'];
+      $nomedisc = $res ['nomedisc'];
+      $livello = $res [ 'livello'];
+
+      $poteri = [];
+
+      $mysql2 = "SELECT poteri_main.idpotere, poteri_main.livellopot, poteri_main.nomepotere, poteri_main.attivo from poteri 
+      left join poteri_main on poteri.idpotere = poteri_main.idpotere 
+      where poteri_main.iddisciplina = $idisciplina and poteri.idutente = $userid";
+      $Result2 = mysqli_query($db, $mysql2);
+      while ( $res2 = mysqli_fetch_array($Result2,MYSQLI_ASSOC)) {
+        $poteri[] = $res2;
+      }
+
+      $discipline[] =  [
+        'iddisciplina' => $idisciplina,
+        'nomedisc' => $nomedisc,
+        'livello' => $livello,
+        'poteri' => $poteri
+      ];
     }
 
-    /***
-    $MySql = "SELECT  nomedisc as nomeskill  ,livello,tipologia  FROM HUNdiscipline
-          LEFT JOIN HUNdiscipline_main ON HUNdiscipline_main.iddisciplina=HUNdiscipline.iddisciplina  
-          WHERE idutente = '$userid'
-          ORDER BY HUNdiscipline.iddisciplina";
+ 
+
+    /********   BACKGROUND ************* */
+
+    $background = [];
+
+    $MySql = "SELECT nomeback , background.idback ,livello FROM background 
+      LEFT JOIN background_main ON background_main.idback=background.idback 
+      WHERE idutente = '$userid' ORDER BY background.idback";
 
     $Result = mysqli_query($db, $MySql);
     while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
 
-      $out1[] =  $res;
-    }
-
-    */
 
 
-
-
-   $MySql = "SELECT  nometaum as nomeskill  ,livello,tipologia  FROM taumaturgie
-          LEFT JOIN taumaturgie_main ON taumaturgie_main.idtaum=taumaturgie.idtaum
-          WHERE idutente = '$userid' ORDER BY livello DESC";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-
-		$MySql = "SELECT  nomenecro as nomeskill  ,livello,tipologia  FROM necromanzie
-          LEFT JOIN necromanzie_main ON necromanzie_main.idnecro=necromanzie.idnecro
-          WHERE idutente = '$userid' ORDER BY livello DESC ";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-
-    $MySql = "SELECT  nomeback as nomeskill  ,livello,tipologia  FROM background
-          LEFT JOIN background_main ON background_main.idback=background.idback
-          WHERE idutente = '$userid'
-          ORDER BY background.idback";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      if ( $res['nomeskill'] == "Risorse" ) {
-        //$res['nomeskill'] = "Risorse base";//
-
-        $out1[] =  $res;
-
+      if ( $res['idback'] == 2 ) {    // RISORSE
         $saldo = $res['livello'];
         $now = time();
         $MySqlX = "SELECT * FROM risorse WHERE idutente = '$userid' order by dataspesa desc";
@@ -128,36 +154,49 @@ header('Content-Type: text/html; charset=utf-8');
           }
           $saldo = $saldo - $spesa + $recuperati;
         }
-        $risorseeff= [
-          'nomeskill' => 'Risorse effettive' ,
+        $risorseeff = [
+          'nomeback' => 'Risorse effettive' ,
           'livello' => $saldo,
-          'tipologia' => 5
+          'idback' => 2
         ];
         if ($saldo != $res['livello']) {
-          $out1[]  = $risorseeff;
+          $background[]  = $risorseeff;
         }
-
-        /*
-        $MySqlX = "SELECT contanti FROM personaggio WHERE idutente = '$userid' ";
-        $ResultX = mysqli_query($db, $MySqlX);
-        $resX = mysqli_fetch_array ($ResultX);
-        if ($resX['contanti'] != 0) {
-
-          $contanti= [
-            'nomeskill' => 'Contanti: '.$resX['contanti'] ,
-            'livello' => 0,
-            'tipologia' => 5
-          ];
-          $out1[]  = $contanti;
-
-        }
-          */
 
       } else {
-        $out1[] =  $res;
+        $background[] =  $res;
       }
 
     }
+
+
+    /******************     necro / taum  */
+
+    $taum =[];
+
+   $MySql = "SELECT  nometaum ,  livello  FROM taumaturgie
+          LEFT JOIN taumaturgie_main ON taumaturgie_main.idtaum=taumaturgie.idtaum
+          WHERE idutente = '$userid' ORDER BY livello DESC";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+
+      $taum[] =  $res;
+    }
+
+      $necro =[];
+
+		$MySql = "SELECT  nomenecro as nomeskill  ,livello,tipologia  FROM necromanzie
+          LEFT JOIN necromanzie_main ON necromanzie_main.idnecro=necromanzie.idnecro
+          WHERE idutente = '$userid' ORDER BY livello DESC ";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+
+      $necro[] =  $res;
+    }
+
+
 
     $MySql = "SELECT  nomecontatto as nomeskill  ,livello,tipologia  FROM contatti
           WHERE idutente = '$userid'
@@ -207,35 +246,22 @@ header('Content-Type: text/html; charset=utf-8');
       $out1[] =  $res;
     }
 
-    /*
-
-    $MySql = "SELECT  nomeamalgama as nomeskill  , '0' as livello, '12' as tipologia  FROM amalgame
-    LEFT JOIN amalgame_main ON amalgame_main.idamalgama=amalgame.idamalgama
-             WHERE idutente = '$userid' ";
-
-    $Result = mysqli_query($db, $MySql);
-      while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-      */
+    
 
     // influenze
 
-    /*
-    $MySql = "SELECT  nomealleato as nomeskill  ,  livello, '13' as tipologia  FROM influenze
-    LEFT JOIN influenze_main ON influenze_main.idinfluenza=influenze.idinfluenza
-             WHERE idutente = '$userid' ";
-
-    $Result = mysqli_query($db, $MySql);
-      while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-    */
+    
+    $out = [
+      'skill' => $skill,
+      'otherskill' => $otherskill,
+      'discipline' => $discipline,
+      'background' => $background,
+      'necro' => $necro,
+      'taum' => $taum,
+    ];
 
 
-    $output = json_encode ($out1, JSON_UNESCAPED_UNICODE);
+    $output = json_encode ($out, JSON_UNESCAPED_UNICODE);
     echo $output;
 
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class Tab5Page implements OnInit {
 
   constructor(
     public user: User,
+    public userskill: Userskill,
     public feed: FeedService,
     public http: HttpClient,
     public router: Router
@@ -35,14 +36,14 @@ export class Tab5Page implements OnInit {
   }
 
   loadDadi(): any {
-    this.feed.getDadi(this.user['userid']).subscribe((allFeeds: any) => {
+    this.feed.getDadi(this.user['idutente']).subscribe((allFeeds: any) => {
       this.tiridado = allFeeds;
     });
   }
 
   tiraildado() {
     var link = 'https://www.roma-by-night.it/ionicPHP/lanciadado.php';
-    var mypost = JSON.stringify({ userid: this.user['userid'] });
+    var mypost = JSON.stringify({ userid: this.user['idutente'] });
 
     this.http.post<any>(link, mypost).subscribe((res) => {
       setTimeout(this.loadDadi(), 1000);
@@ -50,29 +51,29 @@ export class Tab5Page implements OnInit {
   }
   usafdv() {
     var link = 'https://www.roma-by-night.it/ionicPHP/usofdv.php';
-    var mypost = JSON.stringify({ userid: this.user['userid'] });
+    var mypost = JSON.stringify({ userid: this.user['idutente'] });
 
     this.http.post<any>(link, mypost).subscribe((res) => {
       setTimeout(this.loadDadi(), 1000);
     });
 
-    this.user.fulldata['fdv']--;
-    this.user.fulldata['rd'] = Math.floor(
-      (this.user.fulldata['carisma'] +
-        this.user.fulldata['intelligenza'] +
-        this.user.fulldata['prontezza'] +
-        this.user.fulldata['percezione'] +
-        this.user.fulldata['fdv']) /
+    this.user['fdv']--;
+    this.user['rd'] = Math.floor(
+      (this.user['carisma'] +
+        this.user['intelligenza'] +
+        this.user['prontezza'] +
+        this.user['percezione'] +
+        this.user['fdv']) /
         5
     );
   }
   menops() {
     var link =
       'https://www.roma-by-night.it/ionicPHP/menops2.php?id=' +
-      this.user['userid'];
+      this.user['idutente'];
 
     this.http.get<any>(link).subscribe((res) => {
-      this.user.fulldata.PScorrenti--;
+      this.user.PScorrenti--;
 
       setTimeout(this.loadDadi(), 1000);
     });

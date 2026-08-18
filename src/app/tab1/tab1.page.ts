@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { User } from '../globals';
+import { User , Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
@@ -11,12 +11,17 @@ import { AuthserviceService } from '../services/authservice.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit{
   constructor(
     public user: User,
+    public userskill: Userskill,
     private router: Router,
     private authentication: AuthserviceService
   ) {}
+
+  ngOnInit() {
+    console.log ("user - " , this.user);
+  }
 
   public logoutx() {
     this.router.navigate(['login']);
@@ -25,9 +30,9 @@ export class Tab1Page {
   doRefresh(event: any) {
     setTimeout(() => {
       this.authentication
-        .loadpscorrenti(this.user.userid)
+        .loadpscorrenti(this.user.idutente)
         .subscribe((data: any) => {
-          this.user.fulldata.PScorrenti = data.PScorrenti;
+          this.user.PScorrenti = data.PScorrenti;
         });
 
       event.target.complete();

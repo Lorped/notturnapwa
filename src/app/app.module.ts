@@ -13,7 +13,6 @@ import {
   withXhr,
 } from '@angular/common/http';
 
-import { User, Oggetto, ToChange } from './globals';
 import { PipesModule } from './pipes/pipes.module';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
@@ -29,11 +28,8 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    User,
-    Oggetto,
     BarcodeScanner,
     InAppBrowser,
-    ToChange,
     provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ],
 })

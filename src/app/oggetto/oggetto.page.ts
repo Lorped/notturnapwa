@@ -34,7 +34,7 @@ export class OggettoPage implements OnInit {
 
     var url =
       'https://www.roma-by-night.it/ionicPHP/barcode.php?id=' +
-      this.user.userid +
+      this.user.idutente +
       '&barcode=' +
       this.oggetto.id;
 
@@ -96,7 +96,7 @@ export class OggettoPage implements OnInit {
     // headers.append('Content-Type', 'application/json');
     var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
+      idutente: this.user.idutente,
       messaggio: messaggio,
     });
 

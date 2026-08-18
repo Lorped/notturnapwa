@@ -2,18 +2,46 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class Background {
-  public IDbackground = 0;
-  public NomeBackground = '';
-  public LivelloBG = 0;
+  public idback = 0;
+  public nomaback = '';
+  public livello = 0;
 }
 
 
 @Injectable()
-export class askill {
-    public tipologia = 0;
+export class Subskill {
+    public idskill = 0;
     public nomeskill = '';
     public livello = 0;
 }
+
+@Injectable()
+export class Skill {
+    public tipologia = 0;
+    public idskill = 0 ;
+    public nomeskill = '';
+    public livello = 0;
+    public subskill: Array<Subskill> = [];
+}
+
+
+@Injectable()
+export class Potere  {
+    public idpotere = 0;
+    public nomepotere = '';
+    public attivo = '';
+    public livellopot = 0;    
+}
+
+@Injectable()
+export class Disciplina {
+    public iddisciplina = 0;
+    public nomedisc = '';
+    public livello = 0;
+    public poteri: Array<Potere> = [];
+}
+
+
 
 @Injectable()
 export class apoteri2  {
@@ -35,9 +63,9 @@ export class apoteri  {
     }
 }
 
-@Injectable()
-export class afulldata  {
-public idutente = 0 ;
+@Injectable({ providedIn: 'root' })
+export class User  {
+  public idutente = 0 ;
   public nomeplayer = '' ;
   public nomepg = '';
   public idclan = 0;
@@ -63,7 +91,7 @@ public idutente = 0 ;
   public PScorrenti = 0 ;
   public bonusrigen = 0 ; // da left join
   public rigen = 0 ; // da left join
-  public lastvitae = '' ; 
+  public lastps = '' ; 
   public notemaster = '' ; 
   public lastcaccia = '' ;
 
@@ -109,6 +137,8 @@ public idutente = 0 ;
   public rd = 0;  //res dominazione
   public pf = 0;  //punti ferita
   public rp = 0;  //res paletto
+
+  public incaccia = 0; //serve dopo
 }
 
 @Injectable()
@@ -153,51 +183,26 @@ export class anecro  {
     }
 }
 
-export class Amalgama {
-    idamalgama: number = 0;
-    nomeamalgama: string = '';
-    disc1: string = '';
-    lvldisc1: number = 0;
-    disc2: string = '';
-    lvldisc2: number = 0;
-    ps: number = 0;
-    fdv: number = 0;
+
+@Injectable({ providedIn: 'root' })
+export class Userskill {
+    public skill: Array<Skill> = [];
+    public otherskill: Array<Skill> = [];
+    public discipline: Array<Disciplina> = [];
+    public background: Array<Background> =[];
+    public taum: Array<ataum> = [];
+    public necro: Array<anecro> = [];
+
+    
+}
+  
+@Injectable({ providedIn: 'root' })
+export class Oggetto {
+    public id = '';
 }
 
-@Injectable()
-export class User {
-    public type: string;
-    public username: string;
-    public userid: number;
-    public fulldata: afulldata;
-    public skill: Array<askill>;
-    public poteri: Array<apoteri>;
-    public taum: Array<ataum>;
-    public necro: Array<anecro>;
-    public incaccia: Number;
-    public amalgame: Array<Amalgama>;
-  
-    constructor () {
-        this.type = 'V';
-        this.username = '';
-        this.userid = 0;
-        this.fulldata = new afulldata;
-        this.skill = [];
-        this.poteri = [];
-        this.taum = [];
-        this.necro = [];
-        this.incaccia = 0 ;
-        this.amalgame = [];
-    }
-  }
-  
-  @Injectable()
-  export class Oggetto {
-    public id = '';
-  }
 
-
-  export class RubricaItem {
+export class RubricaItem {
     contatto: string;
     cell: number;
     email: number;
@@ -215,7 +220,7 @@ export class User {
     }
   }
 
-  @Injectable()
+  @Injectable({ providedIn: 'root' })
   export class ToChange {
     contatto: string;
     cell: number;

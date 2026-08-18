@@ -21,7 +21,7 @@ export class MortePage implements OnInit {
   morte() {
     var link =
       'https://www.roma-by-night.it/ionicPHP/morte.php?id=' +
-      this.user['userid'];
+      this.user['idutente'];
     this.http.get(link).subscribe((res) => {
       this.router.navigate(['/login']);
     });

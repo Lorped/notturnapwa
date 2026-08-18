@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { User } from '../globals';
+import { User , Userskill} from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
 import { LoadingController } from '@ionic/angular';
@@ -45,7 +44,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private http: HttpClient,
     private authentication: AuthserviceService,
-    private user: User,
+    public user: User,
+    public userskill: Userskill,
     private loadingCtrl: LoadingController
   ) {
     this.registerCredentials.username =
@@ -63,231 +63,123 @@ export class LoginPage implements OnInit {
     // console.log( this.registerCredentials.username );
     // console.log( this.registerCredentials.password );
 
-    this.authentication
-      .login(
-        this.registerCredentials.username,
-        this.registerCredentials.password
-      )
-      .subscribe(
-        (data) => {
-          //save if required
-          if (this.saveme.checked == true) {
-            window.localStorage.setItem(
-              'notturnauserid',
-              this.registerCredentials.username
-            );
-            window.localStorage.setItem(
-              'notturnapasswd',
-              this.registerCredentials.password
-            );
-          } else {
-            window.localStorage.removeItem('notturnauserid');
-            window.localStorage.removeItem('notturnapasswd');
-          }
-
-          this.user.username = this.registerCredentials.username;
-          this.user.userid = data['idutente'];
-          this.user.fulldata = data;
-
-          // fix
-
-          this.user.fulldata['PScorrenti'] = Number(this.user.fulldata['PScorrenti']);
-
-          this.user.fulldata['forza'] = Number(this.user.fulldata['forza']);
-          this.user.fulldata['destrezza'] = Number(
-            this.user.fulldata['destrezza']
+    this.authentication.login(this.registerCredentials.username,this.registerCredentials.password).subscribe(
+      (data) => {
+        //save if required
+        if (this.saveme.checked == true) {
+          window.localStorage.setItem(
+            'notturnauserid',
+            this.registerCredentials.username
           );
-          this.user.fulldata['attutimento'] = Number(
-            this.user.fulldata['attutimento']
+          window.localStorage.setItem(
+            'notturnapasswd',
+            this.registerCredentials.password
           );
-          this.user.fulldata['carisma'] = Number(this.user.fulldata['carisma']);
-          this.user.fulldata['persuasione'] = Number(
-            this.user.fulldata['persuasione']
-          );
-          this.user.fulldata['saggezza'] = Number(
-            this.user.fulldata['saggezza']
-          );
-          this.user.fulldata['prontezza'] = Number(
-            this.user.fulldata['prontezza']
-          );
-          this.user.fulldata['intelligenza'] = Number(
-            this.user.fulldata['intelligenza']
-          );
-          this.user.fulldata['percezione'] = Number(
-            this.user.fulldata['percezione']
-          );
+        } else {
+          window.localStorage.removeItem('notturnauserid');
+          window.localStorage.removeItem('notturnapasswd');
+        }
 
-          this.user.fulldata['fdv'] = Number(this.user.fulldata['fdv']);
-          this.user.fulldata['fdvmax'] = Number(this.user.fulldata['fdvmax']);
-          this.user.fulldata['fama1'] = Number(this.user.fulldata['fama1']);
-          this.user.fulldata['fama2'] = Number(this.user.fulldata['fama2']);
-          this.user.fulldata['fama3'] = Number(this.user.fulldata['fama3']);
 
-          this.user.fulldata['xp'] = Number(this.user.fulldata['xp']);
-          this.user.fulldata['contanti'] = Number(
-            this.user.fulldata['contanti']
-          );
+        //this.user = data;
+        Object.assign(this.user, data);
 
-          // this.user.fulldata['note']=this.nl2br(this.user.fulldata['note']);
-          // this.user.fulldata['notemaster']=this.nl2br(this.user.fulldata['notemaster']);
-          //
+        // fix
 
-         
+        this.user['PScorrenti'] = Number(this.user['PScorrenti']);
+        this.user['forza'] = Number(this.user['forza']);
+        this.user['destrezza'] = Number(this.user['destrezza']);
+        this.user['attutimento'] = Number(this.user['attutimento']);
+        this.user['carisma'] = Number(this.user['carisma']);
+        this.user['persuasione'] = Number(this.user['persuasione']);
+        this.user['saggezza'] = Number(this.user['saggezza']);
+        this.user['prontezza'] = Number(this.user['prontezza']);
+        this.user['intelligenza'] = Number(this.user['intelligenza']);
+        this.user['percezione'] = Number(this.user['percezione']);
+
+        this.user['fdv'] = Number(this.user['fdv']);
+        this.user['fdvmax'] = Number(this.user['fdvmax']);
+        this.user['fama1'] = Number(this.user['fama1']);
+        this.user['fama2'] = Number(this.user['fama2']);
+        this.user['fama3'] = Number(this.user['fama3']);
+
+        this.user['xp'] = Number(this.user['xp']);
+        this.user['contanti'] = Number(this.user['contanti']);
             
-        this.user.fulldata['PScorrenti'] = Number(this.user.fulldata['PScorrenti']);
-         this.user.fulldata['maxps'] = Number(this.user.fulldata['maxps']);
+        this.user['PScorrenti'] = Number(this.user['PScorrenti']);
+        this.user['maxps'] = Number(this.user['maxps']);
 
 
+        this.authentication.skill(this.user.idutente).subscribe(
+          (data) => {
+            this.userskill.skill = data.skill;
+            this.userskill.otherskill = data.otherskill;
+            this.userskill.discipline = data.discipline;
+            this.userskill.background = data.background;
 
-          this.authentication.skill(this.user.userid).subscribe(
-            (data) => {
-              this.user.skill = data;
+            this.user.pf = (3 + this.user['attutimento']) * 2;
 
-              this.authentication.poteri(this.user.userid).subscribe(
-                (data) => {
-                  this.user.poteri = data;
+            this.user.rp = Math.floor(this.user['attutimento'] / 2 );
 
-                  this.authentication.taum(this.user.userid).subscribe(
-                    (data) => {
-                      this.user.taum = data[0].taum;
-                      this.user.necro = data[0].necro;
 
-                      // SETUP ALTRI VALORI
+            for (let i = 0; i < this.userskill.skill.length; i++) {
+              this.userskill.skill[i].livello = Number(this.userskill.skill[i].livello);
+            }
+            for (let i = 0; i < this.userskill.otherskill.length; i++) {
+              this.userskill.otherskill[i].livello = Number(this.userskill.otherskill[i].livello);  
+              if (this.userskill.otherskill[i].idskill == 47) {  //schivare
+                this.user.pf += this.userskill.otherskill[i].livello;
+              }
+            }
 
-                      this.user.fulldata['rd'] = Math.floor(
-                        (this.user.fulldata['carisma'] +
-                          this.user.fulldata['intelligenza'] +
-                          this.user.fulldata['prontezza'] +
-                          this.user.fulldata['percezione'] +
-                          this.user.fulldata['fdv']) /
-                          5
-                      );
-                      this.user.fulldata.pf =
-                        (3 + this.user.fulldata['attutimento']) * 2;
+            const rob = this.userskill.discipline.find ( xx => xx.iddisciplina == 12 ); //robustezza
 
-                      this.user.fulldata.rp = Math.floor(
-                        this.user.fulldata['attutimento'] / 2
-                      );
+            if ( rob ) {
+              this.user.pf += rob.livello;
+              this.user.rp = Math.floor( (this.user['attutimento'] + rob.livello) / 2 );
 
-                      for (let i = 0; i < this.user.skill.length; i++) {
-                        this.user.skill[i].livello = Number(
-                          this.user.skill[i].livello
-                        );
+              for ( let j= 0 ; j < rob.poteri.length ; j++) {
+                if (rob.poteri[j].idpotere == 70 ) { this.user.pf += (5+rob.livello);}
+                if (rob.poteri[j].idpotere == 74 ) { this.user.pf += 5;}
+              }
+            }
 
-                        if (this.user.skill[i].nomeskill == 'Schivare') {
-                          this.user.fulldata.pf += this.user.skill[i].livello;
-                        }
-                        if (this.user.skill[i].nomeskill == 'Robustezza') {
-                          this.user.fulldata.pf += this.user.skill[i].livello;
+            this.user['rd'] = Math.floor(
+              (this.user['carisma'] +
+                this.user['intelligenza'] +
+                this.user['prontezza'] +
+                this.user['percezione'] +
+                this.user['fdv']) /
+                5
+            );
 
-                          this.user.fulldata.rp = Math.floor(
-                            (this.user.fulldata['attutimento'] +
-                              this.user.skill[i].livello) /
-                              2
-                          );
+            this.authentication.taum(this.user.idutente).subscribe(
+              (data) => {
+                this.userskill.taum = data[0].taum;
+                this.userskill.necro = data[0].necro;
+            });
 
-                          // vedo se ha poteri attivi
-                          for (let j = 0; j < this.user.poteri.length; j++) {
-                            if (this.user.poteri[j].iddisciplina == 12) {
-                              for (
-                                let k = 0;
-                                k < this.user.poteri[j].poteri.length;
-                                k++
-                              ) {
-                                // console.log(this.myuser.poteri[j].poteri[k]);
-                                if (
-                                  this.user.poteri[j].poteri[k].nomepotere ==
-                                  'Resilienza'
-                                )
-                                  this.user.fulldata.pf +=
-                                    5 + this.user.skill[i].livello;
-                                if (
-                                  this.user.poteri[j].poteri[k].nomepotere ==
-                                  'Sconfiggere le Debolezze'
-                                )
-                                  this.user.fulldata.pf += 5; //perchè +5 da liv.1
-                              }
-                            }
-                          }
-                        }
-                        if (
-                          this.user.skill[i].nomeskill == 'Ferita Permanente'
-                        ) {
-                          this.user.fulldata.pf -= 3;
-                        }
-                        if (this.user.skill[i].nomeskill == 'Nove Vite') {
-                          this.user.fulldata.pf += 10;
-                        }
-                      }
+          
+            var cura = this.user.rigen;
 
-                      var cura = this.user.fulldata.rigen;
-                      for (let i = 0; i < this.user.skill.length; i++) {
-                        if (
-                          this.user.skill[i].nomeskill == 'Ferita Aperta #2'
-                        ) {
-                          cura -= 1;
-                        }
-                        if (
-                          this.user.skill[i].nomeskill == 'Ferita Aperta #3'
-                        ) {
-                          cura -= 2;
-                        }
-                        if (
-                          this.user.skill[i].nomeskill == 'Ferita Aperta #4'
-                        ) {
-                          cura -= 3;
-                        }
-                      }
-                      for (let i = 0; i < this.user.skill.length; i++) {
-                        if (
-                          this.user.skill[i].nomeskill == 'Guarigione Lenta'
-                        ) {
-                          cura = Math.ceil(cura / 2);
-                        }
-                      }
-                      this.user.fulldata.rigen = cura;
-
-                      this.authentication
-                        .listamalgame(this.user.userid)
-                        .subscribe((data: any) => {
-                          this.user.amalgame = data.amalgame;
-                          //console.log(this.user.amalgame);
-                          this.user.amalgame.forEach((element) => {
-                            element.fdv = Number(element.fdv);
-                            element.ps = Number(element.ps);
-                          });
-                          //console.log(this.user.amalgame);
-                        });
-
-                      // console.log ('user finale: ', this.user);
+            this.user.rigen = cura;
 
                       // all done
-                      this.loadingCtrl.dismiss();
+            this.loadingCtrl.dismiss();
 
-                      this.pushsetup();
+            // this.pushsetup();    <============= poi vediamo !!!
 
-                      //this.router.navigate(['tabs']);
-                    },
-                    (error) => {
-                      this.loadingCtrl.dismiss();
-                      alert('Error loading data4');
-                    }
-                  );
-                },
-                (error) => {
-                  this.loadingCtrl.dismiss();
-                  alert('Error loading data3');
-                }
-              );
-            },
-            (error) => {
-              this.loadingCtrl.dismiss();
-              alert('Error loading data2');
-            }
-          );
+            console.log ("user ", this.user);
+            console.log ("userskill ", this.userskill);
 
-          // console.log ('user: ', this.user);
+            this.router.navigate(['tabs']);
         },
+          (error) => {
+            this.loadingCtrl.dismiss();
+            alert('Error loading data4');  //SKILL
+          }
+        );
+    },
         (error) => {
           this.loadingCtrl.dismiss();
           //console.log(error);
@@ -349,7 +241,7 @@ export class LoginPage implements OnInit {
 
       let updateurl =
         'https://www.roma-by-night.it/ionicPHP/updateid.php?userid=' +
-        this.user.userid +
+        this.user.idutente +
         '&id=' +
         token.value;
       this.http.get(updateurl).subscribe((res) => {
@@ -386,14 +278,14 @@ export class LoginPage implements OnInit {
         this.listaclan = data.clan;
 
         this.listaclan.forEach((element) => {
-          if (element.idclan != Number(this.user.fulldata.idclan)) {
+          if (element.idclan != Number(this.user.idclan)) {
             FCM.unsubscribeFrom({ topic: element.nomeclan });
             //console.log(`unsubscribed from topic: `, element.nomeclan);
           }
         });
       });
 
-    var atopic2 = this.user.fulldata.nomeclan;
+    var atopic2 = this.user.nomeclan;
     FCM.subscribeTo({ topic: atopic2 })
       .then((r) => console.log(`subscribed to topic: `, atopic2))
       .catch((err) => console.log(err));

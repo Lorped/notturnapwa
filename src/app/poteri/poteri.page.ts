@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, apoteri2 } from '../globals';
+import { User, apoteri2 , Userskill } from '../globals';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
@@ -21,13 +21,14 @@ export class PoteriPage implements OnInit {
   constructor(
     public router: Router,
     public user: User,
+    public userskill: Userskill,
     public activatedroute: ActivatedRoute,
     public http: HttpClient,
     public alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
-    let tt = new Date(this.user.fulldata['lastcaccia']);
+    let tt = new Date(this.user['lastcaccia']);
     let tn = new Date();
 
     let diff = tn.getTime() - tt.getTime();
@@ -46,9 +47,9 @@ export class PoteriPage implements OnInit {
       // console.log(paramMap);
     });
 
-    for (let i = 0; i < this.user.poteri.length; i++) {
-      if (this.user.poteri[i].iddisciplina == this.disc) {
-        this.mypoteri = this.user.poteri[i].poteri;
+    for (let i = 0; i < this.userskill.discipline.length; i++) {
+      if (this.userskill.discipline[i].iddisciplina == this.disc) {
+        this.mypoteri = this.userskill.discipline[i].poteri;
         // console.log(this.mypoteri);
       }
     }
@@ -67,7 +68,7 @@ export class PoteriPage implements OnInit {
     } else {
       var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
       var mypost = JSON.stringify({
-        idutente: this.user.userid,
+        idutente: this.user.idutente,
         potere: pot,
         livello: livellopot,
         aDisciplina: this.disc,
@@ -77,16 +78,16 @@ export class PoteriPage implements OnInit {
         let ps = res.ps;
         //console.log(ps);
         //this.navParams.get("parentPage").loadDadi();
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] - ps;
+        this.user['PScorrenti'] = this.user['PScorrenti'] - ps;
 
         this.showalert(pot);
 
         if (this.disc == 2 && livellopot == 5) {
           //MAESTA
-          this.user.fulldata.nummaesta = this.user.fulldata.nummaesta - 1;
+          this.user.nummaesta = this.user.nummaesta - 1;
         }
 
-        if (this.user.fulldata['PScorrenti'] == 0) {
+        if (this.user['PScorrenti'] == 0) {
           // VAI VIA
           this.router.navigate(['/tabs/tab5']);
         }
@@ -107,16 +108,16 @@ export class PoteriPage implements OnInit {
     this.CacciaAnimalita = 1;
     var link =
       'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-      this.user['userid'] +
+      this.user['idutente'] +
       '&recuperati=3&anim=1';
 
     this.http.get<any>(link).subscribe((res) => {
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] + 3;
-      if (this.user.fulldata['PScorrenti'] > this.user.fulldata['maxps']) {
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['maxps'];
+      this.user['PScorrenti'] = this.user['PScorrenti'] + 3;
+      if (this.user['PScorrenti'] > this.user['maxps']) {
+        this.user['PScorrenti'] = this.user['maxps'];
       }
 
-      this.user.fulldata['lastcaccia'] = res.last;
+      this.user['lastcaccia'] = res.last;
 
       this.showalert('Richiamo');
       //console.log(this.myuser);

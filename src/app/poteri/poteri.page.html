@@ -15,32 +15,32 @@
     <ion-row>
       @if (p.attivo=='N' && p.livellopot<5 ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='N' && p.livellopot==5 && disc != 2) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='N' && p.livellopot==5 && disc == 2) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2 || user.fulldata.nummaesta == 0 " >{{p.livellopot}} - {{p.nomepotere}} [{{user.fulldata.nummaesta}}]</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2 || user.nummaesta == 0 " >{{p.livellopot}} - {{p.nomepotere}} [{{user.nummaesta}}]</ion-button>
         </ion-col>
       }
       @if (p.attivo=='N' && p.livellopot >5 ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='X'  ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==user.fulldata.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='Y'  ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.fulldata.PScorrenti==user.fulldata.maxps || user.fulldata.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || user.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
       @if (p.attivo=='S') {

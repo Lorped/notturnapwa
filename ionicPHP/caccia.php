@@ -61,7 +61,7 @@
 	if ( $anim == 1) {
 		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() , lastcaccia=NOW() WHERE idutente=$idutente";
 	} else if ( $vitae == 1) {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() , lastvitae=NOW() WHERE idutente=$idutente";
+		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() , lastps=NOW() WHERE idutente=$idutente";
 	} else {
 		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() WHERE idutente=$idutente";
 	}
@@ -144,7 +144,7 @@
 	}
 	if ( $vitae == 1) {
 		$out= [
-			'lastvitae' => date("Y-m-d H:i:s")
+			'lastps' => date("Y-m-d H:i:s")
 		];
 			echo json_encode($out, JSON_UNESCAPED_UNICODE);
 	}

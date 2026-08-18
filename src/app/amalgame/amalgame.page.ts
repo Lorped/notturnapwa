@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Amalgama, User } from '../globals';
+import {  User } from '../globals';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: false,
 })
 export class AmalgamePage implements OnInit {
-  myamalgame: Array<Amalgama> = [];
+  
   fdv = 0;
   ps = 0;
 
@@ -24,10 +24,10 @@ export class AmalgamePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.myamalgame = this.user.amalgame;
+    
 
-    this.fdv = this.user.fulldata.fdv;
-    this.ps = this.user.fulldata.PScorrenti;
+    this.fdv = this.user.fdv;
+    this.ps = this.user.PScorrenti;
   }
 
   gopotere(nome: string, idamalgama: number, ps: number, fdv: number) {
@@ -38,17 +38,17 @@ export class AmalgamePage implements OnInit {
 
     this.http
       .post<any>('https://www.roma-by-night.it/ionicPHP/usoamalgame.php', {
-        idutente: this.user.userid,
+        idutente: this.user.idutente,
         idamalgama: idamalgama,
       })
       .subscribe((data: any) => {
 
-        this.user.fulldata.PScorrenti = this.user.fulldata.PScorrenti - ps;
-        this.user.fulldata.fdv = this.user.fulldata.fdv - fdv;
+        this.user.PScorrenti = this.user.PScorrenti - ps;
+        this.user.fdv = this.user.fdv - fdv;
 
         this.showalert(nome);
 
-        if (this.user.fulldata.PScorrenti == 0 || this.user.fulldata.fdv == 0) {
+        if (this.user.PScorrenti == 0 || this.user.fdv == 0) {
           // VAI VIA
           this.router.navigate(['/tabs/tab5']);
         }

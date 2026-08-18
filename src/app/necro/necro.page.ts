@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { User, Userskill } from '../globals';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 export class NecroPage implements OnInit {
   constructor(
     public user: User,
+    public userskill: Userskill,
     public router: Router,
     public alertCtrl: AlertController,
     public http: HttpClient
@@ -27,7 +28,7 @@ export class NecroPage implements OnInit {
 
     var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
+      idutente: this.user.idutente,
       potere: pot,
       livello: livellopot,
       aTAUMNECRO: pot2,
@@ -38,11 +39,11 @@ export class NecroPage implements OnInit {
       //console.log(ps);
 
 
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] - ps;
+      this.user['PScorrenti'] = this.user['PScorrenti'] - ps;
 
       this.showalert(pot2, pot);
 
-      if (this.user.fulldata['PScorrenti'] == 0) {
+      if (this.user['PScorrenti'] == 0) {
         // VAI VIA
         this.router.navigate(['/tabs/tab5']);
       }

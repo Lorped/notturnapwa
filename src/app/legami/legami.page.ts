@@ -27,11 +27,11 @@ export class LegamiPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    this.loadUtenti(this.user.userid);
+    this.loadUtenti(this.user.idutente);
 
     var url =
       'https://www.roma-by-night.it/ionicPHP/getlegami.php?id=' +
-      this.user.userid;
+      this.user.idutente;
     this.http.get(url).subscribe((res: any) => {
       this.listalegami = res.target;
       // console.log (this.listalegami);
@@ -58,7 +58,7 @@ export class LegamiPage implements OnInit {
   invia() {
     var url = 'https://www.roma-by-night.it/ionicPHP/legami.php';
     var mypost = JSON.stringify({
-      target: this.user.userid,
+      target: this.user.idutente,
       domitor: this.pgscelto,
     });
 

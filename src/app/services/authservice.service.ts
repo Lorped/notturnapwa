@@ -10,15 +10,12 @@ export class AuthserviceService {
 
   constructor(private http: HttpClient) { }
 
+  
   login(username: string, password: string) {
     return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/login.php', {
       username: username,
       password: password
-    }).pipe(
-    map(user => {
-      // console.log ('auth :' , user);
-      return user;
-    }));
+    });
   }
 
   skill(userid: number) {

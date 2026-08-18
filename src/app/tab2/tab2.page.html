@@ -17,11 +17,11 @@
 
   <ion-row >
     <ion-col size="7">Bonus attivazione</ion-col>
-    <ion-col>+{{ this.user.fulldata.attivazione }}</ion-col>
+    <ion-col>+{{ this.user.attivazione }}</ion-col>
   </ion-row>
 
 
-  @for (desc of this.user.skill; track desc) {
+  @for (desc of this.userskill.skill; track desc) {
     <ion-row>
       @if (desc.tipologia == 2 ) {
         <ion-col size="7">{{ desc.nomeskill }}</ion-col>
@@ -39,7 +39,7 @@
       </ion-row>
     }
 
-    @for (desc of this.user.skill; track desc) {
+    @for (desc of this.userskill.skill; track desc) {
       <ion-row>
         @if (desc.tipologia == 3 ) {
           <ion-col size="7"><span stype="color:#FF0000;">&nbsp;&nbsp;- </span> {{ desc.nomeskill }}</ion-col>
@@ -63,7 +63,7 @@
       </ion-row>
     }
 
-    @for (desc of this.user.skill; track desc) {
+    @for (desc of this.userskill.skill; track desc) {
       <ion-row>
         @if (desc.tipologia == 12 ) {
           <ion-col><span stype="color:#FF0000;"></span> {{ desc.nomeskill }}</ion-col>
@@ -80,7 +80,7 @@
       </ion-row>
     }
 
-    @for (desc of this.user.skill; track desc) {
+    @for (desc of this.userskill.skill; track desc) {
       <ion-row>
         @if (desc.tipologia == 11 ) {
           <ion-col><span stype="color:#FF0000;"></span> {{ desc.nomeskill }}</ion-col>
@@ -96,7 +96,7 @@
       <ion-col ><hr/></ion-col>
     </ion-row>
 
-    @for (desc of this.user.skill; track desc) {
+    @for (desc of this.userskill.skill; track desc) {
       <ion-row>
         @if (desc.tipologia == 0 ) {
           <ion-col size="7">{{ desc.nomeskill }}</ion-col>
@@ -119,7 +119,7 @@
       <ion-col ><hr/></ion-col>
     </ion-row>
 
-    @for (desc of this.user.skill; track desc) {
+    @for (desc of this.userskill.skill; track desc) {
       <ion-row>
         @if (desc.tipologia == 1 ) {
           <ion-col size="7">{{ desc.nomeskill }}</ion-col>

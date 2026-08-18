@@ -22,8 +22,8 @@ export class ModificanotePage implements OnInit {
   modifica() {
     var url = 'https://www.roma-by-night.it/ionicPHP/modificanote.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
-      note: this.user.fulldata.note,
+      idutente: this.user.idutente,
+      note: this.user.note,
     });
 
     this.http.post(url, mypost).subscribe((res) => {

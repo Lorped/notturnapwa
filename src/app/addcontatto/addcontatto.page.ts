@@ -24,7 +24,7 @@ export class AddcontattoPage implements OnInit {
   add() {
     var url = 'https://www.roma-by-night.it/ionicPHP/addrubrica.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
+      idutente: this.user.idutente,
       contatto: this.nuovoContatto.contatto,
       cell: this.nuovoContatto.cell,
       home: this.nuovoContatto.home,

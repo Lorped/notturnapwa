@@ -11,7 +11,7 @@
 
 
 <ion-content class="master" color="dark" padding>
-  @for (p of user.necro; track p) {
+  @for (p of userskill.necro; track p) {
     <ion-row>
       <ion-col size="2"><hr/></ion-col>
       <ion-col size="8" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">{{p.nomenecro}}</ion-col>
@@ -19,7 +19,7 @@
       @for (pp of p.poteri; track pp) {
         <ion-col size="12" text-center>
           @if (pp.attivo=='N') {
-            <ion-button  (click)="gonecro(pp.livello, pp.nomenecro2, p.nomenecro)"  class="submit-btn2" shape="round" size="full" color="danger" type="submit" [disabled]="(user.fulldata.PScorrenti==0)||(user.fulldata.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nomenecro2}}</ion-button>
+            <ion-button  (click)="gonecro(pp.livello, pp.nomenecro2, p.nomenecro)"  class="submit-btn2" shape="round" size="full" color="danger" type="submit" [disabled]="(user.PScorrenti==0)||(user.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nomenecro2}}</ion-button>
           }
           @if (pp.attivo=='S') {
             <span   style="font-size: 1.1em;">{{pp.livello}} - {{pp.nomenecro2}} (attivo)</span>

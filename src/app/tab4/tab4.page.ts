@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, RubricaItem, ToChange } from '../globals';
+import { User, Userskill, RubricaItem, ToChange } from '../globals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ export class Tab4Page implements OnInit {
   loadRubrica() {
     var url =
       'https://www.roma-by-night.it/ionicPHP/rubrica.php?id=' +
-      this.user.userid;
+      this.user.idutente;
 
     var miarubrica: Array<RubricaItem> = [];
 

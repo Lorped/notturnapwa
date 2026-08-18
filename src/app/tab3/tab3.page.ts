@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { User, Userskill } from '../globals';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
 
@@ -20,6 +20,7 @@ export class Tab3Page {
 
   constructor(
     public user: User,
+    public userskill: Userskill,
     private iab: InAppBrowser,
     private router: Router
   ) {}
@@ -55,7 +56,7 @@ export class Tab3Page {
 
   openUrlDT() {
     //console.log (this.myuser);
-    var link = this.user.fulldata['urldt'];
+    var link = this.user['urldt'];
     //const browser = this.iab.create(this.link);
     this.iab.create(link, '_system');
   }
@@ -66,13 +67,13 @@ export class Tab3Page {
   }
 
   reloadnote() {
-    this.note = this.nl2br(this.user.fulldata['note']);
-    this.notemaster = this.nl2br(this.user.fulldata['notemaster']);
+    this.note = this.nl2br(this.user['note']);
+    this.notemaster = this.nl2br(this.user['notemaster']);
   }
 
   ionViewWillEnter() {
-    // console.log(this.fulldata['idclan']);
-    switch (this.user.fulldata['idclan']) {
+    // console.log(this['idclan']);
+    switch (this.user['idclan']) {
       case 1: //  Toreador
         this.link =
           'https://drive.google.com/file/d/0BwbyMyT-GT-UZ2pKb0RzRlZoaVU/view';
@@ -139,18 +140,18 @@ export class Tab3Page {
         break;
     }
 
-    this.note = this.nl2br(this.user.fulldata['note']);
-    this.notemaster = this.nl2br(this.user.fulldata['notemaster']);
+    this.note = this.nl2br(this.user['note']);
+    this.notemaster = this.nl2br(this.user['notemaster']);
 
-    if (this.user.fulldata.xp > 113) {
-      this.xpspendibili = 86 + (this.user.fulldata.xp - 113) / 2;
-    } else if (this.user.fulldata.xp > 32) {
-      this.xpspendibili = 32 + ((this.user.fulldata.xp - 32) / 3) * 2;
+    if (this.user.xp > 113) {
+      this.xpspendibili = 86 + (this.user.xp - 113) / 2;
+    } else if (this.user.xp > 32) {
+      this.xpspendibili = 32 + ((this.user.xp - 32) / 3) * 2;
     } else {
-      this.xpspendibili = this.user.fulldata.xp;
+      this.xpspendibili = this.user.xp;
     }
 
-    this.xpdisponibili = this.xpspendibili - this.user.fulldata.xpspesi;
+    this.xpdisponibili = this.xpspendibili - this.user.xpspesi;
 
     this.xpspendibili = Math.round(this.xpspendibili * 10) / 10;
     this.xpdisponibili = Math.round(this.xpdisponibili * 10) / 10;

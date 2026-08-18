@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { User, Userskill } from '../globals';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
@@ -16,13 +16,14 @@ export class TaumPage implements OnInit {
 
   constructor(
     public user: User,
+    public userskill: Userskill,
     public http: HttpClient,
     public router: Router,
     public alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
-    let tt = new Date(this.user.fulldata['lastvitae']);
+    let tt = new Date(this.user['lastps']);
     let tn = new Date();
 
     let diff = tn.getTime() - tt.getTime();
@@ -40,7 +41,7 @@ export class TaumPage implements OnInit {
 
     var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
     var mypost = JSON.stringify({
-      idutente: this.user.userid,
+      idutente: this.user.idutente,
       potere: pot,
       livello: livellopot,
       aTAUMNECRO: pot2,
@@ -51,11 +52,11 @@ export class TaumPage implements OnInit {
       //console.log(ps);
 
 
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] - ps;
+      this.user['PScorrenti'] = this.user['PScorrenti'] - ps;
 
       this.showalert(pot2, pot);
 
-      if (this.user.fulldata['PScorrenti'] == 0) {
+      if (this.user['PScorrenti'] == 0) {
         // VAI VIA
         this.router.navigate(['/tabs/tab5']);
       }
@@ -67,17 +68,17 @@ export class TaumPage implements OnInit {
 
     var link =
       'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-      this.user['userid'] +
+      this.user['idutente'] +
       '&recuperati=3&vitae=1';
 
     this.http.get(link).subscribe(
       (res: any) => {
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] + 3;
-        if (this.user.fulldata['PScorrenti'] > this.user.fulldata['maxps']) {
-          this.user.fulldata['PScorrenti'] = this.user.fulldata['maxps'];
+        this.user['PScorrenti'] = this.user['PScorrenti'] + 3;
+        if (this.user['PScorrenti'] > this.user['maxps']) {
+          this.user['PScorrenti'] = this.user['maxps'];
         }
 
-        this.user.fulldata['lastvitae'] = res.lastvitae;
+        this.user['lastps'] = res.lastps;
 
         this.FurtoVitae = 0;
 
