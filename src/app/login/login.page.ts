@@ -169,8 +169,8 @@ export class LoginPage implements OnInit {
 
             // this.pushsetup();    <============= poi vediamo !!!
 
-            console.log ("user ", this.user);
-            console.log ("userskill ", this.userskill);
+            //console.log ("user ", this.user);
+            //console.log ("userskill ", this.userskill);
 
             this.router.navigate(['tabs']);
         },

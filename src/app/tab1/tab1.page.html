@@ -1,17 +1,41 @@
-<ion-header>
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list [inset]="true">
+      <ion-item>
+        <ion-icon name="people-outline" size="small"></ion-icon>
+        <ion-button fill="clear">Rubrica</ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="flash" size="small"></ion-icon>
+        <ion-button fill="clear">Background, contatti e alleati</ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label>The Legend of Zelda</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
-  <ion-toolbar color="medium">
-    <ion-title>Personaggio</ion-title>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Personaggio</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="primary">
+        <ion-button (click)="logoutx()">
+          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-    <ion-buttons slot="primary">
-      <ion-button (click)="logoutx()">
-        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
-  </ion-toolbar>
-
-</ion-header>
 
 <ion-content  style="font-size: 0.8em;"; no-padding >
 
@@ -226,3 +250,4 @@
 
                     </ion-content>
 
+</div>
