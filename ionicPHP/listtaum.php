@@ -84,8 +84,9 @@
     }
 
     $outtaum [] = [
+      'idtaum' => $curtaum,
       'nometaum' => $nometaum,
-      'xlivello' => $livello ,
+      'livello' => $livello ,
       'poteri'  => $out2
     ];
 
@@ -118,8 +119,9 @@
 
 
     $outnecro [] = [
+      'idnecro' => $curnecro,
       'nomenecro' => $nomenecro,
-      'xlivello' => $livello ,
+      'livello' => $livello ,
       'poteri'  => $out2
     ];
 

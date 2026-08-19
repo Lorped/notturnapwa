@@ -1,27 +1,3 @@
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar color="medium">
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list [inset]="true">
-      <ion-item>
-        <ion-icon name="people-outline" size="small"></ion-icon>
-        <ion-button fill="clear">Rubrica</ion-button>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="flash" size="small"></ion-icon>
-        <ion-button fill="clear">Background, contatti e alleati</ion-button>
-      </ion-item>
-      <ion-item>
-        <ion-label>The Legend of Zelda</ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar color="medium">
       <ion-title>Personaggio</ion-title>
@@ -37,7 +13,7 @@
   </ion-header>
 
 
-<ion-content  style="font-size: 0.8em;"; no-padding >
+<ion-content  style="font-size: 0.9em;"; no-padding >
 
   <!-- <ion-spinner *ngIf="loading" id="feed-spinner"></ion-spinner> -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -250,4 +226,3 @@
 
                     </ion-content>
 
-</div>

@@ -1,24 +1,121 @@
-<ion-header>
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Skill e conoscenze</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-  <ion-toolbar color="medium">
-    <ion-title>Skill e Conoscenze</ion-title>
-  </ion-toolbar>
 
-</ion-header>
+  <ion-content  padding>
+
+    <ion-row style="align-items: center;">
+      <ion-col ><hr/></ion-col>
+      <ion-col size="6" style="text-align: center; font-size: 1em;">Discipline</ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+
+    <ion-row >
+      <ion-col size="7">Bonus attivazione</ion-col>
+      <ion-col>+{{ this.user.attivazione }}</ion-col>
+    </ion-row>
+
+    @for (desc of this.userskill.discipline; track desc) {
+    <ion-row>
+        <ion-col size="7">{{ desc.nomedisc }}</ion-col>
+        <ion-col>
+          @for (item of 5|times ; track item; let ix = $index) {
+            <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < desc.livello}"></i>
+          }<br>
+          @if (user.maxdisc > 5) {
+            @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix+5 < desc.livello}"></i>
+            }
+          }
+        </ion-col>
+    </ion-row>
+    }
+
+  <!----   NECRO/TAUM -->
+
+    @if (this.userskill.necro.length > 0) {
+      <ion-row style="align-items: center;">
+        <ion-col ><hr/></ion-col>
+        <ion-col size="6" style="text-align: center; font-size: 1em;">Necromanzie</ion-col>
+        <ion-col ><hr/></ion-col>
+      </ion-row>
+      @for ( necro of this.userskill.necro; track necro) {
+        <ion-row>
+          <ion-col size="7">{{ necro.nomenecro }}</ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < necro.livello}"></i>
+            }<br>
+          </ion-col>
+        </ion-row>
+      }
+    }
+    @if (this.userskill.taum.length > 0) {
+    <ion-row style="align-items: center;">
+      <ion-col ><hr/></ion-col>
+      <ion-col size="6" style="text-align: center; font-size: 1em;">Taumaturgie</ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+    @for ( taum of this.userskill.taum; track taum) {
+      <ion-row>
+        <ion-col size="7">{{ taum.nometaum }}</ion-col>
+        <ion-col>
+          @for (item of 5|times ; track item; let ix = $index) {
+            <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < taum.livello}"></i>
+          }<br>
+        </ion-col>
+      </ion-row>
+    }
+  }
+
+  <!----   COMPETENZE -->
+
+      <ion-row style="align-items: center;">
+        <ion-col ><hr/></ion-col>
+        <ion-col size="6" style="text-align: center; font-size: 1em;">Competenze</ion-col>
+        <ion-col ><hr/></ion-col>
+      </ion-row>
 
 
-<ion-content color="dark" class="master" padding>
 
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Discipline e Taumaturgie</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
+<ion-accordion-group>
+  @for ( sk of this.userskill.skill; track sk) {
+    <ion-accordion value="{{ sk.nomeskill }}">
+      <ion-item slot="header" color="light">
 
-  <ion-row >
-    <ion-col size="7">Bonus attivazione</ion-col>
-    <ion-col>+{{ this.user.attivazione }}</ion-col>
-  </ion-row>
+        <ion-label style="display: flex; justify-content: space-between;">
+
+            {{ sk.nomeskill }} &nbsp;&nbsp;
+
+          <div class="ion-text-end">
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < sk.livello}"></i>
+            }
+          </div>
+        </ion-label>
+      </ion-item>
+      @for (ssk of sk.subskill; track ssk; let ix = $index) {
+      <div class="ion-padding" slot="content"> 
+        <ion-col size = "6">
+          -- {{ ssk.nomeskill }} &nbsp;&nbsp;
+        </ion-col>
+        <ion-col size="6">
+          @for (item of 5|times ; track item; let ix = $index) {
+            <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < ssk.livello}"></i>
+          }
+          </ion-col>
+      </div>
+      }
+
+    </ion-accordion>
+  }
+</ion-accordion-group>
 
 
   @for (desc of this.userskill.skill; track desc) {
@@ -55,13 +152,6 @@
       </ion-row>
     }
 
-    @if (amalgame == 1) {
-      <ion-row style="align-items: center;">
-        <ion-col ><hr/></ion-col>
-        <ion-col size="6" style="text-align: center; font-size: 1em;">Amalgame</ion-col>
-        <ion-col ><hr/></ion-col>
-      </ion-row>
-    }
 
     @for (desc of this.userskill.skill; track desc) {
       <ion-row>
@@ -119,7 +209,7 @@
       <ion-col ><hr/></ion-col>
     </ion-row>
 
-    @for (desc of this.userskill.skill; track desc) {
+    @for (desc of this.userskill.otherskill; track desc) {
       <ion-row>
         @if (desc.tipologia == 1 ) {
           <ion-col size="7">{{ desc.nomeskill }}</ion-col>
@@ -147,7 +237,7 @@
 
     <ion-row style="align-items: center;">
       <ion-col ><hr/></ion-col>
-      <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Danni delle Armi</ion-col>
+      <ion-col size="6" style="text-align: center; font-size: 1.1em;">Danni delle Armi</ion-col>
       <ion-col ><hr/></ion-col>
     </ion-row>
 
@@ -215,3 +305,4 @@
 
 
   </ion-content>
+

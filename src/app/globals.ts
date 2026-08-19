@@ -150,15 +150,10 @@ export class apottaum  {
 
 @Injectable()
 export class ataum  {
-    public nometaum: string;
-    public livellopot: number;
-    public poteri: Array<apottaum>; 
-
-    constructor () {
-        this.nometaum = '';
-        this.livellopot = 0 ;
-        this.poteri = [];
-    }
+    public idtaum = 0;
+    public nometaum = '';
+    public livello = 0;
+    public poteri: Array<apottaum> = [ ]; 
 }
 
 
@@ -172,15 +167,10 @@ export class apotnecro  {
 
 @Injectable()
 export class anecro  {
-    public nomenecro: string;
-    public livellopot: number;
-    public poteri: Array<apotnecro>; 
-
-    constructor () {
-        this.nomenecro = '';
-        this.livellopot = 0 ;
-        this.poteri = [];
-    }
+    public idnecro = 0 ;
+    public nomenecro = '';
+    public livello = 0;
+    public poteri: Array<apotnecro> = [];
 }
 
 

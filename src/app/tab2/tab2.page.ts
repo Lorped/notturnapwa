@@ -16,19 +16,19 @@ export class Tab2Page {
   public barcodes: Barcode[] = [];
   public isPermissionGranted = false;
 
-  rituali: number = 0;
-  amalgame: number = 0;
+  rituali = 0;
+  amalgame = 0;
 
-  forza: number = 0; //??
-  rissa: number = 0;
-  mischia: number = 0;
-  lancio: number = 0;
-  tiro: number = 0;
-  fuoco: number = 0;
-  potenza: number = 0;
-  artigli: number = 0;
+  forza = 0; //??
+  rissa = 0;
+  mischia = 0;
+  lancio = 0;
+  tiro = 0;
+  fuoco = 0;
+  potenza = 0;
+  artigli = 0;
 
-  fomipot2 = 0;
+  fomipot2 = 0;  
   foripot2 = 0;
   folapot2 = 0;
   treti2 = 0;
@@ -113,29 +113,32 @@ export class Tab2Page {
     this.potenza = 0;
     this.artigli = 0;
 
-    for (var i = 0; i < this.userskill.skill.length; i++) {
-      if (this.userskill.skill[i].nomeskill == 'Rissa') {
-        this.rissa = this.userskill.skill[i].livello;
+
+    for (var i = 0; i < this.userskill.otherskill.length; i++) {
+      if (this.userskill.otherskill[i].idskill == 42) {  //rissa
+        this.rissa = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.skill[i].nomeskill == 'Mischia') {
-        this.mischia = this.userskill.skill[i].livello;
+      if (this.userskill.otherskill[i].idskill == 43) {  //mischia
+        this.mischia = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.skill[i].nomeskill == 'Armi da lancio') {
-        this.lancio = this.userskill.skill[i].livello;
+      if (this.userskill.otherskill[i].idskill == 46) {  //lancio
+        this.lancio = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.skill[i].nomeskill == 'Armi da tiro') {
-        this.tiro = this.userskill.skill[i].livello;
+      if (this.userskill.otherskill[i].idskill == 45) {  //Armi da tiro
+        this.tiro = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.skill[i].nomeskill == 'Armi da fuoco') {
-        this.fuoco = this.userskill.skill[i].livello;
-      }
-      if (this.userskill.skill[i].nomeskill == 'Potenza') {
-        this.potenza = this.userskill.skill[i].livello;
-      }
-      if (this.userskill.skill[i].nomeskill == 'Proteide') {
-        if (this.userskill.skill[i].livello > 1) this.artigli = 1;
+      if (this.userskill.otherskill[i].idskill == 44) {  //Armi da fuoco
+        this.fuoco = this.userskill.otherskill[i].livello;
       }
     }
+    const pot = this.userskill.discipline.find((xx) => xx.iddisciplina == 17); //potenza
+    if (pot) {
+      this.potenza = pot.livello;
+    }
+    const prot = this.userskill.discipline.find((xx) => xx.iddisciplina == 18); //proteide
+    if (prot && prot.livello > 1) {
+      this.artigli = 1;
+    }  
 
     this.forza = this.user['forza'];
 
