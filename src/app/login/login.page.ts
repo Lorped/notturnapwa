@@ -35,6 +35,8 @@ export class LoginPage implements OnInit {
 
   listaclan: Array<Clan> = [];
 
+  isDarkMode = false;
+
   saveme = {
     checked: false,
   };
@@ -57,7 +59,13 @@ export class LoginPage implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || prefersDark.matches;
+    prefersDark.addEventListener('change', (mediaQuery) => {
+      this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || mediaQuery.matches;
+    });
+  }
 
   public login() {
     // console.log( this.registerCredentials.username );

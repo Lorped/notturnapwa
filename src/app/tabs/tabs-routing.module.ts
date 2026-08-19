@@ -37,6 +37,10 @@ const routes: Routes = [
         loadChildren: () => import('../modificanote/modificanote.module').then( m => m.ModificanotePageModule)
       },
       {
+        path: 'rubrica',
+        loadChildren: () => import('../rubrica/rubrica.module').then( m => m.RubricaPageModule)
+      },
+      {
         path: 'addcontatto',
         loadChildren: () => import('../addcontatto/addcontatto.module').then( m => m.AddcontattoPageModule)
       },
@@ -76,10 +80,7 @@ const routes: Routes = [
         path: 'telepatia',
         loadChildren: () => import('../telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
       },
-      {
-        path: 'amalgame',
-        loadChildren: () => import('../amalgame/amalgame.module').then( m => m.AmalgamePageModule)
-      },
+
     
         
       {

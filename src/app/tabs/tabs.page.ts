@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -9,7 +10,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class TabsPage implements OnInit {
   paletteToggle = false;
-  constructor() {}
+  constructor(public router: Router) {}
 
   ngOnInit() {
     // Use matchMedia to check the user preference
@@ -37,4 +38,9 @@ export class TabsPage implements OnInit {
   toggleDarkPalette(shouldAdd: boolean) {
     document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
   }
+
+  openRubrica() {
+    this.router.navigate(['/tabs/rubrica']);
+  }
+
 }

@@ -21,11 +21,7 @@ export class AuthserviceService {
   skill(userid: number) {
     return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/skill.php', {
       userid: userid
-    }).pipe(
-    map(data => {
-      // console.log ('skill :' , data);
-      return data;
-    }));
+    });
   }
 
   poteri(userid: number) {
@@ -57,15 +53,8 @@ export class AuthserviceService {
 
   }
 
-  listamalgame(userid: number){
-
-		return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/listamalgame.php?id='+userid
-		).pipe(
-      map(data => {
-        // console.log ('PS :' , data);
-        return data;
-      }));
-
+  loadrubrica(userid: number){
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/rubrica.php?id='+userid );
   }
 
 }
