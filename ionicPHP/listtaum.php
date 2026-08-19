@@ -26,7 +26,7 @@
   $idutente=$_GET['id'];
 
 
-  include ('db2.inc.php');  // NEW MYSQL //
+  require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
   $outtaum = [];
 
@@ -116,8 +116,7 @@
       $out2 [] = $res3;
     }
 
-
-
+    
     $outnecro [] = [
       'idnecro' => $curnecro,
       'nomenecro' => $nomenecro,
@@ -127,9 +126,30 @@
 
   }
 
+  $outrituali = [];
+  $MySql4 = "SELECT rituali_n.idrituale, nomerituale, livello FROM rituali_n
+    left join rituali_n_main on rituali_n_main.idrituale = rituali_n.idrituale
+    where rituali_n.idutente = $idutente
+    order by livello asc";
+  $Result4 = mysqli_query($db, $MySql4);
+  while ($res4=mysqli_fetch_array($Result4, MYSQLI_ASSOC)) {
+    $outrituali [] = $res4;
+  }
+  $MySql4 = "SELECT rituali_t.idrituale, nomerituale, livello FROM rituali_t
+    left join rituali_t_main on rituali_t_main.idrituale = rituali_t.idrituale
+    where rituali_t.idutente = $idutente
+    order by livello asc";
+  $Result4 = mysqli_query($db, $MySql4);
+  while ($res4=mysqli_fetch_array($Result4, MYSQLI_ASSOC)) {
+    $outrituali [] = $res4;
+  } 
+
+
+
   $outx [] = [
     'taum' => $outtaum,
-    'necro' => $outnecro
+    'necro' => $outnecro,
+    'rituali' => $outrituali
   ];
 
 

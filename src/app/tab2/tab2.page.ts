@@ -16,8 +16,8 @@ export class Tab2Page {
   public barcodes: Barcode[] = [];
   public isPermissionGranted = false;
 
-  rituali = 0;
-  amalgame = 0;
+
+
 
   forza = 0; //??
   rissa = 0;
@@ -90,20 +90,7 @@ export class Tab2Page {
   }
 
   ionViewWillEnter() {
-    this.rituali = 0;
 
-    for (var j = 0; j < this.userskill.skill.length; j++) {
-      if (this.userskill.skill[j].tipologia == 11) {
-        this.rituali = 1;
-        break;
-      }
-    }
-    for (var j = 0; j < this.userskill.skill.length; j++) {
-      if (this.userskill.skill[j].tipologia == 12) {
-        this.amalgame = 1;
-        break;
-      }
-    }
 
     this.rissa = 0;
     this.mischia = 0;
@@ -116,24 +103,24 @@ export class Tab2Page {
 
     for (var i = 0; i < this.userskill.otherskill.length; i++) {
       if (this.userskill.otherskill[i].idskill == 42) {  //rissa
-        this.rissa = this.userskill.otherskill[i].livello;
+        this.rissa = Number(this.userskill.otherskill[i].livello);
       }
       if (this.userskill.otherskill[i].idskill == 43) {  //mischia
-        this.mischia = this.userskill.otherskill[i].livello;
+        this.mischia = Number(this.userskill.otherskill[i].livello);
       }
       if (this.userskill.otherskill[i].idskill == 46) {  //lancio
-        this.lancio = this.userskill.otherskill[i].livello;
+        this.lancio = Number(this.userskill.otherskill[i].livello);
       }
       if (this.userskill.otherskill[i].idskill == 45) {  //Armi da tiro
-        this.tiro = this.userskill.otherskill[i].livello;
+        this.tiro = Number(this.userskill.otherskill[i].livello);
       }
       if (this.userskill.otherskill[i].idskill == 44) {  //Armi da fuoco
-        this.fuoco = this.userskill.otherskill[i].livello;
+        this.fuoco = Number(this.userskill.otherskill[i].livello);
       }
     }
     const pot = this.userskill.discipline.find((xx) => xx.iddisciplina == 17); //potenza
     if (pot) {
-      this.potenza = pot.livello;
+      this.potenza = Number(pot.livello);
     }
     const prot = this.userskill.discipline.find((xx) => xx.iddisciplina == 18); //proteide
     if (prot && prot.livello > 1) {
@@ -145,17 +132,26 @@ export class Tab2Page {
     // console.log( "forza:" , this.forza);
     // console.log( "rissa:" , this.rissa);
     // console.log( "mischia:" , this.mischia);
-    // console.log( "lancio:" , this.lancio);
-    // console.log( "tiro:" , this.tiro);
-    // console.log( "fuoco:" , this.fuoco);
-    // console.log( "potenza:" , this.potenza);
-    // console.log( "artigli:" , this.artigli);
+    //console.log( "lancio:" , this.lancio);
+    //console.log( "tiro:" , this.tiro);
+    //console.log( "fuoco:" , this.fuoco);
+    //console.log( "potenza:" , this.potenza);
+    //console.log( "artigli:" , this.artigli);
+
+
 
     this.fomipot2 = Math.ceil((this.forza + this.mischia + this.potenza) / 2);
     this.foripot2 = Math.ceil((this.forza + this.rissa + this.potenza) / 2);
+
     this.folapot2 = Math.ceil((this.forza + this.lancio + this.potenza) / 2);
     this.treti2 = Math.ceil((3 + this.tiro) / 2);
 
     this.trefuoco2 = Math.ceil((3 + this.fuoco) / 2);
+
+    //console.log( "fomipot2:" , this.fomipot2);
+    //console.log( "foripot2:" , this.foripot2);
+    //console.log( "folapot2:" , this.folapot2);
+    //console.log( "treti2:" , this.treti2);
+    //console.log( "trefuoco2:" , this.trefuoco2);
   }
 }

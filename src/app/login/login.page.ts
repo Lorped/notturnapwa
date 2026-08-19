@@ -157,6 +157,7 @@ export class LoginPage implements OnInit {
               (data) => {
                 this.userskill.taum = data[0].taum;
                 this.userskill.necro = data[0].necro;
+                this.userskill.rituali = data[0].rituali;
             });
 
           

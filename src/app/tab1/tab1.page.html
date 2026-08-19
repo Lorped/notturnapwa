@@ -196,8 +196,10 @@
                         @for (item of 5|times ; track item; let ix = $index) {
                           <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.percezione}"></i>
                           }<br>
-                          @for (item of 5|times ; track item; let ix = $index) {
-                            <i class="fa fa-circle myxsmallicon myred2" [ngClass]="{'mywhite': ix+5 >= user.percezione}"></i>
+                          @if (this.user.maxstat >5){
+                              @for (item of 5|times ; track item; let ix = $index) {
+                                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.percezione}"></i>
+                              }
                           }
                         </ion-col>
                         <ion-col>

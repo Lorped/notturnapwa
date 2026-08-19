@@ -173,6 +173,12 @@ export class anecro  {
     public poteri: Array<apotnecro> = [];
 }
 
+@Injectable()
+export class Rituale  {
+    public idrituale = 0;
+    public livello = 0;
+    public nomerituale = '';
+}
 
 @Injectable({ providedIn: 'root' })
 export class Userskill {
@@ -182,6 +188,7 @@ export class Userskill {
     public background: Array<Background> =[];
     public taum: Array<ataum> = [];
     public necro: Array<anecro> = [];
+    public rituali: Array<Rituale> = [];
 
     
 }
@@ -190,6 +197,8 @@ export class Userskill {
 export class Oggetto {
     public id = '';
 }
+
+
 
 
 export class RubricaItem {

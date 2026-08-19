@@ -7,6 +7,11 @@
   <ion-content class="ion-padding">
     <ion-list [inset]="true">
       <ion-item>
+      <ion-toggle [(ngModel)]="paletteToggle" (ionChange)="toggleChange($event)" justify="space-between"
+        >Dark Mode</ion-toggle
+      >
+    </ion-item>
+      <ion-item>
         <ion-icon name="people-outline" size="small"></ion-icon>
         <ion-button fill="clear">Rubrica</ion-button>
       </ion-item>
