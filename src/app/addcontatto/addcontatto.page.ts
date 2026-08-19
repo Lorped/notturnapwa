@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: false,
 })
 export class AddcontattoPage implements OnInit {
-  nuovoContatto = new RubricaItem('', 0, 0, 0, '', 0);
+  nuovoContatto = new RubricaItem();
 
   constructor(
     public router: Router,
@@ -28,7 +28,7 @@ export class AddcontattoPage implements OnInit {
       contatto: this.nuovoContatto.contatto,
       cell: this.nuovoContatto.cell,
       home: this.nuovoContatto.home,
-      email: this.nuovoContatto.email,
+
       note: this.nuovoContatto.note,
     });
 
@@ -40,7 +40,6 @@ export class AddcontattoPage implements OnInit {
   ionViewWillEnter() {
     this.nuovoContatto.contatto = '';
     this.nuovoContatto.cell = 0;
-    this.nuovoContatto.email = 0;
     this.nuovoContatto.home = 0;
     this.nuovoContatto.note = '';
   }

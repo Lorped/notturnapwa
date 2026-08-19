@@ -20,7 +20,7 @@ export class Tab1Page implements OnInit{
   ) {}
 
   ngOnInit() {
-    console.log ("user - " , this.user);
+    //console.log ("user - " , this.user);
   }
 
   public logoutx() {

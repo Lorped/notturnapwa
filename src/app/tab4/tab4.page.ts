@@ -38,12 +38,7 @@ export class Tab4Page implements OnInit {
             for (let i = 0; i < res.length; i++) {
               let item = res[i];
               let newRubricaItem = new RubricaItem(
-                item.contatto,
-                item.cell,
-                item.email,
-                item.home,
-                item.note,
-                item.idrubrica
+
               );
               miarubrica.push(newRubricaItem);
             }
@@ -64,7 +59,7 @@ export class Tab4Page implements OnInit {
     this.tochange.contatto = item.contatto;
     this.tochange.cell = item.cell;
     this.tochange.home = item.home;
-    this.tochange.email = item.email;
+
     this.tochange.note = item.note;
     this.tochange.idrubrica = item.idrubrica;
     // console.log ("in edit: ", this.tochange);

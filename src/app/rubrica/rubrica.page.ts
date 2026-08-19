@@ -1,4 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { AuthserviceService } from '../services/authservice.service';
+import { RubricaItem, User } from '../globals';
 
 @Component({
   selector: 'app-rubrica',
@@ -8,7 +10,23 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   standalone: false,
 })
 export class RubricaPage implements OnInit {
-  constructor() {}
+  constructor(private authservice: AuthserviceService, private user: User) {}
 
-  ngOnInit() {}
+  rubrica: Array<RubricaItem> = [];
+
+  ngOnInit() {
+  }
+
+   ionViewWillEnter(){
+    this.authservice.loadrubrica(this.user.idutente).subscribe((data) => {
+      this.rubrica = data;
+    });
+   }
+
+  add() {}
+  edit(id: number) {}
+  delete(id: number) {}
+
+  
+
 }

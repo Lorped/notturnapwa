@@ -23,9 +23,7 @@
           @if (item.cell==1) {
             <ion-icon  name="call"  slot="end"></ion-icon>
           }
-          @if (item.email==1) {
-            <ion-icon name="mail"  slot="end"></ion-icon>
-          }
+
           @if (item.home==1) {
             <ion-icon name="home"  slot="end"></ion-icon>
           }
@@ -53,9 +51,6 @@
 
 
 
-  <ion-fab  slot="fixed" horizontal="end" vertical="bottom">
-    <ion-fab-button  color="danger" (click)="add()"><ion-icon name="add"></ion-icon></ion-fab-button>
-  </ion-fab>
 
   <!--
   <div class="ion-text-end"color="dark">
