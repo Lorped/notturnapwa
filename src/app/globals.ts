@@ -155,6 +155,15 @@ export class User  {
 }
 
 @Injectable()
+export class pregiodifetto  {
+    public idpregio = 0;
+    public nomepregio = '';
+    public valore = 0;
+    public classe = '';
+}
+
+
+@Injectable()
 export class apottaum  {
     public idtaum2 = 0;
     public livello = 0;

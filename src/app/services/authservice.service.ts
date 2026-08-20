@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -25,31 +24,16 @@ export class AuthserviceService {
   }
 
   poteri(userid: number) {
-    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/listpoteri.php?id='+userid
-    ).pipe(
-    map(data => {
-      //  ('poteri :' , data);
-      return data;
-    }));
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/listpoteri.php?id='+userid);
   }
 
   taum(userid: number) {
-    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/listtaum.php?id='+userid
-    ).pipe(
-    map(data => {
-      // console.log ('poteri :' , data);
-      return data;
-    }));
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/listtaum.php?id='+userid);
   }
 
   loadpscorrenti(userid: number){
 
-		return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getps.php?id='+userid
-		).pipe(
-      map(data => {
-        // console.log ('PS :' , data);
-        return data;
-      }));
+		return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getps.php?id='+userid);
 
   }
 
@@ -78,6 +62,10 @@ export class AuthserviceService {
       home: home,
       note: note
     });
+  }
+
+  getpregi(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getpregi.php?id='+userid); 
   }
 
 }

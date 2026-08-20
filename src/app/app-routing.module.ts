@@ -30,7 +30,14 @@ const routes: Routes = [
   {
     path: 'background',
     loadChildren: () =>
-      import('./background/background.module').then((m) => m.BackgroundPageModule),
+      import('./background/background.module').then(
+        (m) => m.BackgroundPageModule
+      ),
+  },
+  {
+    path: 'pregi',
+    loadChildren: () =>
+      import('./pregi/pregi.module').then((m) => m.PregiPageModule),
   },
 ];
 

@@ -49,6 +49,10 @@ const routes: Routes = [
         loadChildren: () => import('../changecontatto/changecontatto.module').then( m => m.ChangecontattoPageModule)
       },
       {
+        path: 'pregi',
+        loadChildren: () => import('../pregi/pregi.module').then( m => m.PregiPageModule)
+      },
+      {
         path: 'caccia/:id',
         loadChildren: () => import('../caccia/caccia.module').then( m => m.CacciaPageModule)
       },

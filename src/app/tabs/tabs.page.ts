@@ -45,5 +45,8 @@ export class TabsPage implements OnInit {
   openBackground() {
     this.router.navigate(['/tabs/background']);
   }
+  openPregi() {
+    this.router.navigate(['/tabs/pregi']);
+  }
 
 }

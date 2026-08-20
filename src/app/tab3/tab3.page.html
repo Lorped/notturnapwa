@@ -1,19 +1,19 @@
 <ion-header>
 
   <ion-toolbar color="medium">
-    <ion-title>Background</ion-title>
+    <ion-title>Analisi oggetto</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 
-<ion-content color="dark" class="master" padding>
+<ion-content  padding>
 
 
   
   <ion-row style="align-items: center;">
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Analizza Oggetto</ion-col>
+    <ion-col size="6"  style=" text-align: center; font-size: 1em;">Analizza Oggetto</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
@@ -21,94 +21,10 @@
     <ion-col style="text-align: center;"><ion-button color="danger" shape="round" outline (click)="openbarcode()">Scan</ion-button></ion-col>
   </ion-row>
 
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col col-6 style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Background</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
-
-  @if (user.contanti !=0) {
-    <ion-row>
-      <ion-col size="7">Contanti</ion-col>
-      <ion-col>
-        {{user.contanti}}
-      </ion-col>
-    </ion-row>
-  }
-  @for (desc of this.userskill.skill; track desc) {
-    <ion-row>
-      @if (desc.tipologia == 5 ) {
-        <ion-col size="7">{{ desc.nomeskill }}</ion-col>
-      }
-      @if (desc.tipologia == 5 && desc.nomeskill != 'Contatti' && desc.nomeskill != 'Risorse' && desc.nomeskill != 'Risorse effettive') {
-        <ion-col>
-          <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
-          @for (item of 5|times ; track item; let ix = $index) {
-            <i class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
-          }
-        </ion-col>
-      }
-      @if (desc.tipologia == 5 && desc.nomeskill != 'Contatti' && desc.nomeskill == 'Risorse' ) {
-        <ion-col>
-          <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
-          @for (item of 10|times ; track item; let ix = $index) {
-            <i class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
-          }
-        </ion-col>
-      }
-      @if (desc.tipologia == 5 && desc.nomeskill != 'Contatti' && desc.nomeskill == 'Risorse effettive' ) {
-        <ion-col>
-          <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
-          @for (item of 10|times ; track item; let ix = $index) {
-            <i class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
-          }
-        </ion-col>
-      }
-      <!-- <ion-col *ngIf="desc.tipologia == 5 && desc.nomeskill == 'Contatti' " stype="text-align:left;">{{ desc.livello }}/20</ion-col>  -->
-    </ion-row>
-  }
-
-  @for (desc of this.userskill.skill; track desc) {
-    <ion-row>
-      @if (desc.tipologia == 7  ) {
-        <ion-col size="7">&nbsp;&nbsp;- {{ desc.nomeskill }}</ion-col>
-      }
-      @if (desc.tipologia == 7  ) {
-        <ion-col>
-          <!-- <img src="assets/img/5/{{ desc.livello }}.png"> -->
-          @for (item of 5|times ; track item; let ix = $index) {
-            <i class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
-          }
-        </ion-col>
-      }
-    </ion-row>
-  }
-
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Influenze</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
-
-  @for (desc of this.userskill.skill; track desc) {
-    <ion-row>
-      @if (desc.tipologia == 13 ) {
-        <ion-col size="7">{{ desc.nomeskill }}</ion-col>
-      }
-      @if (desc.tipologia == 13 ) {
-        <ion-col>
-          @for (item of 5|times ; track item; let ix = $index) {
-            <i class="fa fa-circle mysmallicon myred2" [ngClass]="{'mywhite': ix >= desc.livello}"></i>
-          }
-        </ion-col>
-      }
-      <!-- <ion-col *ngIf="desc.tipologia == 5 && desc.nomeskill == 'Contatti' " stype="text-align:left;">{{ desc.livello }}/20</ion-col>  -->
-    </ion-row>
-  }
-
+  
   <ion-row style="align-items: center;" >
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Pregi</ion-col>
+    <ion-col size="6" style="text-align: center; font-size: 1.1em;">Pregi</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
@@ -122,7 +38,7 @@
 
   <ion-row style="align-items: center;" >
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Difetti</ion-col>
+    <ion-col size="6" style=" text-align: center; font-size: 1.1em;">Difetti</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
@@ -134,19 +50,11 @@
     </ion-row>
   }
 
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Rifugio</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
-
-  <ion-row >
-    <ion-col >{{this.user.rifugio}}</ion-col>
-  </ion-row>
+  
 
   <ion-row style="align-items: center;" >
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Conoscenze di Clan</ion-col>
+    <ion-col size="6" style=" text-align: center; font-size: 1.1em;">Conoscenze di Clan</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
@@ -157,7 +65,7 @@
 
   <ion-row style="align-items: center;" >
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Manuale</ion-col>
+    <ion-col size="6" style=" text-align: center; font-size: 1.1em;">Manuale</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
@@ -167,50 +75,24 @@
 
   <ion-row style="align-items: center;" >
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">DownTime</ion-col>
+    <ion-col size="6" style=" text-align: center; font-size: 1.1em;">DownTime</ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
   <ion-row >
     <ion-col style="text-align: center;"><ion-button color="tertiary" shape="round" fill="outline" (click)="openUrlDT()" [disabled]="this.user.urldt==''">Open</ion-button></ion-col>
   </ion-row>
 
-  <ion-row style="align-items: center;" >
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Status XPT/XPS</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
-  <ion-row >
-    <ion-col size="3" style="color:#FF0000;text-align: center" >XPT</ion-col>
-    <ion-col size = "3" style="color:#FFFFFF; text-align: center; ">{{this.user.xp}}</ion-col>
-    <ion-col size="3" style="color:#FF0000; text-align: center;" > XPS</ion-col>
-    <ion-col size = "3" style="color:#FFFFFF; text-align: center; ">{{xpspendibili}}</ion-col>
-  </ion-row>
-  <ion-row >
-    <ion-col size="3" style="color:#FF0000;text-align: center;" >Spesi</ion-col>
-    <ion-col size = "3" style="color:#FFFFFF; text-align: center; ">{{this.user.xpspesi}}</ion-col>
-    <ion-col size="3" style="color:#FF0000;text-align: center;" >Disponibili</ion-col>
-    <ion-col size = "3" style="color:#FFFFFF; text-align: center; ">{{xpdisponibili}}</ion-col>
-  </ion-row>
-
-  @if (this.user.notemaster != '') {
-    <ion-row style="align-items: center;">
-      <ion-col ><hr/></ion-col>
-      <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Annotazioni oggetti</ion-col>
-      <ion-col ><hr/></ion-col>
-    </ion-row>
-  }
-  <ion-row >
-    <ion-col style="color:#FFFFFF; text-align: justify; font-size: 1.1em;"><span [innerHTML]="this.notemaster"></span></ion-col>
-  </ion-row>
+  
+  
   @if (this.user.note != '') {
     <ion-row style="align-items: center;">
       <ion-col ><hr/></ion-col>
-      <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Annotazioni</ion-col>
+      <ion-col size="6" style="text-align: center; font-size: 1.1em;">Annotazioni</ion-col>
       <ion-col ><hr/></ion-col>
     </ion-row>
   }
   <ion-row >
-    <ion-col style="color:#FFFFFF; text-align: justify; font-size: 1.1em;"><span [innerHTML]="this.note"></span></ion-col>
+    <ion-col style=" text-align: justify; font-size: 1.1em;"><span [innerHTML]="this.note"></span></ion-col>
   </ion-row>
 
 
@@ -221,12 +103,5 @@
     </ion-button>
   </div>
 
-  <!--
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="danger" (click)="modifica()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  -->
-
+  
 </ion-content>
