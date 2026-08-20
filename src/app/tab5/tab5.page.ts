@@ -106,10 +106,7 @@ export class Tab5Page implements OnInit {
     }
   }
 
-  addpx() {
-    var id = 0;
-    this.router.navigate(['/tabs/addpx']);
-  }
+
 
   goamalgame() {
     //console.log("amalgame");

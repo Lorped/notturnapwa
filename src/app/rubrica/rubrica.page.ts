@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
-import { RubricaItem, User } from '../globals';
+import { RubricaItem, User, ToChange } from '../globals';
 
 @Component({
   selector: 'app-rubrica',
@@ -10,7 +11,7 @@ import { RubricaItem, User } from '../globals';
   standalone: false,
 })
 export class RubricaPage implements OnInit {
-  constructor(private authservice: AuthserviceService, private user: User) {}
+  constructor(private authservice: AuthserviceService, private user: User, private router: Router, private tochange: ToChange) {}
 
   rubrica: Array<RubricaItem> = [];
 
@@ -23,10 +24,30 @@ export class RubricaPage implements OnInit {
     });
    }
 
-  add() {}
-  edit(id: number) {}
-  delete(id: number) {}
+  add() {
+    this.router.navigate(['/tabs/addcontatto']);
+  }
+  edit(id: number) {
+    const tochange=this.rubrica.find((item) => item.idrubrica === id);
+    if(tochange) {
+      this.tochange.idrubrica = tochange.idrubrica;
+      this.tochange.contatto = tochange.contatto;
+      this.tochange.cell = tochange.cell;
+      this.tochange.home = tochange.home;
+      this.tochange.note = tochange.note;
 
-  
+      this.router.navigate(['/tabs/changecontatto']);
+    }
+
+
+  }
+
+  delete(id: number) {
+    this.authservice.delrubrica(id).subscribe((data) => {
+      this.authservice.loadrubrica(this.user.idutente).subscribe((data) => {
+        this.ionViewWillEnter();
+      });
+    });
+  }
 
 }

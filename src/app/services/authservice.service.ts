@@ -57,4 +57,27 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/rubrica.php?id='+userid );
   }
 
+  addcontatto(userid: number, contatto: string, cell: number, home: number, note: string){
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/addrubrica.php', {
+      idutente: userid,
+      contatto: contatto,
+      cell: cell,
+      home: home,
+      note: note
+    });
+  }
+
+  delrubrica(idrubrica: number){
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/delrubrica.php?id='+idrubrica );
+  }
+  changerubrica(idrubrica: number, contatto: string, cell: number,  home: number, note: string){
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/changerubrica.php', {
+      idrubrica: idrubrica,
+      contatto: contatto,
+      cell: cell,
+      home: home,
+      note: note
+    });
+  }
+
 }

@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { RubricaItem, ToChange } from '../globals';
+import { ToChange } from '../globals';
 import { Router } from '@angular/router';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-changecontatto',
@@ -26,9 +26,10 @@ export class ChangecontattoPage implements OnInit {
   ngOnInit() {}
 
   constructor(
-    public http: HttpClient,
+
     public tochange: ToChange,
-    public router: Router
+    public router: Router,
+    public authservice: AuthserviceService
   ) {}
 
   change() {
@@ -45,22 +46,18 @@ export class ChangecontattoPage implements OnInit {
       this.tochange.home = 0;
     }
 
-    var url = 'https://www.roma-by-night.it/ionicPHP/changerubrica.php';
-
-    // console.log(this.tochange);
-
-    var mypost = JSON.stringify({
-      idrubrica: this.tochange.idrubrica,
-      contatto: this.tochange.contatto,
-      cell: this.tochange.cell,
-      email: this.tochange.email,
-      home: this.tochange.home,
-      note: this.tochange.note,
+   
+    this.authservice.changerubrica(
+      this.tochange.idrubrica,
+      this.tochange.contatto, 
+      this.tochange.cell,
+      this.tochange.home,
+      this.tochange.note
+    ).subscribe((res: any) => {
+      this.router.navigate(['/tabs/rubrica']);
     });
 
-    this.http.post(url, mypost).subscribe((res) => {
-      this.router.navigate(['/tabs/tab4']);
-    });
+  
   }
 
   ionViewWillEnter() {

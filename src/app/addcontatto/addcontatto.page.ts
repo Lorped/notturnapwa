@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-addcontatto',
@@ -15,25 +15,24 @@ export class AddcontattoPage implements OnInit {
 
   constructor(
     public router: Router,
-    public http: HttpClient,
-    public user: User
+    public user: User,
+    public authservice: AuthserviceService 
   ) {}
 
   ngOnInit() {}
 
   add() {
-    var url = 'https://www.roma-by-night.it/ionicPHP/addrubrica.php';
-    var mypost = JSON.stringify({
-      idutente: this.user.idutente,
-      contatto: this.nuovoContatto.contatto,
-      cell: this.nuovoContatto.cell,
-      home: this.nuovoContatto.home,
+    if (this.nuovoContatto.cell === undefined) this.nuovoContatto.cell = 0;
+    if (this.nuovoContatto.home === undefined) this.nuovoContatto.home = 0;
 
-      note: this.nuovoContatto.note,
-    });
-
-    this.http.post<any>(url, mypost).subscribe((res) => {
-      this.router.navigate(['/tabs/tab4']);
+    this.authservice.addcontatto(
+      this.user.idutente,
+      this.nuovoContatto.contatto,
+      this.nuovoContatto.cell,
+      this.nuovoContatto.home,
+      this.nuovoContatto.note
+    ).subscribe((res: any) => {
+      this.router.navigate(['/tabs/rubrica']);
     });
   }
 

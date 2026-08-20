@@ -42,5 +42,8 @@ export class TabsPage implements OnInit {
   openRubrica() {
     this.router.navigate(['/tabs/rubrica']);
   }
+  openBackground() {
+    console.log('openBackground');
+  }
 
 }

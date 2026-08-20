@@ -21,10 +21,6 @@ const routes: Routes = [
         loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
       },
       {
-        path: 'tab4',
-        loadChildren: () => import('../tab4/tab4.module').then( m => m.Tab4PageModule)
-      },
-      {
         path: 'tab5',
         loadChildren: () => import('../tab5/tab5.module').then( m => m.Tab5PageModule)
       },
@@ -72,10 +68,7 @@ const routes: Routes = [
         path: 'morte',
         loadChildren: () => import('../morte/morte.module').then( m => m.MortePageModule)
       },
-      {
-        path: 'addpx',
-        loadChildren: () => import('../addpx/addpx.module').then( m => m.AddpxPageModule)
-      },
+
       {
         path: 'telepatia',
         loadChildren: () => import('../telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
