@@ -117,6 +117,10 @@ export class LoginPage implements OnInit {
         this.user['PScorrenti'] = Number(this.user['PScorrenti']);
         this.user['maxps'] = Number(this.user['maxps']);
 
+        if (this.user.idlds == 21 ) {
+          this.user.bonusdisc = Number (this.user.bonusdisc) + 1;
+        }
+
 
         this.authentication.skill(this.user.idutente).subscribe(
           (data) => {
@@ -124,6 +128,8 @@ export class LoginPage implements OnInit {
             this.userskill.otherskill = data.otherskill;
             this.userskill.discipline = data.discipline;
             this.userskill.background = data.background;
+            this.userskill.alleati = data.alleati;
+            this.userskill.contatti = data.contatti;
 
             this.user.pf = (3 + this.user['attutimento']) * 2;
 

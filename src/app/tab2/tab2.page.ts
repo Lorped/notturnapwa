@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { User, Userskill, Oggetto } from '../globals';
+import { User, Userskill } from '../globals';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
-import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+
+
 
 @Component({
   selector: 'app-tab2',
@@ -13,13 +12,8 @@ import { AlertController } from '@ionic/angular';
   standalone: false,
 })
 export class Tab2Page {
-  public barcodes: Barcode[] = [];
-  public isPermissionGranted = false;
 
-
-
-
-  forza = 0; //??
+  forza = 0; 
   rissa = 0;
   mischia = 0;
   lancio = 0;
@@ -35,62 +29,11 @@ export class Tab2Page {
   trefuoco2 = 0;
 
   constructor(
-    public oggetto: Oggetto,
     public user: User,
     public userskill: Userskill,
-    private router: Router,
-    public alertController: AlertController
-  ) {
-    this.initialstuff();
-  }
-
-  async initialstuff() {
-    const granted = await this.requestPermissions();
-    if (!granted) {
-      this.presentAlert();
-    }
-
-    let { available } =
-      await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
-
-    if (available == false) {
-      // alert("debug: module not available");
-      await BarcodeScanner.installGoogleBarcodeScannerModule();
-    } else {
-      // alert("debug: module available");
-    }
-  }
-
-  async requestPermissions(): Promise<boolean> {
-    const { camera } = await BarcodeScanner.requestPermissions();
-    return camera === 'granted' || camera === 'limited';
-  }
-
-  async presentAlert(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Permission denied',
-      message: 'Please grant camera permission to use the barcode scanner.',
-      buttons: ['OK'],
-    });
-    await alert.present();
-  }
-
-  async openbarcode() {
-    // this.oggetto.id='504756580060';
-    // this.router.navigate(['/tabs/oggetto']);
-    this.barcodes = [];
-
-    const { barcodes } = await BarcodeScanner.scan();
-    this.barcodes.push(...barcodes);
-
-    // console.log('Barcode data', barcodes);
-    //var ll = this.barcodes.length;
-    this.oggetto.id = this.barcodes[0].rawValue;
-    this.router.navigate(['/tabs/oggetto']);
-  }
+  ) {}
 
   ionViewWillEnter() {
-
 
     this.rissa = 0;
     this.mischia = 0;
@@ -137,8 +80,6 @@ export class Tab2Page {
     //console.log( "fuoco:" , this.fuoco);
     //console.log( "potenza:" , this.potenza);
     //console.log( "artigli:" , this.artigli);
-
-
 
     this.fomipot2 = Math.ceil((this.forza + this.mischia + this.potenza) / 2);
     this.foripot2 = Math.ceil((this.forza + this.rissa + this.potenza) / 2);

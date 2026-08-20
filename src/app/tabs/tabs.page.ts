@@ -43,7 +43,7 @@ export class TabsPage implements OnInit {
     this.router.navigate(['/tabs/rubrica']);
   }
   openBackground() {
-    console.log('openBackground');
+    this.router.navigate(['/tabs/background']);
   }
 
 }

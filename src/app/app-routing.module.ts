@@ -27,6 +27,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./rubrica/rubrica.module').then((m) => m.RubricaPageModule),
   },
+  {
+    path: 'background',
+    loadChildren: () =>
+      import('./background/background.module').then((m) => m.BackgroundPageModule),
+  },
 ];
 
 @NgModule({

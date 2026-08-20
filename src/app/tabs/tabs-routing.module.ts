@@ -33,6 +33,10 @@ const routes: Routes = [
         loadChildren: () => import('../modificanote/modificanote.module').then( m => m.ModificanotePageModule)
       },
       {
+        path: 'background',
+        loadChildren: () => import('../background/background.module').then( m => m.BackgroundPageModule)
+      },
+      {
         path: 'rubrica',
         loadChildren: () => import('../rubrica/rubrica.module').then( m => m.RubricaPageModule)
       },

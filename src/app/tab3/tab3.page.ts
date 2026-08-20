@@ -1,7 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { User, Userskill } from '../globals';
+import { User, Userskill, Oggetto } from '../globals';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
+import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -11,6 +13,10 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class Tab3Page {
+  public barcodes: Barcode[] = [];
+  public isPermissionGranted = false;
+
+
   note: string = '';
   notemaster: string = '';
   link: string = '';
@@ -19,11 +25,64 @@ export class Tab3Page {
   xpdisponibili = 0;
 
   constructor(
+    public oggetto: Oggetto,
     public user: User,
     public userskill: Userskill,
     private iab: InAppBrowser,
-    private router: Router
-  ) {}
+    private router: Router,
+    public alertController: AlertController
+  ) {
+      this.initialstuff();
+  }
+
+
+
+  async initialstuff() {
+    const granted = await this.requestPermissions();
+    if (!granted) {
+      this.presentAlert();
+    }
+
+    let { available } =
+      await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+
+    if (available == false) {
+      // alert("debug: module not available");
+      await BarcodeScanner.installGoogleBarcodeScannerModule();
+    } else {
+      // alert("debug: module available");
+    }
+  }
+
+  async requestPermissions(): Promise<boolean> {
+    const { camera } = await BarcodeScanner.requestPermissions();
+    return camera === 'granted' || camera === 'limited';
+  }
+
+  async presentAlert(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Permission denied',
+      message: 'Please grant camera permission to use the barcode scanner.',
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
+  async openbarcode() {
+    // this.oggetto.id='504756580060';
+    // this.router.navigate(['/tabs/oggetto']);
+    this.barcodes = [];
+
+    const { barcodes } = await BarcodeScanner.scan();
+    this.barcodes.push(...barcodes);
+
+    // console.log('Barcode data', barcodes);
+    //var ll = this.barcodes.length;
+    this.oggetto.id = this.barcodes[0].rawValue;
+    this.router.navigate(['/tabs/oggetto']);
+  }
+
+
 
   nl2br(str: string) {
     // Some latest browsers when str is null return and unexpected null value

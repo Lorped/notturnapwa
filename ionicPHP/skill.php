@@ -161,12 +161,40 @@ header('Content-Type: text/html; charset=utf-8');
         ];
         if ($saldo != $res['livello']) {
           $background[]  = $risorseeff;
+        } else {
+          $background[] =  $res;
         }
 
       } else {
         $background[] =  $res;
       }
 
+    }
+
+    /******************** ALLEATI / CONTATTI */
+
+    $alleati = [];
+    $contatti = [];
+
+    $MySql = "SELECT  nomealleato , livello  FROM alleati
+          WHERE idutente = '$userid'
+          ORDER BY livello DESC";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+
+      $alleati[] =  $res;
+    }
+    
+
+    $MySql = "SELECT  nomecontatto   ,livello   FROM contatti
+          WHERE idutente = '$userid'
+          ORDER BY livello DESC";
+
+    $Result = mysqli_query($db, $MySql);
+    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
+
+      $contatti[] =  $res;
     }
 
 
@@ -256,6 +284,8 @@ header('Content-Type: text/html; charset=utf-8');
       'otherskill' => $otherskill,
       'discipline' => $discipline,
       'background' => $background,
+      'alleati' => $alleati,
+      'contatti' => $contatti,
       'necro' => $necro,
       'taum' => $taum,
     ];

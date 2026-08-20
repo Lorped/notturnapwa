@@ -20,6 +20,10 @@
     <ion-col size="7">Bonus attivazione</ion-col>
     <ion-col>+{{ this.user.attivazione }}</ion-col>
   </ion-row>
+  <ion-row >
+    <ion-col size="7">Bonus attacco/difesa</ion-col>
+    <ion-col>+{{ this.user.bonusdisc }}</ion-col>
+  </ion-row>
 
   @for (desc of this.userskill.discipline; track desc) {
   <ion-row>
@@ -178,15 +182,6 @@
 
 
 
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Analizza Oggetto</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
-
-  <ion-row >
-    <ion-col style="text-align: center;"><ion-button color="danger" shape="round" outline (click)="openbarcode()">Scan</ion-button></ion-col>
-  </ion-row>
 
   <ion-row style="align-items: center;">
     <ion-col ><hr/></ion-col>

@@ -3,7 +3,19 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class Background {
   public idback = 0;
-  public nomaback = '';
+  public nomeback = '';
+  public livello = 0;
+}
+@Injectable()
+export class Alleato {
+  public idalleato = 0;
+  public nomealleato = '';
+  public livello = 0;
+}
+@Injectable()
+export class Contatto {
+  public idcontatto = 0;
+  public nomecontatto = '';
   public livello = 0;
 }
 
@@ -91,6 +103,7 @@ export class User  {
   public PScorrenti = 0 ;
   public bonusrigen = 0 ; // da left join
   public rigen = 0 ; // da left join
+  public bonusdisc = 0 ; // da left join
   public lastps = '' ; 
   public notemaster = '' ; 
   public lastcaccia = '' ;
@@ -186,6 +199,8 @@ export class Userskill {
     public otherskill: Array<Skill> = [];
     public discipline: Array<Disciplina> = [];
     public background: Array<Background> =[];
+    public alleati: Array<Alleato> =[];
+    public contatti: Array<Contatto> =[];
     public taum: Array<ataum> = [];
     public necro: Array<anecro> = [];
     public rituali: Array<Rituale> = [];
