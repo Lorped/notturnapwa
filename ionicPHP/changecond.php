@@ -24,7 +24,7 @@ header("Access-Control-Allow-Origin: *");
 // header('Content-type: text/xml; charset="utf-8"');
 
 
-	include ('db2.inc.php');   //NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';   //NEW MYSQL //
 
 
 
@@ -48,7 +48,7 @@ $descrX = mysqli_real_escape_string($db, $request->descrX);
 
 	$MySql = "UPDATE cond_oggetti SET tabcond=$tabcond , valcond=$valcond , descrX='$descrX' WHERE idcondizione=$idcondizione  ";
 	$Result = mysqli_query($db, $MySql);
-	if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db)."+". $Mysql );
+
 
 
 ?>

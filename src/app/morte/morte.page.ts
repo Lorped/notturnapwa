@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
-import { HttpClient } from '@angular/common/http';
+import { AuthserviceService } from '../services/authservice.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,16 +13,14 @@ import { Router } from '@angular/router';
 export class MortePage implements OnInit {
   constructor(
     public user: User,
-    public http: HttpClient,
+    public authservice: AuthserviceService,
     public router: Router
   ) {}
 
   ngOnInit() {}
+
   morte() {
-    var link =
-      'https://www.roma-by-night.it/ionicPHP/morte.php?id=' +
-      this.user['idutente'];
-    this.http.get(link).subscribe((res) => {
+    this.authservice.morteultima(this.user['idutente']).subscribe((res) => {
       this.router.navigate(['/login']);
     });
   }

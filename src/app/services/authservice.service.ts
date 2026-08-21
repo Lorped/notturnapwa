@@ -68,4 +68,12 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getpregi.php?id='+userid); 
   }
 
+  morteultima(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/morte.php?id='+userid); 
+  }
+
+  barcode(userid: number, barcode: string) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/barcode.php?id=' + userid + '&barcode=' + barcode);
+  }
+
 }

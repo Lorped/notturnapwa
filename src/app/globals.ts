@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isInjectable } from 'node_modules/@angular/core/types/_debug_node-chunk';
 
 @Injectable()
 export class Background {
@@ -216,10 +217,26 @@ export class Userskill {
 
     
 }
+
+
+export class Esito {
+    public motivo = '';
+    public descrizione = '';
+    public sino = '';
+}
+
   
 @Injectable({ providedIn: 'root' })
 export class Oggetto {
     public id = '';
+    public nomeoggetto = '';
+    public descrizione = '';
+    public esito: Array<Esito> = [];
+    public domanda = '';
+    public R1 = '';
+    public R2 = '';
+    public esitoSI: Array<Esito> = [];
+    public esitoNO: Array<Esito> = [];
 }
 
 

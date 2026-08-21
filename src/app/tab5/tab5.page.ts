@@ -3,6 +3,7 @@ import { User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @Component({
   selector: 'app-tab5',
@@ -20,7 +21,8 @@ export class Tab5Page implements OnInit {
     public userskill: Userskill,
     public feed: FeedService,
     public http: HttpClient,
-    public router: Router
+    public router: Router,
+    private iab: InAppBrowser,
   ) {
     this.tiridado = [];
     this.loadDadi();
@@ -88,9 +90,7 @@ export class Tab5Page implements OnInit {
     this.router.navigate(['/tabs/legami']);
   }
 
-  gomorte() {
-    this.router.navigate(['/tabs/morte']);
-  }
+ 
 
   godisciplina(disc: number, nomed: string) {
     if (disc == 98) {
@@ -108,11 +108,47 @@ export class Tab5Page implements OnInit {
 
 
 
-  goamalgame() {
-    //console.log("amalgame");
-    // go NECRO
-    this.router.navigate(['/tabs/amalgame']);
+ 
+
+
+  nl2br(str: string) {
+    // Some latest browsers when str is null return and unexpected null value
+    if (typeof str === 'undefined' || str === null) {
+      return '';
+    }
+    // Adjust comment to avoid issue on locutus.io display
+    var breakTag = '<br>';
+    return (str + '').replace(/(\r\n|\n\r|\r|\n)/g, breakTag + '$1');
   }
+
+
+
+  openUrl2() {
+    const link =
+      'https://drive.google.com/file/d/0BwbyMyT-GT-UZFBwNmp4SHZ6SFk/view';
+    //const browser = this.iab.create(this.link);
+    this.iab.create(link, '_system');
+  }
+
+  openUrl3() {
+    const link =
+      'https://drive.google.com/file/d/1RoDz3IopLmZtTK_7zDms7ClkcBlZdI31/view';
+    //const browser = this.iab.create(this.link);
+    this.iab.create(link, '_system');
+  }
+
+
+
+  modifica() {
+    // this.navCtrl.push('ModificanotePage', { "parentPage": this });
+    this.router.navigate(['/tabs/modificanote']);
+  }
+
+  reloadnote() {
+    //this.note = this.nl2br(this.user['note']);
+    //this.notemaster = this.nl2br(this.user['notemaster']);
+  }
+
 
   ionViewWillEnter() {
     this.tiridado = [];

@@ -24,15 +24,19 @@
 	header('Content-Type: text/html; charset=utf-8');
 
 	include ('messaggi.inc.php');
-	include ('db2.inc.php');    // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';    // NEW MYSQL //
 
 
 	$idutente=$_GET['id'];
 	if ($idutente=="" || $idutente == 0 ) {
-		$esito=[];
-		$esito[] = 'Attenzione';
-		$esito[] = ' No userid definita!';
-		$output = json_encode ($esito, JSON_UNESCAPED_UNICODE);
+		$esito = [];
+		$out = [
+			'nomeoggetto' => 'ATTENZIONE',
+			'descrizione' => 'oggetto non definito',
+			'esito' => $esito,
+			'domanda' => null
+		];
+		$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
     	echo $output;
 		die();
 	}
@@ -40,11 +44,13 @@
 
 	$barcode=$_GET['barcode'];
 
+	// SEGRETERIA DA RIFARE MA CI PENSIAMO DOPO !!! //
+
 	if ( $barcode == "999999999999" ) {
+
 
 		$esito = [];
 		$esito[] = 'SEGRETERIA';
-
 
 		$Mysql = "SELECT nomeplayer, xp  FROM personaggio WHERE idutente ='$idutente' ";
 		$Result = mysqli_query($db, $Mysql);
@@ -139,18 +145,30 @@
 
 	}
 
-	$descpaired = "";
+	// OGGETTO NORMALE //
+
+	$condizioni = [];
+	$nomeoggetto= '';
+	$descrizione='';
+	$esito = [];
+
+	//verifica PARIRED //
+
 	$Mysql8="SELECT * FROM oggetti WHERE barcode='$barcode' ";
 	$Result8=mysqli_query($db, $Mysql8);
-	if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql8);
+
 	$res8=mysqli_fetch_array($Result8);
 	$idx=$res8['idoggetto'];
+	$nomeoggetto=$res8['nomeoggetto'];
+	$descrizione=$res8['descrizione'];
+	$domanda=$res8['domanda'];
+	$ifdomanda=$res8['ifdomanda'];
+	$R1=$res8['r1'];
+	$R2=$res8['r2'];
+
 	$Mysql9="SELECT * FROM paired WHERE idoggetto1 = '$idx' or idoggetto2 = '$idx' ";
 	$Result9=mysqli_query($db, $Mysql9);
-	if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql9);
 	if ( $res9=mysqli_fetch_array($Result9) ) { // esiste un oggetto gemello
-
-		$descpaired = "";
 
 		//inserisco il log di questo oggetto e cancello i log più vecchi di 2 ore
       	$MySql3 = "INSERT INTO logscan (IDoggetto, IDutente ) VALUES ($idx, $idutente ) ";
@@ -172,8 +190,6 @@
         	// ok paired
 			$descpaired = $res9['Paired'];
 
-
-
 			$Mysql10="SELECT * FROM oggetti WHERE idoggetto='$newoggetto' ";
 			$Result10=mysqli_query($db, $Mysql10);
 			$res10=mysqli_fetch_array($Result10);
@@ -183,7 +199,7 @@
 			user2master($idutente,$messaggio, $db );
 
 			$Mysql11="SELECT nomepg FROM personaggio WHERE idutente=$idutente";
-				if ( $res11=mysqli_fetch_array(mysqli_query($db, $Mysql11)) ) {
+			if ( $res11=mysqli_fetch_array(mysqli_query($db, $Mysql11)) ) {
 					$nomepg=$res11['nomepg'];
 				} else {
 					$nomepg="NARRAZIONE";
@@ -194,203 +210,230 @@
 			$Mysql12="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( $idutente, '$xnomepg', NOW(), '$xmessaggio' , 0) ";
 			mysqli_query($db, $Mysql12);
 
+			$rigarisp = [
+				'motivo' => 'Accoppiamento '.$res8['nomeoggetto'] . " + " . $res10['nomeoggetto']	,
+				'descrizione' => $descpaired,
+				'sino' => ''
+			];
+			$esito[] = $rigarisp;
 
 		}
 	}
 
 
 
-	$Mysql="SELECT * FROM oggetti LEFT JOIN cond_oggetti ON oggetti.idoggetto = cond_oggetti.idoggetto WHERE barcode='$barcode' ORDER BY cond_oggetti.valcond ASC ";
+	
+
+	$Mysql="SELECT tipocond, tabcond, valcond, descrX, risp, subskill  FROM oggetti LEFT JOIN cond_oggetti ON oggetti.idoggetto = cond_oggetti.idoggetto WHERE barcode='$barcode' ORDER BY cond_oggetti.valcond ASC ";
 	$Result=mysqli_query($db, $Mysql);
 	if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql);
 
+	while ( $res=mysqli_fetch_array($Result)) {
+		$condizioni[]=$res;
+	}
 
-	$numrows = mysqli_num_rows($Result);
 
-	$extra="";
-	// $esterno=$res['fissomobile'];
+
+
+
 
 	$ok = 0;
-	while ( $res=mysqli_fetch_array($Result)) {
 
-		$esterno=$res['fissomobile'];
-		$nome=$res['nomeoggetto'];
 
-		if ($res['tipocond'] == 'A' ){
-			switch ( $res['tabcond'] ) {
-				case 1: $cc="Forza" ; break;
-				case 2: $cc="Destrezza" ; break;
-				case 3: $cc="Attutimento" ; break;
-				case 4: $cc="Carisma" ; break;
-				case 5: $cc="Persuasione" ; break;
-				case 6: $cc="Saggezza" ; break;
-				case 7: $cc="Percezione" ; break;
-				case 8: $cc="Intelligenza" ; break;
-				case 9: $cc="Prontezza" ; break;
+
+
+	foreach ($condizioni as $cond) {
+
+		//condizioni su attributi
+
+		if ($cond['tipocond'] == 'A' ){
+			switch ( $cond['tabcond'] ) {
+				case 1: $cc="forza" ; break;
+				case 2: $cc="destrezza" ; break;
+				case 3: $cc="attutimento" ; break;
+				case 4: $cc="carisma" ; break;
+				case 5: $cc="persuasione" ; break;
+				case 6: $cc="saggezza" ; break;
+				case 7: $cc="percezione" ; break;
+				case 8: $cc="intelligenza" ; break;
+				case 9: $cc="prontezza" ; break;
 			}
 
 			$Mysql2 = "SELECT ".$cc." FROM personaggio WHERE idutente ='$idutente' ";
 			$Result2=mysqli_query($db,$Mysql2);
-			if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql2);
 			$res2=mysqli_fetch_array($Result2);
 			
-			/*
-			if ( $res2[$cc]=='' ) {
-				$Mysql2 = "SELECT ".$cc." FROM HUNTERpersonaggio WHERE idutente ='$idutente' ";
-				$Result2=mysqli_query($db, $Mysql2);
-				$res2=mysqli_fetch_array($Result2);
-			}
-			*/
-			
-			if ($res2[$cc] >= $res['valcond'] ) {
-				$ok=1;
-				if ($res['risp'] == '') {
-					$extra=$extra." ".$res['descrX'];
-				}
-				if ($res['risp'] == 'S') {
-					$extra_si=$extra_si." ".$res['descrX'];
-				}
-				if ($res['risp'] == 'N') {
-					$extra_no=$extra_no." ".$res['descrX'];
-				}
+			if ( $res2[$cc] >= $cond['valcond'] ) {
 
-			}
-//echo " cc =" .$cc. " valore = ". $res2[$cc] . "vs. " .$res['valcond'] . " OK = ".$ok ;
+				$rigarisp = [
+					'motivo' => ucfirst($cc),
+					'descrizione' => $cond['descrX'],
+					'sino' => $cond['risp']
+				];
+				$esito[] = $rigarisp;	
+
+			} 
 		}
-
-		if ($res['tipocond'] == 'S' ){
-			$ids=$res['tabcond'];
-			$Mysql4="SELECT * FROM skill WHERE idskill = $ids AND idutente = '$idutente' ";
-			$Result4=mysqli_query($db, $Mysql4);
-			if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql4);
-
-			if (mysqli_num_rows($Result4) !=0  ) {
-				$res4=mysqli_fetch_array($Result4);
-				if ($res4['livello'] >= $res['valcond'] ) {
-					$ok=1;
-					if ($res['risp'] == '') {
-						$extra=$extra." ".$res['descrX'];
-					}
-					if ($res['risp'] == 'S') {
-						$extra_si=$extra_si." ".$res['descrX'];
-					}
-					if ($res['risp'] == 'N') {
-						$extra_no=$extra_no." ".$res['descrX'];
-					}
-				}
-			}
-
-//echo " skill =" .$ids. " valore = ". $res4['livello'] . "vs. " .$res['valcond'] . " OK = ".$ok ;
-		}
-		if ($res['tipocond'] == 'D' ){
-			$ids=$res['tabcond'];
-			$Mysql4="SELECT * FROM discipline WHERE iddisciplina = $ids AND idutente = '$idutente' ";
-			$Result4=mysqli_query($db, $Mysql4);
-			if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql4);
-
-			if (mysqli_num_rows($Result4) !=0  ) {
-				$res4=mysqli_fetch_array($Result4);
-				if ($res4['livello'] >= $res['valcond'] ) {
-					$ok=1;
-					if ($res['risp'] == '') {
-						$extra=$extra." ".$res['descrX'];
-					}
-					if ($res['risp'] == 'S') {
-						$extra_si=$extra_si." ".$res['descrX'];
-					}
-					if ($res['risp'] == 'N') {
-						$extra_no=$extra_no." ".$res['descrX'];
-					}
-				}
-			}
-
-//echo " disciplina =" .$ids. " valore = ". $res4['livello'] . "vs. " .$res['valcond'] . " OK = ".$ok ;
-		}
-
-		if ($res['tipocond'] == 'P' ){
-			$ids=$res['tabcond'];
-			$Mysql4="SELECT * FROM poteri WHERE idpotere = $ids AND idutente = '$idutente' ";
-			$Result4=mysqli_query($db, $Mysql4);
-			if (mysqli_errno($db)) die ( mysqli_errno($db).": ".mysqli_error($db) ."+".$Mysql4);
-
-			if (mysqli_num_rows($Result4) !=0  ) {
-				$ok=1;
-				if ($res['risp'] == '') {
-					$extra=$extra." ".$res['descrX'];
-				}
-				if ($res['risp'] == 'S') {
-					$extra_si=$extra_si." ".$res['descrX'];
-				}
-				if ($res['risp'] == 'N') {
-					$extra_no=$extra_no." ".$res['descrX'];
-				}
-			}
-		}
-
-		$domanda = [];
-		if ( $res['ifdomanda'] == 1 ) {
-			$domanda = [
-				'Domanda' => $res['domanda'],
-				'R1' => $res['r1'].' '.$extra_si,
-				'R2' => $res['r2'].' '.$extra_no
-	 		];
-		}
-
-
-		$esito=[];
-		if ( $ok == 0 ) {
-			if ( $res['descrizione']!="") {
-				$esito[] = $res['nomeoggetto'];
-				$esito[] = $res['descrizione'] .'. '.$descpaired;
 				
-				if ( $res['ifdomanda'] == 1 ) {
-				    $esito[] = $domanda;
-				}
-				
-			} else {
-				$esito[] = $res['nomeoggetto'];
-				$esito[] = "- Nulla di speciale -" .'. '.$descpaired;
-				if ( $res['ifdomanda'] == 1 ) {
-				    $esito[] = $domanda;
+
+		// CONTROLLO DISCIPLINE
+
+		if ($cond['tipocond'] == 'D' ){
+			$ids=$cond['tabcond'];
+			$Mysql4="SELECT * FROM discipline left join discipline_main on discipline_main.iddisciplina=discipline.iddisciplina
+				WHERE discipline.iddisciplina = $ids AND idutente = '$idutente' ";
+			$Result4=mysqli_query($db, $Mysql4);
+
+			if ( $res4=mysqli_fetch_array($Result4)  ) {		
+				if ($res4['livello'] >= $cond['valcond'] ) {
+					$rigarisp = [
+						'motivo' => $res4['nomedisc'],
+						'descrizione' => $cond['descrX'],
+						'sino' => $cond['risp']
+					];
+					$esito[] = $rigarisp;	
 				}
 			}
-		} else {
-			$esito[] = $res['nomeoggetto'];
-			$esito[] = $res['descrizione'].'. '.$extra .'. '.$descpaired;
-			
-			if ( $res['ifdomanda'] == 1 ) {
-				    $esito[] = $domanda;
-			}
-			
 		}
-		// $esito[] = $domanda;
-		
-		
+
+		// POTERI
+
+		if ($cond['tipocond'] == 'P' ){
+			$ids=$cond['tabcond'];
+			$Mysql4="SELECT * FROM poteri left join poteri_main on poteri_main.idpotere=poteri.idpotere
+				WHERE poteri.idpotere = $ids AND idutente = '$idutente' ";
+			$Result4=mysqli_query($db, $Mysql4);
+
+			if ( $res4=mysqli_fetch_array($Result4)  ) {
+				
+				$rigarisp = [
+					'motivo' => $res4['nomepotere'],
+					'descrizione' => $cond['descrX'],
+					'sino' => $cond['risp']
+				];
+				$esito[] = $rigarisp;	
+
+			}
+		}
+
+		// SKILL GENERICI
+
+		if ($cond['tipocond'] == 'X' ){
+			$ids=$cond['tabcond'];
+			$Mysql4="SELECT * FROM skill left join skill_main on skill_main.idskill=skill.idskill
+				WHERE skill.idskill = $ids AND idutente = '$idutente' ";
+			$Result4=mysqli_query($db, $Mysql4);
+
+
+			if ( $res4=mysqli_fetch_array($Result4)  ) {
+				
+				$rigarisp = [
+					'motivo' => $res4['nomeskill'],
+					'descrizione' => $cond['descrX'],
+					'sino' => $cond['risp']
+				];
+				$esito[] = $rigarisp;	
+
+			}
+		}
 
 	}
 
 
-
-	if ( $esterno == 'E') {
-		$Mysql="SELECT notemaster from personaggio WHERE idutente=$idutente";
-		$Result=mysqli_query($db,$Mysql);
-		$resx=mysqli_fetch_array($Result);
-		$testo=$resx['notemaster'];
-		$testo=mysqli_real_escape_string($db, $testo.date('d-m-Y H:i')." Visionato oggetto ".$nome).'\\n';
-		$Mysql="UPDATE personaggio set notemaster = '$testo' WHERE idutente=$idutente";
-		mysqli_query($db,$Mysql);
+	// INIZIO SKILL  SPECIFICI
 
 
+	foreach ($condizioni as $cond) {
+
+		if ($cond['tipocond'] == 'S' ){
+
+		//print_r($cond); 
+		//echo "<br><br>";
+
+			$ids=$cond['tabcond'];
+
+			$Mysql4="SELECT * FROM skill left join skill_main on skill_main.idskill=skill.idskill
+				WHERE skill_main.idskill = $ids AND idutente = '$idutente' ";
+			$Result4=mysqli_query($db, $Mysql4);
+
+
+			if ( $res4=mysqli_fetch_array($Result4)  ) {
+				// HO UN SKILL GENERICO confermato. ESISTE UNA CONDIZIONE Su SKILL SPECIFICO ?
+				for ( $i=0; $i< count($condizioni); $i++ ) {
+					
+					if ( $condizioni[$i]['tipocond'] == 'SS' && $condizioni[$i]['subskill'] == $ids ) {
+
+						$specifica = $condizioni[$i]['tabcond'];
+
+						$mysql5="SELECT * FROM skill_main 
+							left join skill on skill_main.idskill = skill.idskill
+							WHERE skill_main.idskill =  $specifica  AND idutente = '$idutente' ";
+
+						$Result5=mysqli_query($db, $mysql5);
+
+						if ( $res5=mysqli_fetch_array($Result5)  ) {
+
+							// c'è una condizione su skill specifico verificato?
+							if ( $res5['livello'] >= $condizioni[$i]['valcond'] ) {
+								$rigarisp = [
+									'motivo' => $res5['nomeskill'],
+									'descrizione' => $condizioni[$i]['descrX'],
+									'sino' => $cond['risp']
+								];
+								$esito[] = $rigarisp;										
+							} else {
+								// allora inserisco solo il generico
+								$rigarisp = [
+									'motivo' => $res4['nomeskill'],
+									'descrizione' => $cond['descrX'],
+									'sino' => $cond['risp']
+								];
+								$esito[] = $rigarisp;	
+							}
+						} else {
+							// allora inserisco solo il generico
+							$rigarisp = [
+								'motivo' => $res4['nomeskill'],
+								'descrizione' => $cond['descrX'],
+								'sino' => $cond['risp']
+							];
+							$esito[] = $rigarisp;
+						}
+					}
+				}								
+
+			}
+		}
 	}
 
-	if ($numrows == 0){
-		$esito=[];
-		$esito[] = 'Attenzione';
-		$esito[] = ' Oggetto non valido';
 
+	$esitoSI = [];
+	$esitoNO = [];
+
+	foreach ($esito as $riga) {
+		if ($riga['sino'] === 'S') {
+			$esitoSI[] = $riga;
+		} elseif ($riga['sino'] === 'N') {
+			$esitoNO[] = $riga;
+		}
 	}
+	$esito = array_values(array_filter($esito, function($riga) {
+		return $riga['sino'] !== 'S' && $riga['sino'] !== 'N';
+	}));
 
-	$output = json_encode ($esito, JSON_UNESCAPED_UNICODE);
+
+	$out = [
+		'nomeoggetto' => $nomeoggetto,
+		'descrizione' => $descrizione,
+		'esito' => $esito,
+		'esitoSI' => $esitoSI,
+		'esitoNO' => $esitoNO,
+		'domanda' => $domanda,
+		'R1' => $R1,
+		'R2' => $R2,
+	];
+
+	$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
     echo $output;
 
 

@@ -25,7 +25,7 @@
 
 	include 'messaggi.inc.php';
 
-	include ('db2.inc.php');  // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
 
  	$idutente = $_GET['id'];
@@ -63,8 +63,8 @@
 
 
 /* do other stuff */
-$Mysql="UPDATE personaggio set PScorrenti = 0 , fdv=0 WHERE idutente=$idutente";
-$Result=mysqli_query($db, $Mysql);
+// $Mysql="UPDATE personaggio set PScorrenti = 0 , fdv=0 WHERE idutente=$idutente";
+//$Result=mysqli_query($db, $Mysql);
 
 $Mysql="DELETE from legami WHERE target=$idutente  or domitor=$idutente";
 $Result=mysqli_query($db, $Mysql);

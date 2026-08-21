@@ -48,5 +48,8 @@ export class TabsPage implements OnInit {
   openPregi() {
     this.router.navigate(['/tabs/pregi']);
   }
+  openMorte() {
+    this.router.navigate(['/tabs/morte']);
+  }
 
 }
