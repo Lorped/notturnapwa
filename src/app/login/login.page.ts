@@ -61,10 +61,17 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (window.localStorage.getItem('notturnadarkmode') == 'true') {
+      document.documentElement.classList.add('ion-palette-dark');
+    }
+
     this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || prefersDark.matches;
     prefersDark.addEventListener('change', (mediaQuery) => {
       this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || mediaQuery.matches;
     });
+
+
   }
 
   public login() {

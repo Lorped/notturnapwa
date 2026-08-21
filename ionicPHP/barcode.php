@@ -235,13 +235,6 @@
 
 
 
-
-
-	$ok = 0;
-
-
-
-
 	foreach ($condizioni as $cond) {
 
 		//condizioni su attributi
@@ -359,6 +352,7 @@
 
 			if ( $res4=mysqli_fetch_array($Result4)  ) {
 				// HO UN SKILL GENERICO confermato. ESISTE UNA CONDIZIONE Su SKILL SPECIFICO ?
+				$esistesoecifico=false;
 				for ( $i=0; $i< count($condizioni); $i++ ) {
 					
 					if ( $condizioni[$i]['tipocond'] == 'SS' && $condizioni[$i]['subskill'] == $ids ) {
@@ -372,6 +366,7 @@
 						$Result5=mysqli_query($db, $mysql5);
 
 						if ( $res5=mysqli_fetch_array($Result5)  ) {
+							$esistesoecifico=true;
 
 							// c'è una condizione su skill specifico verificato?
 							if ( $res5['livello'] >= $condizioni[$i]['valcond'] ) {
@@ -382,7 +377,7 @@
 								];
 								$esito[] = $rigarisp;										
 							} else {
-								// allora inserisco solo il generico
+								// allora inserisco solo il generico perchè ho lo skill specifico troppo basso
 								$rigarisp = [
 									'motivo' => $res4['nomeskill'],
 									'descrizione' => $cond['descrX'],
@@ -391,7 +386,8 @@
 								$esito[] = $rigarisp;	
 							}
 						} else {
-							// allora inserisco solo il generico
+							$esistesoecifico=true;
+							// allora inserisco solo il generico perchè non ho lo skill specifico
 							$rigarisp = [
 								'motivo' => $res4['nomeskill'],
 								'descrizione' => $cond['descrX'],
@@ -400,6 +396,15 @@
 							$esito[] = $rigarisp;
 						}
 					}
+				}
+				//se alla fine non esiste uno skill specifico verificato allora inserisco il generico
+				if ( $esistesoecifico == false ) {
+					$rigarisp = [
+						'motivo' => $res4['nomeskill'],
+						'descrizione' => $cond['descrX'],
+						'sino' => $cond['risp']
+					];
+					$esito[] = $rigarisp;	
 				}								
 
 			}
@@ -420,6 +425,21 @@
 	$esito = array_values(array_filter($esito, function($riga) {
 		return $riga['sino'] !== 'S' && $riga['sino'] !== 'N';
 	}));
+
+
+	$mysql = "SELECT * FROM logscanogg WHERE idutente = '$idutente' AND idoggetto = '$idx' ";
+	$result = mysqli_query($db, $mysql);
+	if (mysqli_num_rows($result) == 0) {
+		$mysql = "INSERT INTO logscanogg  (idutente, idoggetto)
+			VALUES ('$idutente', '$idx') ";
+		mysqli_query($db, $mysql);
+		foreach ($esito as $riga) {
+			$mysql2 = "INSERT INTO logscanfull  (idutente, idoggetto, motivo, descrizione)
+				VALUES ('$idutente', '$idx', '".$riga['motivo']."', '".$riga['descrizione']."') ";
+			mysqli_query($db, $mysql2);
+		}
+	}
+
 
 
 	$out = [

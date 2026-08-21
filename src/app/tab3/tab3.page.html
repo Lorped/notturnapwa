@@ -14,11 +14,30 @@
   
   <ion-row style="align-items: center;">
     <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="text-align: center;"><ion-button color="danger" shape="round" outline (click)="openbarcode()">Scan</ion-button></ion-col>
+    <ion-col size="6" style="text-align: center;"><ion-button color="danger" shape="round" outline (click)="openbarcode()">New Scan</ion-button></ion-col>
     <ion-col ><hr/></ion-col>
   </ion-row>
 
-
+  @for (ogg of this.oldscan; track ogg) {
+    <ion-card>
+      <ion-card-header>
+          <ion-card-subtitle>{{ogg.datascan}}</ion-card-subtitle>
+          <ion-card-title>{{ogg.nomeoggetto}}</ion-card-title>
+          <ion-card-subtitle>{{ogg.descrizione}}</ion-card-subtitle>
+        </ion-card-header>
+        @if (ogg.esito.length > 0) {
+          <ion-card-content>
+            <ion-item>
+              <ion-label>
+                @for (xx of ogg.esito ; track xx) {
+                  <p><ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </p>                         
+                }
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        }
+      </ion-card>
+  }
 
  
 
@@ -43,26 +62,28 @@
             <ion-card-subtitle>{{oggetto.descrizione}}</ion-card-subtitle>
           </ion-card-header>
   
-          <ion-card-content>
-            <ion-list>
-            @for (xx of this.oggetto.esito ; track xx) {
-                <ion-item>
-                  <ion-label> <ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </ion-label>               
-                </ion-item>            
-            }
-          </ion-list>
-          </ion-card-content>
+          @if (this.oggetto.esito.length > 0) {
+            <ion-card-content>
+              <ion-list>
+              @for (xx of this.oggetto.esito ; track xx) {
+                  <ion-item>
+                    <ion-label> <ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </ion-label>               
+                  </ion-item>            
+              }
+            </ion-list>
+            </ion-card-content>
+          }
         </ion-card>
 
-        @if (this.oggetto.domanda != '') {
+        @if (this.oggetto.domanda && this.oggetto.domanda != '') {
           <ion-card>
             <ion-card-header>
               <ion-card-title>{{oggetto.domanda}}</ion-card-title>
             </ion-card-header>
 
-            <div style="text-align: center; justify-content: center; display: flex; ">
-            <ion-button *ngIf="rispostaselezionata != 'NO'" size="small" color="success" (click)="risposta('SI')"  [disabled]="giarisposto">SI</ion-button>
-            <ion-button *ngIf="rispostaselezionata != 'SI'" size="small" color="danger" (click)="risposta('NO')" [disabled]="giarisposto">NO</ion-button>
+            <div style="text-align:center; justify-content: center; display: flex; ">
+            <ion-button *ngIf="rispostaselezionata != 'NO'" size="small" color="success" (click)="risposta('SI')"  [disabled]="giarisposto" style="margin-left: 15%;margin-right: 15%;">SI</ion-button>
+            <ion-button *ngIf="rispostaselezionata != 'SI'" size="small" color="danger" (click)="risposta('NO')" [disabled]="giarisposto" style="margin-left: 15%;margin-right: 15%;">NO</ion-button>
             </div>
 
 

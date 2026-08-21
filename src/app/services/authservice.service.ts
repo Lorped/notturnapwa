@@ -76,4 +76,8 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/barcode.php?id=' + userid + '&barcode=' + barcode);
   }
 
+  getscan(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getscan.php?id=' + userid);
+  }
+
 }

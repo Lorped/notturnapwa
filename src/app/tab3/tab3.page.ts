@@ -1,11 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { User, Oggetto } from '../globals';
-import { Router } from '@angular/router';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
-import { ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-tab3',
@@ -24,6 +22,8 @@ export class Tab3Page {
 
   giarisposto = false;
   rispostaselezionata = '';
+
+  oldscan: Array<Oggetto> = [];
 
 
   constructor(
@@ -85,7 +85,7 @@ export class Tab3Page {
 
     *****/
 
-    this.oggetto.id='463308606542';
+    this.oggetto.id='155405728268';
     
     this.authservice.barcode(this.user.idutente, this.oggetto.id).subscribe((data) => {
 
@@ -119,8 +119,16 @@ export class Tab3Page {
 
   cancel() {
     this.isModalOpen = false;
+    this.authservice.getscan(this.user.idutente).subscribe((data) => {
+      this.oldscan = data;
+    });
   }
   
   ionViewWillEnter() {
+    this.authservice.getscan(this.user.idutente).subscribe((data) => {
+      //console.log(data);
+      this.oldscan = data;
+      // console.log("odscan : ", this.oldscan);
+    });
   }
 }

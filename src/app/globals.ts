@@ -226,7 +226,6 @@ export class Esito {
 }
 
   
-@Injectable({ providedIn: 'root' })
 export class Oggetto {
     public id = '';
     public nomeoggetto = '';
@@ -237,6 +236,7 @@ export class Oggetto {
     public R2 = '';
     public esitoSI: Array<Esito> = [];
     public esitoNO: Array<Esito> = [];
+    public datascan = '';
 }
 
 

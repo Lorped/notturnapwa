@@ -16,17 +16,33 @@ export class TabsPage implements OnInit {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // Initialize the dark palette based on the initial
-    // value of the prefers-color-scheme media query
-    this.initializeDarkPalette(prefersDark.matches);
+    if (window.localStorage.getItem('notturnadarkmode') == 'true') {
+      document.documentElement.classList.add('ion-palette-dark');
+      this.paletteToggle = true;
+    } else {
+      // Initialize the dark palette based on the initial
+      // value of the prefers-color-scheme media query
+      this.initializeDarkPalette(prefersDark.matches);
+    }
+
+  
 
     // Listen for changes to the prefers-color-scheme media query
     prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkPalette(mediaQuery.matches));
+
+
   }
   // Check/uncheck the toggle and update the palette based on isDark
   initializeDarkPalette(isDark: boolean) {
     this.paletteToggle = isDark;
     this.toggleDarkPalette(isDark);
+
+    //console.log ('Dark mode is ' + (isDark ? 'enabled' : 'disabled'));
+
+    window.localStorage.setItem(
+      'notturnadarkmode',
+      isDark ? 'true' : 'false'
+    );
   }
 
   // Listen for the toggle check/uncheck to toggle the dark palette
@@ -37,6 +53,10 @@ export class TabsPage implements OnInit {
   // Add or remove the "ion-palette-dark" class on the html element
   toggleDarkPalette(shouldAdd: boolean) {
     document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
+        window.localStorage.setItem(
+      'notturnadarkmode',
+      shouldAdd ? 'true' : 'false'
+    );
   }
 
   openRubrica() {

@@ -25,10 +25,6 @@ const routes: Routes = [
         loadChildren: () => import('../tab5/tab5.module').then( m => m.Tab5PageModule)
       },
       {
-        path: 'oggetto',
-        loadChildren: () => import('../oggetto/oggetto.module').then( m => m.OggettoPageModule)
-      },
-      {
         path: 'modificanote',
         loadChildren: () => import('../modificanote/modificanote.module').then( m => m.ModificanotePageModule)
       },
