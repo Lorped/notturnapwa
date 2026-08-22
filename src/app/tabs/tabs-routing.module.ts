@@ -49,7 +49,7 @@ const routes: Routes = [
         loadChildren: () => import('../pregi/pregi.module').then( m => m.PregiPageModule)
       },
       {
-        path: 'caccia/:id',
+        path: 'caccia',
         loadChildren: () => import('../caccia/caccia.module').then( m => m.CacciaPageModule)
       },
       {

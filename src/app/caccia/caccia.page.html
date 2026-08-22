@@ -1,67 +1,73 @@
-<ion-header>
+<ion-content>
 
-  <ion-toolbar color="medium">
-    <ion-title>Caccia</ion-title>
-  </ion-toolbar>
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Caccia</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
 
-</ion-header>
 
 
 
-<ion-content padding class="master" color="dark">
 
-  @if (hidevalue==false && BS==1) {
-    <ion-row style="align-items: center;">
-      <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Bacio Selvaggio</ion-col>
-    </ion-row>
-  }
-  @if (hidevalue==false && gregge > 0) {
-    <ion-row style="align-items: center;">
-      <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Gregge</ion-col>
-    </ion-row>
-  }
-  @if (hidevalue==false && metab==1) {
+  @if (this.user.incaccia==1 && metab==1) {
     <ion-row style="align-items: center;">
       <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Metabolismo Efficiente</ion-col>
     </ion-row>
   }
-  @if (hidevalue==false) {
+    @if (this.user.incaccia==1 && zanne==1) {
+    <ion-row style="align-items: center;">
+      <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia aumentato per Zanne Spuntate</ion-col>
+    </ion-row>
+  }
+    @if (this.user.incaccia==1 && gregge > 0) {
+    <ion-row style="align-items: center;">
+      <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia ridotto per Gregge</ion-col>
+    </ion-row>
+  }
+  @if (this.user.incaccia==1 && bs==1) {
+    <ion-row style="align-items: center;">
+      <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia dimezzato per Bacio Selvaggio</ion-col>
+    </ion-row>
+  }
+
+  
+  @if (this.user.incaccia==1) {
     <ion-row style="align-items: center;">
       <ion-col  style="color:#FF0000; text-align: center; font-size: 1.1em;">Tempo di Caccia Restante</ion-col>
     </ion-row>
   }
-  @if (hidevalue==false) {
+  @if (this.user.incaccia==1) {
     <ion-row style="align-items: center;">
-      <ion-col style="color:#FFFFFF; text-align: center; font-size: 2.1em; font-family: 'MyFont';">{{minuti}}:{{secondi}}</ion-col>
+      <ion-col style="text-align: center; font-size: 2.1em; font-family: 'MyFont';">{{min_string}}:{{secondi_string}}</ion-col>
     </ion-row>
   }
-  @if (hidevalue==true) {
+  @if (this.user.incaccia==0 && this.statocaccia==2) {
     <ion-row style="align-items: center;">
       <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Caccia terminata!</ion-col>
     </ion-row>
   }
-  @if (hidevalue==true) {
-    <ion-row style="align-items: center;">
-      <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Saziati {{recuperati}} livelli di Sete</ion-col>
-    </ion-row>
-  }
-  @if (hidevalue==true && toxic==1) {
-    <ion-row style="align-items: center;">
-      <ion-col style="color:#FF0000; text-align: center; font-size: 1.1em;">Caccia sfortunata!!</ion-col>
-    </ion-row>
-  }
+
+
+  @if (this.user.incaccia== 0 ){
+  <ion-row >  
+      <ion-col >
+        <ion-button color="danger"  (click)="iniziocaccia()"  shape="round" expand="full" type="submit" [disabled]="this.user.PScorrenti>=this.user.maxps" >Inizia la caccia</ion-button>
+      </ion-col>
+  </ion-row >
+}
+
 
   <ion-row >
-    @if (hidevalue==false) {
+    @if (this.user.incaccia == 1 && this.statocaccia == 1) {
       <ion-col >
-        <ion-button color="danger" (click)="goback()"  class="submit-btn2" shape="round" expand="full" type="submit"  >Cancella la caccia</ion-button>
+        <ion-button color="danger"  (click)="cancellacaccia()" class="submit-btn2" shape="round" expand="full" type="submit"  >Cancella la caccia</ion-button>
       </ion-col>
     }
-    @if (hidevalue==true) {
-      <ion-col >
-        <ion-button  color="danger" (click)="goback()"  class="submit-btn2" shape="round" expand="full" type="submit"  >Torna</ion-button>
-      </ion-col>
-    }
+
   </ion-row >
 
 </ion-content>

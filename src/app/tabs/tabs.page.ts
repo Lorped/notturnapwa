@@ -71,5 +71,8 @@ export class TabsPage implements OnInit {
   openMorte() {
     this.router.navigate(['/tabs/morte']);
   }
+  openCaccia() {
+    this.router.navigate(['/tabs/caccia']);
+  }
 
 }

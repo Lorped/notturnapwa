@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, Userskill } from '../globals';
-import { ActivatedRoute, Router } from '@angular/router';
+import { pregiodifetto, User, Userskill } from '../globals';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-caccia',
@@ -11,161 +11,180 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: false,
 })
 export class CacciaPage implements OnInit {
-  maxTime: any = 600; /* 10 minuti */
-  minuti: any = 10;
-  secondi: any = '00';
-  hidevalue = false;
+  duratacaccia = 10; /* base 10 minuti */
+  minuti = 10;
+  secondi = 0;
+  min_string = '10';
+  secondi_string = '00';
+
+
+
+
+  statocaccia = 0;  //   0 - prima , 1 - in corso, 2 - finita
+  hidevalue = false
   timer: any;
 
-  gregge = 0;
-  tossico = 0; //difetto
-  toxic = 0; //se difetto è stato attivato
-  metab = 0;
+  metab = 0;  // metab. effic  -3 min
+  zanne = 0; // zanne spuntate +2 min
+  gregge = 0; // -1 min / livello
+  bs = 0; // bacio selvaggio -50%
+  bspossibile = 0; // bacio selvaggio possibile
+
+  pregi: Array<pregiodifetto> = [];
 
   recuperati = 0;
-  addcaccia = 0;
-  BS = 0;
   timestart = 0;
-  fullTime = 0;
 
   constructor(
     private http: HttpClient,
     public user: User,
     public userskill: Userskill,
-    public router: Router,
-    public activatedroute: ActivatedRoute
+    public authservice: AuthserviceService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const pot = this.userskill.discipline.find((d) => d.iddisciplina == 17);  // potenza
+    if (pot) {
+      const bb = pot.poteri.find((p) => p.idpotere == 54); // bacio selvaggio
+      if (bb) {
+        this.bspossibile = 1;
+      }
+    }
+  }
 
   ionViewWillEnter() {
-    if (this.user.incaccia != 1) {
-      this.user.incaccia = 1;
+   
+      const oldstart = window.localStorage.getItem(
+        'NotturnaCacciaTimestart',
+      );
+      const olddurata = window.localStorage.getItem(
+        'NotturnaDurataCaccia',
+      );
 
-      // console.log ("again..");
-
-      this.activatedroute.paramMap.subscribe((paramMap) => {
-        this.BS = Number(paramMap.get('id'));
-        // console.log(paramMap);
-      });
-
-      this.gregge = 0;
-      this.tossico = 0;
-      this.metab = 0;
-
-      for (let i = 0; i < this.userskill.skill.length; i++) {
-        if (this.userskill.skill[i].nomeskill == 'Gregge') {
-          if (this.userskill.skill[i].livello > 0) {
-            this.gregge = this.userskill.skill[i].livello;
-          }
-        }
-        if (this.userskill.skill[i].nomeskill == 'Tossicodipendente') {
-          this.tossico = 1;
-        }
-        if (this.userskill.skill[i].nomeskill == 'Metabolismo Efficiente') {
-          this.metab = 1;
-        }
+      if (olddurata && oldstart && this.user.incaccia == 0) {
+        console.log ('riprendo la caccia in corso');
+        this.statocaccia = 1;
+        this.user.incaccia = 1;
+        this.timestart = parseInt(oldstart);
+        this.duratacaccia = parseInt(olddurata);
+        this.StartTimer();
       }
 
-      this.maxTime = this.user.tempocaccia * 60 - this.gregge * 60  ;
 
-      if (this.user['idclan'] == 2) {
-        //ventrue
-        this.maxTime = this.maxTime + 60 * 3; // 3 min. addizionali
-      }
+  }
 
-      if (this.metab == 1) {
-        this.maxTime = 1 * this.maxTime - 3 * 60;
-      }
+  iniziocaccia() {
+    this.user.incaccia = 1;
 
-      if (this.BS == 1) {
-        this.maxTime = this.maxTime / 2;
-      }
-
-      //this.recuperati = 5 ;
-
-      this.fullTime = this.maxTime;
-
-      this.minuti = this.maxTime / 60;
-      this.secondi = this.maxTime - 60 * Math.floor(this.maxTime / 60);
-
-      if (this.minuti < 10) {
-        this.minuti = '0' + this.minuti;
-      }
-      if (this.secondi < 10) {
-        this.secondi = '0' + this.secondi;
-      }
-
-      this.recuperati =
-        this.user['maxps'] - this.user['PScorrenti'];
-
-      if (this.tossico == 1 && Math.random() * 100 < 30) {
-        this.recuperati = Math.ceil(this.recuperati / 2);
-        this.toxic = 1;
-      } else {
-        this.toxic = 0;
-      }
-      /* valori ridotti per test
-      this.maxTime = 10
-      this.minuti = '00';
-      this.secondi = '10';
-      */
-      let tn = new Date();
-
-      this.timestart = tn.getTime();
-      this.msginizio();
-      this.StartTimer();
+    const gg = this.userskill.background.find((b) => b.idback == 11);
+    if (gg) {
+      this.gregge = gg.livello;
     }
+
+    this.authservice.getpregi(this.user.idutente).subscribe((data) => {
+      Object.assign(this.pregi, data);
+
+      const metab = this.pregi.find((p) => p.idpregio == 5);
+      if (metab) {
+        this.metab = 3;
+      }
+      const zanne = this.pregi.find((p) => p.idpregio == 17);
+      if (zanne) {
+        this.zanne = 2;
+      }
+
+      //valore in minuti della caccia
+      this.duratacaccia = this.user.tempocaccia - this.gregge  - this.metab  + this.zanne ;
+
+
+      // TEMPO RIDOTTO PER TEST!!!
+      this.duratacaccia = 1;
+      /***************************** */
+
+      //scrivo in locale il tempo di caccia
+      window.localStorage.setItem(
+        'NotturnaDurataCaccia',
+        this.duratacaccia.toString()
+      );
+      let tn = new Date();
+      this.timestart = tn.getTime();
+      window.localStorage.setItem(
+        'NotturnaCacciaTimestart',
+        this.timestart.toString()
+      );
+
+
+      console.log('inizio caccia: ' + this.timestart);
+      console.log('durata caccia: ' + this.duratacaccia);
+
+      this.StartTimer();
+
+    });
+  }
+
+  scrivilocale() {
+      //scrivo in locale l'ora d'inizio della caccia
+      let tn = new Date();
+      let ttn = tn.getTime();
+      window.localStorage.setItem(
+        'NotturnaCacciaTimestart',
+        ttn.toString()
+      );
   }
 
   StartTimer() {
     this.timer = setTimeout((x: any) => {
-      // if (this.maxTime <= 0) { }
-      this.maxTime -= 1;
-
+      
       let now = new Date();
       let nowt = now.getTime();
 
-      if (
-        Math.round((nowt - this.timestart) / 1000) >
-        this.fullTime - this.maxTime
-      ) {
-        // console.log ( "nowt "+ nowt);
-        // console.log ( "timestart "+ this.timestart);
-        // console.log ( "fullTime "+ this.fullTime);
-        // console.log ( "maxTime "+ this.maxTime);
-        // console.log ( "diff1 "+ Math.round ((nowt - this.timestart)/1000));
-        // console.log ( "diff2 "+ (this.fullTime-this.maxTime) );
+      //secondi trascorsi dall'inizio della caccia
+      let elapsedSeconds = Math.round((nowt - this.timestart) / 1000);
 
-        this.maxTime =
-          this.fullTime - Math.round((nowt - this.timestart) / 1000);
-      }
-
-      this.minuti = Math.floor(this.maxTime / 60);
-      this.secondi = this.maxTime - 60 * Math.floor(this.maxTime / 60);
+      this.minuti = Math.floor( (this.duratacaccia*60 - elapsedSeconds) / 60 );
+      this.secondi = (this.duratacaccia*60 - elapsedSeconds) - 60 * Math.floor((this.duratacaccia*60 - elapsedSeconds) / 60);
       if (this.secondi < 10) {
-        this.secondi = '0' + this.secondi;
+        this.secondi_string = '0' + this.secondi.toString();
+      } else {
+        this.secondi_string = this.secondi.toString();
       }
       if (this.minuti < 10) {
-        this.minuti = '0' + this.minuti;
+        this.min_string = '0' + this.minuti.toString();
+      } else {
+        this.min_string = this.minuti.toString();
       }
 
-      if (this.maxTime > 0) {
-        this.hidevalue = false;
-        this.StartTimer();
+      if (elapsedSeconds < this.duratacaccia * 60) {
+        if (this.statocaccia == -1) { // cancellata la caccia
+          console.log("caccia cancellata");
+          this.statocaccia = 0;
+          this.user.incaccia = 0;
+          window.localStorage.removeItem('NotturnaCacciaTimestart');
+          window.localStorage.removeItem('NotturnaDurataCaccia');
+        } else {
+          //console.log("è passato un secondo, non ho finito, rilancio il timer");
+          //console.log ('tempo trascorso: ' + elapsedSeconds + ' secondi');
+          this.statocaccia = 1;
+          this.user.incaccia = 1;
+          this.scrivilocale();
+          this.StartTimer();
+        }
       } else {
-        this.hidevalue = true;
-
-        //console.log("FINE");
-
-        this.msgfine();
-        // if ( this.BS != 1) {
-        // verifica del PS
-        // this.navParams.get("parentPage").loadDadi();
-        // this.navParams.get("parentPage").loadpscorrenti();
-        // }
+        // HO FINITO LA CACCIA!!!
+        this.statocaccia = 2;
+        this.user.incaccia = 0;
+        console.log("FINE");
+        window.localStorage.removeItem('NotturnaCacciaTimestart');
+        window.localStorage.removeItem('NotturnaDurataCaccia');
+        //this.msgfine();
       }
     }, 1000);
+  }
+
+
+  cancellacaccia() {
+    this.statocaccia = -1;
+    this.user.incaccia = 0;
   }
 
   msginizio() {
@@ -179,16 +198,13 @@ export class CacciaPage implements OnInit {
   }
 
   msgfine() {
-    this.user['PScorrenti'] =
-      this.user['PScorrenti'] + this.recuperati;
+
     this.user.incaccia = 0;
+    this.statocaccia = 2;
 
-    if (this.user['PScorrenti'] > this.user['maxps']) {
-      this.user['PScorrenti'] = this.user['maxps'];
-    }
+    this.recuperati = this.user['maxps'] - this.user['PScorrenti'];
 
-
-    //console.log(this.myuser);
+    this.user['PScorrenti'] = this.user['maxps'];
 
     var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
     var mypost = JSON.stringify({
@@ -204,9 +220,7 @@ export class CacciaPage implements OnInit {
         this.recuperati +
         '&anim=0' +
         '&BS=' +
-        this.BS +
-        '&toxic=' +
-        this.toxic;
+        this.bs ;
 
       this.http.get(link).subscribe((res) => {
         // if ( this.BS != 1) {
@@ -217,12 +231,5 @@ export class CacciaPage implements OnInit {
     });
   }
 
-  goback() {
-    this.user.incaccia = 0;
 
-    // if ( this.BS != 1) {
-    // this.navParams.get("parentPage").loadDadi();
-    // }
-    this.router.navigate(['/tabs/tab5']);
-  }
 }
