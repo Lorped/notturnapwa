@@ -124,6 +124,9 @@ export class LoginPage implements OnInit {
         this.user['PScorrenti'] = Number(this.user['PScorrenti']);
         this.user['maxps'] = Number(this.user['maxps']);
 
+        this.user['bonusrigen'] = Number(this.user['bonusrigen']);
+        this.user['rigen'] = Number(this.user['rigen']);
+
         if (this.user.idlds == 21 ) {
           this.user.bonusdisc = Number (this.user.bonusdisc) + 1;
         }

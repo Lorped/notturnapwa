@@ -4,6 +4,7 @@ import { FeedService, FeedItem } from '../services/feed.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-tab5',
@@ -16,6 +17,10 @@ export class Tab5Page implements OnInit {
   public alertButtons = ['OK'];
   tiridado: Array<FeedItem>;
 
+  isResist1Open = false;
+  isResist2Open = false;
+  esito = 0;
+
   constructor(
     public user: User,
     public userskill: Userskill,
@@ -23,6 +28,7 @@ export class Tab5Page implements OnInit {
     public http: HttpClient,
     public router: Router,
     private iab: InAppBrowser,
+    public authservice: AuthserviceService
   ) {
     this.tiridado = [];
     this.loadDadi();
@@ -52,10 +58,7 @@ export class Tab5Page implements OnInit {
     });
   }
   usafdv() {
-    var link = 'https://www.roma-by-night.it/ionicPHP/usofdv.php';
-    var mypost = JSON.stringify({ userid: this.user['idutente'] });
-
-    this.http.post<any>(link, mypost).subscribe((res) => {
+    this.authservice.usofdv(this.user['idutente']).subscribe((res) => {
       setTimeout(this.loadDadi(), 1000);
     });
 
@@ -68,28 +71,44 @@ export class Tab5Page implements OnInit {
         this.user['fdv']) /
         5
     );
+
   }
   menops() {
-    var link =
-      'https://www.roma-by-night.it/ionicPHP/menops2.php?id=' +
-      this.user['idutente'];
-
-    this.http.get<any>(link).subscribe((res) => {
+    this.authservice.menops(this.user['idutente']).subscribe((res) => {
       this.user.PScorrenti--;
+      setTimeout(this.loadDadi(), 1000);
+    });
 
+  }
+
+ 
+
+  resistidisc(){
+    let base = Number(this.user['fdv']) + Number(this.user['attivazione']);
+    let dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
+
+    this.esito = base * dad ;
+    this.isResist1Open = true;
+
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe((res) => {
       setTimeout(this.loadDadi(), 1000);
     });
   }
+   resistidisc2(){
+    let base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
+    let dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
-  gocaccia() {
-    var id = 0;
-    this.router.navigate(['/tabs/caccia', id]);
+    this.esito = base * dad ;
+    this.isResist2Open = true;
+
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe((res) => {
+      setTimeout(this.loadDadi(), 1000);
+    });
   }
-
-  golegami() {
-    this.router.navigate(['/tabs/legami']);
+  togglealert(isOpen: boolean) {
+    this.isResist1Open = isOpen;
+    this.isResist2Open = isOpen;
   }
-
  
 
   godisciplina(disc: number, nomed: string) {
@@ -130,24 +149,7 @@ export class Tab5Page implements OnInit {
     this.iab.create(link, '_system');
   }
 
-  openUrl3() {
-    const link =
-      'https://drive.google.com/file/d/1RoDz3IopLmZtTK_7zDms7ClkcBlZdI31/view';
-    //const browser = this.iab.create(this.link);
-    this.iab.create(link, '_system');
-  }
 
-
-
-  modifica() {
-    // this.navCtrl.push('ModificanotePage', { "parentPage": this });
-    this.router.navigate(['/tabs/modificanote']);
-  }
-
-  reloadnote() {
-    //this.note = this.nl2br(this.user['note']);
-    //this.notemaster = this.nl2br(this.user['notemaster']);
-  }
 
 
   ionViewWillEnter() {

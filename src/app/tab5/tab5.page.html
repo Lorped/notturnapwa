@@ -1,13 +1,14 @@
 <ion-header>
-
   <ion-toolbar color="medium">
-    <ion-title>Poteri e Messaggi</ion-title>
+    <ion-title>Poteri</ion-title>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 
-<ion-content class="master" color="dark" >
+<ion-content>
 
   <!--
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" class="master">
@@ -15,43 +16,77 @@
   </ion-refresher>
   -->
 
+  <ion-list>
 
-  <ion-row class="master" color="dark" >
-    <ion-col>
-      <ion-button class="submit-btn2" expand="full" shape="round" color="danger" type="submit" (click)="tiraildado()">Tira un dado</ion-button>
-    </ion-col>
-  </ion-row>
+    <ion-item>
+      <ion-icon name="hand-right-outline" size="small"></ion-icon>
+      <ion-button  fill="clear"  color="dark" type="submit" (click)="resistidisc()">Resisti a una Disciplina</ion-button>
+    </ion-item>
 
-  <ion-row class="master" color="dark" >
-    <ion-col>
-      <ion-button class="submit-btn3" expand="full" shape="round" type="submit" [disabled]="user.fdv==0" (click)="usafdv()">Usa Forza di Volontà</ion-button>
-    </ion-col>
-  </ion-row>
+    <ion-item>
+      <ion-icon name="hand-left-outline" size="small"></ion-icon>
+      <ion-icon name="hand-right-outline" size="small"></ion-icon>
+      <ion-button  fill="clear"  color="dark" type="submit" (click)="resistidisc2()">Resisti a Dominazione</ion-button>
+    </ion-item>
 
-  <ion-row class="master" color="dark" >
-    <ion-col>
-      <ion-button id="cura" class="submit-btn2" color="danger" expand="full" shape="round" type="submit" [disabled]="user.PScorrenti==0" (click)="menops()">Cura Ferite - {{this.user.rigen}}</ion-button>
-    </ion-col>
-  </ion-row>
+    <ion-item>
+      <ion-icon name="school-outline" size="small"></ion-icon>
+      <ion-button  id="fdv" fill="clear"  color="dark" type="submit" (click)="usafdv()" [disabled]="user.fdv==0">Usa Forza di Volontà</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="dice-outline" size="small"></ion-icon>
+      <ion-button  fill="clear"  color="danger" type="submit" (click)="tiraildado()">Tira un dado</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="heart-circle-outline" size="small"></ion-icon>
+      <ion-button id="cura" fill="clear" color="secondary" type="submit" [disabled]="user.PScorrenti==0" (click)="menops()">Cura Ferite ( {{this.user.rigen+this.user.bonusrigen}} )</ion-button>
+    </ion-item>
+
+
+  </ion-list>
+
+
+
 
   <ion-alert
     trigger="cura"
-    header="Attenzione"
-    subHeader="Cura ferite"
+    header="Cura Ferite"
+    subHeader="Esito"
     [buttons]="alertButtons"
-  message="{{user.rigen}}  ferite curate" ></ion-alert>
+    message="Hai consumato 1 PS per rigenerare {{user.rigen+user.bonusrigen}}  ferite" >
+  </ion-alert>
+   <ion-alert
+    trigger="fdv"
+    header="Forza di Volontà"
+    subHeader="Esito"
+    [buttons]="alertButtons"
+    message="Hai utilizzato 1 punto di FdV" >
+  </ion-alert>
+
+  <ion-alert
+    [isOpen]="isResist1Open"
+    header="Prova contrapposta"
+    subHeader="Resistere a una disciplina"
+    message="Il tiro di resistenza è {{esito}}. "
+    [buttons]="alertButtons"
+    (didDismiss)="togglealert(false)">
+  </ion-alert>
+   <ion-alert
+    [isOpen]="isResist2Open"
+    header="Prova contrapposta"
+    subHeader="Resistere a Dominazione"
+    message="Il tiro di resistenza è {{esito}}. "
+    [buttons]="alertButtons"
+    (didDismiss)="togglealert(false)">
+  </ion-alert>
 
 
 
-  <ion-row class="master" color="dark" >
-    <ion-col>
-      <ion-button class="submit-btn2" color="danger" expand="full" shape="round" type="submit" (click)="golegami()">Legame di Sangue</ion-button>
-    </ion-col>
-  </ion-row>
 
 
-
-  <ion-row class="master" color="dark">
+  <ion-row >
     @for (pot of this.userskill.discipline; track pot) {
       <ion-col size="6">
         <ion-button color="danger" (click)="godisciplina(pot.iddisciplina,pot.nomedisc )"  class="submit-btn2" expand="full" shape="round" type="submit" [disabled]="this.user.PScorrenti==0" >{{pot.nomedisc}}</ion-button>
@@ -62,11 +97,11 @@
 
 
 
-  <ion-list color="dark" class="master">
+  <ion-list >
     @for (tiri of tiridado; track tiri) {
-      <ion-item  color="dark" class="master" >
+      <ion-item   >
         <ion-label class="ion-text-wrap" >
-          <p style="color: #707070">{{tiri.data}} {{tiri.ora}}</p><div>{{tiri.pg}} {{tiri.testo}} </div>
+          <p>{{tiri.data}} {{tiri.ora}}</p><div>{{tiri.pg}} {{tiri.testo}} </div>
         </ion-label>
       </ion-item>
     }

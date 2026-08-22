@@ -7,9 +7,7 @@
   <ion-content class="ion-padding">
     <ion-list [inset]="true">
       <ion-item>
-      <ion-toggle [(ngModel)]="paletteToggle" (ionChange)="toggleChange($event)" justify="space-between"
-        >Dark Mode</ion-toggle
-      >
+      <ion-toggle [(ngModel)]="paletteToggle" (ionChange)="toggleChange($event)" justify="space-between">Dark Mode</ion-toggle>
     </ion-item>
       <ion-item>
         <ion-icon name="people-outline" size="small"></ion-icon>
@@ -36,17 +34,29 @@
           </ion-menu-toggle>
       </ion-item>
       <ion-item>
-        <ion-icon name="skull-outline" size="small"></ion-icon>
-          <ion-menu-toggle>
-            <ion-button fill="clear" color="danger" (click)="openMorte()" class="all">Morte Ultima</ion-button>
-          </ion-menu-toggle>
-      </ion-item>
-            <ion-item>
         <ion-icon name="reader-outline" size="small"></ion-icon>
           <ion-menu-toggle>
             <ion-button fill="clear" color="dark" (click)="openNote()" class="all">Annotazioni</ion-button>
           </ion-menu-toggle>
       </ion-item>
+      <ion-item>
+        <ion-icon name="flame-outline" size="small"></ion-icon>
+          <ion-menu-toggle>
+            <ion-button fill="clear" color="dark" (click)="openLegami()" class="all">Legami di Sangue</ion-button>
+          </ion-menu-toggle>
+      </ion-item>          
+      <ion-item>
+        <ion-icon name="skull-outline" size="small"></ion-icon>
+          <ion-menu-toggle>
+            <ion-button fill="clear" color="danger" (click)="openMorte()" class="all">Morte Ultima</ion-button>
+          </ion-menu-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="log-out-outline" size="small"></ion-icon>
+          <ion-menu-toggle>
+            <ion-button fill="clear" color="danger" (click)="logout()" class="all">Logout</ion-button>
+          </ion-menu-toggle>
+      </ion-item>      
     </ion-list>
   </ion-content>
 </ion-menu>

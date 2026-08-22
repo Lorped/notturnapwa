@@ -81,5 +81,11 @@ export class TabsPage implements OnInit {
   openNote() {
     this.router.navigate(['/tabs/modificanote']);
   }
+  openLegami() {
+    this.router.navigate(['/tabs/legami']);
+  }
+  logout() {
+    this.router.navigate(['/login']);
+  }
 
 }
