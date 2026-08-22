@@ -29,12 +29,9 @@ export class Tab1Page implements OnInit{
 
   doRefresh(event: any) {
     setTimeout(() => {
-      this.authentication
-        .loadpscorrenti(this.user.idutente)
-        .subscribe((data: any) => {
+      this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: any) => {
           this.user.PScorrenti = data.PScorrenti;
         });
-
       event.target.complete();
     }, 2000);
   }
