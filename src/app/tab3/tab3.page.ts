@@ -70,7 +70,7 @@ export class Tab3Page {
   async openbarcode() {
 
 
-    /*******   TEST 
+    /*******   TEST  ***/
     this.barcodes = [];
     const { barcodes } = await BarcodeScanner.scan();
     this.barcodes.push(...barcodes);
@@ -83,9 +83,11 @@ export class Tab3Page {
       this.oggetto.id = newbarcode;
     }
 
-    *****/
+    
 
+    /*******
     this.oggetto.id='155405728268';
+    **********/
     
     this.authservice.barcode(this.user.idutente, this.oggetto.id).subscribe((data) => {
 
@@ -111,7 +113,7 @@ export class Tab3Page {
   }
 
   risposta(risposta: string) {
-    console.log('Risposta selezionata:', risposta);
+    //console.log('Risposta selezionata:', risposta);
     this.giarisposto = true;
     this.rispostaselezionata = risposta;
   }

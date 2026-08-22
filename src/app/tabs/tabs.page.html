@@ -30,7 +30,7 @@
           </ion-menu-toggle>
       </ion-item>
       <ion-item>
-        <ion-icon name="flashlight-outline" size="small"></ion-icon>
+        <ion-icon name="water-outline" size="small"></ion-icon>
           <ion-menu-toggle>
             <ion-button fill="clear" color="dark" (click)="openCaccia()" class="all">Caccia</ion-button>
           </ion-menu-toggle>
@@ -39,6 +39,12 @@
         <ion-icon name="skull-outline" size="small"></ion-icon>
           <ion-menu-toggle>
             <ion-button fill="clear" color="danger" (click)="openMorte()" class="all">Morte Ultima</ion-button>
+          </ion-menu-toggle>
+      </ion-item>
+            <ion-item>
+        <ion-icon name="reader-outline" size="small"></ion-icon>
+          <ion-menu-toggle>
+            <ion-button fill="clear" color="dark" (click)="openNote()" class="all">Annotazioni</ion-button>
           </ion-menu-toggle>
       </ion-item>
     </ion-list>
@@ -74,6 +80,15 @@
 
     </ion-tab-bar>
   </ion-tabs>
+
+  <!---------  PER FINE CACCIA -->
+  <ion-toast
+    [isOpen]="this.user.ToastFineCaccia"
+    message="La Caccia è terminata!!"
+    [duration]="5000"
+    (didDismiss)="setOpen(false)"
+    icon="water-outline"
+  ></ion-toast>
 
 </ion-content>
 

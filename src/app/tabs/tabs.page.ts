@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from '../globals';
 
 @Component({
   selector: 'app-tabs',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class TabsPage implements OnInit {
   paletteToggle = false;
-  constructor(public router: Router) {}
+  constructor(public router: Router, public user: User) {}
 
   ngOnInit() {
     // Use matchMedia to check the user preference
@@ -73,6 +74,12 @@ export class TabsPage implements OnInit {
   }
   openCaccia() {
     this.router.navigate(['/tabs/caccia']);
+  }
+  setOpen(isOpen: boolean) {
+    this.user.ToastFineCaccia = isOpen;
+  }
+  openNote() {
+    this.router.navigate(['/tabs/modificanote']);
   }
 
 }

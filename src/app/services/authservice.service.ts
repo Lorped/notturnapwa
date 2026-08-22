@@ -80,4 +80,20 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getscan.php?id=' + userid);
   }
 
+  msgtomaster(userid: number, messaggio: string) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/msgtomaster.php', {
+      idutente: userid,
+      messaggio: messaggio
+    });
+  }
+
+  caccia(userid: number, bs: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/caccia.php?id=' + userid + '&BS=' + bs);
+  }
+  modifcanote(userid: number, note: string) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/modificanote.php', {
+      idutente: userid,
+      note: note
+    });
+  }
 }

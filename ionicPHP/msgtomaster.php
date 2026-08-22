@@ -24,9 +24,9 @@
 
 
 
-	include ('messaggi.inc.php');
+	require_once __DIR__ . '/messaggi.inc.php';
 
-	include ('db2.inc.php');  // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
 
 	$postdata = file_get_contents("php://input");

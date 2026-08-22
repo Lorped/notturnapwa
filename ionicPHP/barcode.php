@@ -430,13 +430,16 @@
 	$mysql = "SELECT * FROM logscanogg WHERE idutente = '$idutente' AND idoggetto = '$idx' ";
 	$result = mysqli_query($db, $mysql);
 	if (mysqli_num_rows($result) == 0) {
-		$mysql = "INSERT INTO logscanogg  (idutente, idoggetto)
+		$mysql2 = "INSERT INTO logscanogg  (idutente, idoggetto)
 			VALUES ('$idutente', '$idx') ";
-		mysqli_query($db, $mysql);
+		mysqli_query($db, $mysql2);
 		foreach ($esito as $riga) {
-			$mysql2 = "INSERT INTO logscanfull  (idutente, idoggetto, motivo, descrizione)
-				VALUES ('$idutente', '$idx', '".$riga['motivo']."', '".$riga['descrizione']."') ";
-			mysqli_query($db, $mysql2);
+			$mot = mysqli_real_escape_string($db, $riga['motivo']);
+			$descr=mysqli_real_escape_string($db, $riga['descrizione']);
+			$mysql3 = "INSERT INTO logscanfull  (idutente, idoggetto, motivo, descrizione)
+				VALUES ('$idutente', '$idx', '$mot', '$descr') ";
+			mysqli_query($db, $mysql3);
+
 		}
 	}
 
@@ -453,6 +456,7 @@
 		'R2' => $R2,
 	];
 
+	header("HTTP/1.1 200 OK");
 	$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
     echo $output;
 

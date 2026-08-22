@@ -153,6 +153,7 @@ export class User  {
   public rp = 0;  //res paletto
 
   public incaccia = 0; //serve dopo
+  public ToastFineCaccia = false; //serve dopo
 }
 
 @Injectable()

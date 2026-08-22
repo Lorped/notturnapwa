@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-modificanote',
@@ -13,22 +14,22 @@ import { Router } from '@angular/router';
 export class ModificanotePage implements OnInit {
   constructor(
     public user: User,
-    private http: HttpClient,
-    private router: Router
+    private authService: AuthserviceService,
   ) {}
 
-  ngOnInit() {}
+  noteiniziali = '';
+
+  ngOnInit() {
+    this.noteiniziali = this.user.note;
+  }
+
+  noteModificate(): boolean {
+    return this.user.note !== this.noteiniziali;
+  }
 
   modifica() {
-    var url = 'https://www.roma-by-night.it/ionicPHP/modificanote.php';
-    var mypost = JSON.stringify({
-      idutente: this.user.idutente,
-      note: this.user.note,
-    });
-
-    this.http.post(url, mypost).subscribe((res) => {
-      //console.log("here");
-      this.router.navigate(['/tabs/tab3']);
+    this.authService.modifcanote(this.user.idutente, this.user.note).subscribe((data) => {
+      this.noteiniziali = this.user.note;
     });
   }
 }

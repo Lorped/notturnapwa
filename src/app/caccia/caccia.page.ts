@@ -11,28 +11,25 @@ import { AuthserviceService } from '../services/authservice.service';
   standalone: false,
 })
 export class CacciaPage implements OnInit {
-  duratacaccia = 10; /* base 10 minuti */
+  duratacaccia = 600; /* base 10 minuti */
   minuti = 10;
   secondi = 0;
   min_string = '10';
   secondi_string = '00';
 
-
-
-
   statocaccia = 0;  //   0 - prima , 1 - in corso, 2 - finita
-  hidevalue = false
+
   timer: any;
 
   metab = 0;  // metab. effic  -3 min
   zanne = 0; // zanne spuntate +2 min
   gregge = 0; // -1 min / livello
   bs = 0; // bacio selvaggio -50%
+  organovoro = 0; // organo voro +2 min
   bspossibile = 0; // bacio selvaggio possibile
 
   pregi: Array<pregiodifetto> = [];
 
-  recuperati = 0;
   timestart = 0;
 
   constructor(
@@ -67,10 +64,23 @@ export class CacciaPage implements OnInit {
         this.user.incaccia = 1;
         this.timestart = parseInt(oldstart);
         this.duratacaccia = parseInt(olddurata);
+
+        //console.log('inizio caccia: ' + this.timestart);
+        //console.log('durata caccia: ' + this.duratacaccia);
+        let ttn = new Date();
+        let nowt = ttn.getTime();
+        let elapsedSeconds = Math.round((nowt - this.timestart) / 1000);  
+        //console.log('tempo trascorso: ' + elapsedSeconds + ' secondi'); 
+        this.duratacaccia = this.duratacaccia - elapsedSeconds;
+        //console.log('nuovo tempo rimanente: ' + this.duratacaccia + ' secondi');
+
         this.StartTimer();
       }
+  }
 
-
+  iniziocaccia_bs(){
+    this.bs = 1;
+    this.iniziocaccia();
   }
 
   iniziocaccia() {
@@ -93,12 +103,20 @@ export class CacciaPage implements OnInit {
         this.zanne = 2;
       }
 
-      //valore in minuti della caccia
-      this.duratacaccia = this.user.tempocaccia - this.gregge  - this.metab  + this.zanne ;
+      if(this.user.idlds ==  24) {  // GALAN
+        this.organovoro = 2 ;
+      }
+
+      //valore in secondi della caccia
+      this.duratacaccia = (this.user.tempocaccia - this.gregge  - this.metab  + this.zanne + this.organovoro)*60;
+
+      if (this.bs == 1) {
+        this.duratacaccia = Math.round(this.duratacaccia / 2);
+      } 
 
 
       // TEMPO RIDOTTO PER TEST!!!
-      this.duratacaccia = 1;
+      // this.duratacaccia = 120;  // 2 minuti per test
       /***************************** */
 
       //scrivo in locale il tempo di caccia
@@ -114,15 +132,17 @@ export class CacciaPage implements OnInit {
       );
 
 
-      console.log('inizio caccia: ' + this.timestart);
-      console.log('durata caccia: ' + this.duratacaccia);
+      //console.log('inizio caccia: ' + this.timestart);
+      //console.log('durata caccia: ' + this.duratacaccia);
+
+      this.authservice.msgtomaster(this.user['idutente'], 'ha iniziato la caccia').subscribe();
 
       this.StartTimer();
 
     });
   }
 
-  scrivilocale() {
+  scrivilocale(restanti: number) {
       //scrivo in locale l'ora d'inizio della caccia
       let tn = new Date();
       let ttn = tn.getTime();
@@ -130,6 +150,12 @@ export class CacciaPage implements OnInit {
         'NotturnaCacciaTimestart',
         ttn.toString()
       );
+      //scrivo in locale i secondi restanti
+      window.localStorage.setItem(
+        'NotturnaDurataCaccia',
+        restanti.toString()
+      );
+
   }
 
   StartTimer() {
@@ -141,8 +167,12 @@ export class CacciaPage implements OnInit {
       //secondi trascorsi dall'inizio della caccia
       let elapsedSeconds = Math.round((nowt - this.timestart) / 1000);
 
-      this.minuti = Math.floor( (this.duratacaccia*60 - elapsedSeconds) / 60 );
-      this.secondi = (this.duratacaccia*60 - elapsedSeconds) - 60 * Math.floor((this.duratacaccia*60 - elapsedSeconds) / 60);
+      this.minuti = Math.floor( (this.duratacaccia - elapsedSeconds) / 60 );
+      this.secondi = (this.duratacaccia - elapsedSeconds)  - (this.minuti * 60);
+
+      //console.log('tempo trascorso: ' + elapsedSeconds + ' secondi');
+      //console.log('tempo rimanente: ' + this.minuti + ' minuti e ' + this.secondi + ' secondi');
+
       if (this.secondi < 10) {
         this.secondi_string = '0' + this.secondi.toString();
       } else {
@@ -154,11 +184,12 @@ export class CacciaPage implements OnInit {
         this.min_string = this.minuti.toString();
       }
 
-      if (elapsedSeconds < this.duratacaccia * 60) {
+      if (elapsedSeconds < this.duratacaccia ) {
         if (this.statocaccia == -1) { // cancellata la caccia
           console.log("caccia cancellata");
           this.statocaccia = 0;
           this.user.incaccia = 0;
+          this.bs = 0 ;
           window.localStorage.removeItem('NotturnaCacciaTimestart');
           window.localStorage.removeItem('NotturnaDurataCaccia');
         } else {
@@ -166,17 +197,19 @@ export class CacciaPage implements OnInit {
           //console.log ('tempo trascorso: ' + elapsedSeconds + ' secondi');
           this.statocaccia = 1;
           this.user.incaccia = 1;
-          this.scrivilocale();
+          this.scrivilocale(this.duratacaccia-elapsedSeconds);
           this.StartTimer();
         }
       } else {
         // HO FINITO LA CACCIA!!!
         this.statocaccia = 2;
         this.user.incaccia = 0;
+        this.bs = 0 ;
         console.log("FINE");
+        this.user.ToastFineCaccia = true;
         window.localStorage.removeItem('NotturnaCacciaTimestart');
         window.localStorage.removeItem('NotturnaDurataCaccia');
-        //this.msgfine();
+        this.msgfine();
       }
     }, 1000);
   }
@@ -187,48 +220,19 @@ export class CacciaPage implements OnInit {
     this.user.incaccia = 0;
   }
 
-  msginizio() {
-    var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
-    var mypost = JSON.stringify({
-      idutente: this.user['idutente'],
-      messaggio: 'ha iniziato la caccia',
-    });
 
-    this.http.post(link, mypost).subscribe();
-  }
 
   msgfine() {
 
     this.user.incaccia = 0;
     this.statocaccia = 2;
 
-    this.recuperati = this.user['maxps'] - this.user['PScorrenti'];
-
     this.user['PScorrenti'] = this.user['maxps'];
 
-    var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
-    var mypost = JSON.stringify({
-      idutente: this.user['idutente'],
-      messaggio: 'ha terminato la caccia',
-    });
+    this.authservice.caccia(this.user['idutente'], this.bs).subscribe();
 
-    this.http.post(link, mypost).subscribe((res) => {
-      var link =
-        'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-        this.user['idutente'] +
-        '&recuperati=' +
-        this.recuperati +
-        '&anim=0' +
-        '&BS=' +
-        this.bs ;
+    this.authservice.msgtomaster(this.user['idutente'], 'ha terminato la caccia').subscribe();
 
-      this.http.get(link).subscribe((res) => {
-        // if ( this.BS != 1) {
-        // torno indietro
-        // this.navParams.get("parentPage").loadDadi();
-        // }
-      });
-    });
   }
 
 

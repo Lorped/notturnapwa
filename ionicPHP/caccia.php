@@ -26,7 +26,7 @@
 
 
 
-	include ('db2.inc.php');    // NEW MSQLI //
+	require_once __DIR__ . '/db2.inc.php';    // NEW MSQLI //
 
  	$idutente=$_GET['id'];
 	$recuperati=$_GET['recuperati'];
@@ -36,66 +36,21 @@
 
 	// $idutente = 1 ;   // TEST *****************
 
-	$toxic=$_GET['toxic'];
+	
 
- 	$Mysql="SELECT * FROM personaggio
-		LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-		LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+ 	$Mysql="SELECT nomepg,  maxps, idlds from personaggio 
+		LEFT JOIN generazione ON personaggio.generazione = generazione.generazione
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
 
-	$PScorrenti=$res['PScorrenti'];
-	$setetot=$res['sete']+$res['addsete'];
-	$lastps=$res['lastps'];
+	$maxps=$res['maxps'];
 	$nomepg=$res['nomepg'];
 	$xnomepg=mysqli_real_escape_string($db,$nomepg);
+	$idslds=$res['idlds'];
 
-
-
-	$PScorrenti=$PScorrenti+$recuperati;
-	if ($PScorrenti > $setetot) {
-		$PScorrenti = $setetot;
-	}
-
-	if ( $anim == 1) {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() , lastcaccia=NOW() WHERE idutente=$idutente";
-	} else if ( $vitae == 1) {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() , lastps=NOW() WHERE idutente=$idutente";
-	} else {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti , lastps=NOW() WHERE idutente=$idutente";
-	}
-
-
-	$Result=mysqli_query ($db, $Mysql);
-
-
-
-
-	if ( $vitae == 1) {
-		$testo=$nomepg." ha usato Rigenerazione della Vitae  (".$recuperati ." livelli di sete recuperati)";
-		$xtesto=mysqli_real_escape_string($db, $testo);
-		//$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , $idutente ) ";
-		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , 0 ) ";
-		mysqli_query($db, $Mysql);
-
-	} else {
-		$testo=$nomepg." ha saziato la sua sete (".$recuperati ." livelli recuperati)";
-		$xtesto=mysqli_real_escape_string($db, $testo);
-		//$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , $idutente ) ";
-		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , 0 ) ";
-		mysqli_query($db, $Mysql);
-	}
-
-
-
-		// set post fields
-
-	master2user($idutente,$testo, $db);
-
-
-
-	// do anything you want with your response
+	$Mysql="UPDATE personaggio SET PScorrenti = $maxps , lastps=NOW()  WHERE idutente=$idutente";
+	mysqli_query ($db, $Mysql);
 
 	//die(print_r($response));
 
@@ -105,14 +60,24 @@
 	$chance=$res['chance'];
 
 	if ( $BS == 1) {
-		$chance =	$chance * 2;
+		$chance =	$chance  +5 ;
 	}
+	if ( $idslds == 22) {      // RIARIO
+		$chance =	$chance +5 ;
+	}
+	if ( $idslds == 7) {      // dedalo
+		$chance =	$chance +5 ;
+	}
+	if ( $idslds == 24) {      // galan
+		$chance =	$chance +5 ;
+	}
+
 
 	$tiro=rand(1,100);
 
 	if ($tiro < $chance)  {
 
-		$testo="VIOLAZIONE della MASQUERADE per ".$nomepg;
+		$testo="VIOLAZIONE della MASQUERADE per ".$nomepg. "  durante la Caccia.";
 		$xtesto=mysqli_real_escape_string($db, $testo);
 		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , 0 ) ";
 		mysqli_query($db, $Mysql);
@@ -123,17 +88,7 @@
 	}
 
 
-	if ( $toxic == 1) {
 
-		$testo="Caccia sfortunata (Tossicodipendenza) per ".$nomepg;
-		$xtesto=mysqli_real_escape_string($db, $testo);
-		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , 0 ) ";
-		mysqli_query($db, $Mysql);
-
-		sleep(1);
-		master2master($testo);
-
-	}
 
 
 	if ( $anim == 1) {
