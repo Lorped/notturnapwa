@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  ChangeDetectionStrategy } from '@angular/core';
 import { User, Userskill } from '../globals';
 
 @Component({
@@ -8,8 +8,8 @@ import { User, Userskill } from '../globals';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class BackgroundPage implements OnInit {
+export class BackgroundPage  {
   constructor(public user: User, public userskill: Userskill) {}
 
-  ngOnInit() {}
+
 }

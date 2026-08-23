@@ -61,7 +61,7 @@ export class LegamiPage implements OnInit {
       domitor: this.pgscelto,
     });
 
-    this.http.post(url, mypost).subscribe((res) => {
+    this.http.post(url, mypost).subscribe(() => {
       this.router.navigate(['/tabs/tab5']);
     });
 

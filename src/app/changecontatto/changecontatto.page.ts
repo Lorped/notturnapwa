@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  ChangeDetectionStrategy } from '@angular/core';
 import { ToChange } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
@@ -10,7 +10,7 @@ import { AuthserviceService } from '../services/authservice.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class ChangecontattoPage implements OnInit {
+export class ChangecontattoPage  {
   cell = {
     checked: true,
   };
@@ -23,7 +23,7 @@ export class ChangecontattoPage implements OnInit {
     checked: true,
   };
 
-  ngOnInit() {}
+
 
   constructor(
 
@@ -53,7 +53,7 @@ export class ChangecontattoPage implements OnInit {
       this.tochange.cell,
       this.tochange.home,
       this.tochange.note
-    ).subscribe((res: any) => {
+    ).subscribe(() => {
       this.router.navigate(['/tabs/rubrica']);
     });
 

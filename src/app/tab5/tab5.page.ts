@@ -84,24 +84,24 @@ export class Tab5Page implements OnInit {
  
 
   resistidisc(){
-    let base = Number(this.user['fdv']) + Number(this.user['attivazione']);
-    let dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
+    const base = Number(this.user['fdv']) + Number(this.user['attivazione']);
+    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
     this.esito = base * dad ;
     this.isResist1Open = true;
 
-    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe((res) => {
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
       setTimeout(this.loadDadi(), 1000);
     });
   }
    resistidisc2(){
-    let base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
-    let dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
+    const base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
+    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
     this.esito = base * dad ;
     this.isResist2Open = true;
 
-    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe((res) => {
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
       setTimeout(this.loadDadi(), 1000);
     });
   }
@@ -130,15 +130,7 @@ export class Tab5Page implements OnInit {
  
 
 
-  nl2br(str: string) {
-    // Some latest browsers when str is null return and unexpected null value
-    if (typeof str === 'undefined' || str === null) {
-      return '';
-    }
-    // Adjust comment to avoid issue on locutus.io display
-    var breakTag = '<br>';
-    return (str + '').replace(/(\r\n|\n\r|\r|\n)/g, breakTag + '$1');
-  }
+
 
 
 

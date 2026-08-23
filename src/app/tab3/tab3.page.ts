@@ -42,7 +42,7 @@ export class Tab3Page {
       this.presentAlert();
     }
 
-    let { available } =
+    const { available } =
       await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
 
     if (available == false) {
@@ -79,7 +79,7 @@ export class Tab3Page {
     this.oggetto.id = this.barcodes[0].rawValue;
 
     if (this.oggetto.id.length > 12) {
-      let newbarcode = this.oggetto.id.substr(-12);
+      const newbarcode = this.oggetto.id.substr(-12);
       this.oggetto.id = newbarcode;
     }
 

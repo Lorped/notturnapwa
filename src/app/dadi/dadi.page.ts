@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-dadi',
@@ -7,8 +7,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class DadiPage implements OnInit {
+export class DadiPage  {
   constructor() {}
 
-  ngOnInit() {}
+
 }

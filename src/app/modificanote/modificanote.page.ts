@@ -1,7 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
@@ -28,7 +26,7 @@ export class ModificanotePage implements OnInit {
   }
 
   modifica() {
-    this.authService.modifcanote(this.user.idutente, this.user.note).subscribe((data) => {
+    this.authService.modifcanote(this.user.idutente, this.user.note).subscribe(() => {
       this.noteiniziali = this.user.note;
     });
   }

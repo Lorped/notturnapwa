@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component,  ChangeDetectionStrategy } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
@@ -10,7 +10,7 @@ import { AuthserviceService } from '../services/authservice.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class AddcontattoPage implements OnInit {
+export class AddcontattoPage  {
   nuovoContatto = new RubricaItem();
 
   constructor(
@@ -19,7 +19,7 @@ export class AddcontattoPage implements OnInit {
     public authservice: AuthserviceService 
   ) {}
 
-  ngOnInit() {}
+
 
   add() {
     if (this.nuovoContatto.cell === undefined) this.nuovoContatto.cell = 0;
@@ -31,7 +31,7 @@ export class AddcontattoPage implements OnInit {
       this.nuovoContatto.cell,
       this.nuovoContatto.home,
       this.nuovoContatto.note
-    ).subscribe((res: any) => {
+    ).subscribe(() => {
       this.router.navigate(['/tabs/rubrica']);
     });
   }

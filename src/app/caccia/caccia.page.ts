@@ -19,7 +19,7 @@ export class CacciaPage implements OnInit {
 
   statocaccia = 0;  //   0 - prima , 1 - in corso, 2 - finita
 
-  timer: any;
+
 
   metab = 0;  // metab. effic  -3 min
   zanne = 0; // zanne spuntate +2 min
@@ -67,9 +67,9 @@ export class CacciaPage implements OnInit {
 
         //console.log('inizio caccia: ' + this.timestart);
         //console.log('durata caccia: ' + this.duratacaccia);
-        let ttn = new Date();
-        let nowt = ttn.getTime();
-        let elapsedSeconds = Math.round((nowt - this.timestart) / 1000);  
+        const ttn = new Date();
+        const nowt = ttn.getTime();
+        const elapsedSeconds = Math.round((nowt - this.timestart) / 1000);
         //console.log('tempo trascorso: ' + elapsedSeconds + ' secondi'); 
         this.duratacaccia = this.duratacaccia - elapsedSeconds;
         //console.log('nuovo tempo rimanente: ' + this.duratacaccia + ' secondi');
@@ -124,7 +124,7 @@ export class CacciaPage implements OnInit {
         'NotturnaDurataCaccia',
         this.duratacaccia.toString()
       );
-      let tn = new Date();
+      const tn = new Date();
       this.timestart = tn.getTime();
       window.localStorage.setItem(
         'NotturnaCacciaTimestart',
@@ -144,8 +144,8 @@ export class CacciaPage implements OnInit {
 
   scrivilocale(restanti: number) {
       //scrivo in locale l'ora d'inizio della caccia
-      let tn = new Date();
-      let ttn = tn.getTime();
+      const tn = new Date();
+      const ttn = tn.getTime();
       window.localStorage.setItem(
         'NotturnaCacciaTimestart',
         ttn.toString()
@@ -159,13 +159,13 @@ export class CacciaPage implements OnInit {
   }
 
   StartTimer() {
-    this.timer = setTimeout((x: any) => {
+    setTimeout(() => {
       
-      let now = new Date();
-      let nowt = now.getTime();
+      const now = new Date();
+      const nowt = now.getTime();
 
       //secondi trascorsi dall'inizio della caccia
-      let elapsedSeconds = Math.round((nowt - this.timestart) / 1000);
+      const elapsedSeconds = Math.round((nowt - this.timestart) / 1000);
 
       this.minuti = Math.floor( (this.duratacaccia - elapsedSeconds) / 60 );
       this.secondi = (this.duratacaccia - elapsedSeconds)  - (this.minuti * 60);
