@@ -184,15 +184,11 @@ export class LoginPage implements OnInit {
                 this.userskill.rituali = data[0].rituali;
             });
 
-          
-            var cura = this.user.rigen;
 
-            this.user.rigen = cura;
-
-                      // all done
+            // all done
             this.loadingCtrl.dismiss();
 
-            // this.pushsetup();    <============= poi vediamo !!!
+            //this.pushsetup();    //  Da verificare se possibile semplificare
 
             //console.log ("user ", this.user);
             //console.log ("userskill ", this.userskill);
@@ -223,15 +219,6 @@ export class LoginPage implements OnInit {
       );
   }
 
-  nl2br(str: string) {
-    // Some latest browsers when str is null return and unexpected null value
-    if (typeof str === 'undefined' || str === null) {
-      return '';
-    }
-    // Adjust comment to avoid issue on locutus.io display
-    var breakTag = '<br>';
-    return (str + '').replace(/(\r\n|\n\r|\r|\n)/g, breakTag + '$1');
-  }
 
   pushsetup() {
     // Request permission to use push notifications

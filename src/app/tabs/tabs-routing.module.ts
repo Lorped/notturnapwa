@@ -72,6 +72,10 @@ const routes: Routes = [
         path: 'morte',
         loadChildren: () => import('../morte/morte.module').then( m => m.MortePageModule)
       },
+      {
+        path: 'focusattr',
+        loadChildren: () => import('../focusattr/focusattr.module').then( m => m.FocusattrPageModule)
+      },
 
       {
         path: 'telepatia',

@@ -38,11 +38,7 @@
           <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
-      @if (p.attivo=='Y'  ) {
-        <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || user.PScorrenti == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
-        </ion-col>
-      }
+
       @if (p.attivo=='S') {
         <ion-col  style="font-size: 1.1em; text-align: center;">
           - {{p.livellopot}}.{{p.nomepotere}} (attivo) -

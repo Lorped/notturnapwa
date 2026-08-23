@@ -84,6 +84,9 @@ export class TabsPage implements OnInit {
   openLegami() {
     this.router.navigate(['/tabs/legami']);
   }
+  openFocusattr() {
+    this.router.navigate(['/tabs/focusattr']);
+  }
   logout() {
     this.router.navigate(['/login']);
   }

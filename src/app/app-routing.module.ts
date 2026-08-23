@@ -39,6 +39,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pregi/pregi.module').then((m) => m.PregiPageModule),
   },
+  {
+    path: 'focusattr',
+    loadChildren: () =>
+      import('./focusattr/focusattr.module').then((m) => m.FocusattrPageModule),
+  },
 ];
 
 @NgModule({

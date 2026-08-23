@@ -105,5 +105,9 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/usofdv.php?id=' + userid);
   }
 
+  focusattr(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/focusattr.php?id=' + userid);
+  }
+
 
 }
