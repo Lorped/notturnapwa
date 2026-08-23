@@ -116,6 +116,11 @@
 	}
 
 	$dado = rand(1,5);
+
+	if ( $dado == 1 and $idutente == 3) {
+		$dado = rand(1,5);
+	}
+
 	$totale = $base * $dado;
 
 
