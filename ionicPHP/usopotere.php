@@ -24,44 +24,45 @@
 
 
 	include ('messaggi.inc.php');
-	include ('db2.inc.php'); // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php'; // NEW MYSQL //
 
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 
 	$idutente = $request->idutente;
-	$pot = $request->potere;
-	$livellopot = $request->livello;
-	$aDisciplina = $request->aDisciplina;
-	$aTAUMNECRO = $request->aTAUMNECRO;
+	$potere = $request->potere;
+	$idpotere = $request->idpotere;
+	$livello = $request->livello;
+	$disciplina = $request->disciplina;   // nome della disciplina, o della via taumaturgica o necromantica
+	
 
- 	$Mysql="SELECT  nomepg FROM personaggio WHERE idutente=$idutente";
+ 	$Mysql="SELECT PScorrenti, nomepg , cacciaobbligata, frenesia , bonusdisc, attivazione FROM personaggio
+		LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
+		LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+		LEFT JOIN generazione ON personaggio.generazione = generazione.generazione 
+		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
 
 	$nomepg=$res['nomepg'];
 	$xnomepg=mysqli_real_escape_string($db, $nomepg);
-
-	if ($aDisciplina != "") {
-	$Mysql="SELECT  nomedisc FROM discipline_main WHERE iddisciplina=$aDisciplina";
-	$Result=mysqli_query ($db, $Mysql);
-	$res=mysqli_fetch_array($Result);
-	$nomedisc=$res['nomedisc'];
-	} else {
-		$nomedisc=$aTAUMNECRO;
-	}
+	$frenesia=$res['frenesia'];
+	$cacciaobbligata=$res['cacciaobbligata'];
+	$PScorrenti=$res['PScorrenti'];
+	$bonusdisc=$res['bonusdisc'];
+	$attivazione=$res['attivazione'];
 
 
-
-
-	if ( $livellopot >= 5) {
+	if ( $livello >= 5) {
 		$Mysql="UPDATE personaggio SET PScorrenti = PScorrenti-2 , lastps=NOW() WHERE idutente=$idutente";
+		$PScorrenti = $PScorrenti - 2;
 	} else {
 		$Mysql="UPDATE personaggio SET PScorrenti = PScorrenti-1 , lastps=NOW() WHERE idutente=$idutente";
+		$PScorrenti = $PScorrenti - 1;
 	}
 	$Result=mysqli_query ($db, $Mysql);
 
-	if ( $livellopot == 5 && $aDisciplina==2 ) { //maesta
+	if ( $idpotere == 15 ) { //maesta
 		$Mysql="UPDATE personaggio SET nummaesta = nummaesta-1 , lastmaesta=NOW() WHERE idutente=$idutente";
 		$Result=mysqli_query ($db, $Mysql);
 	}
@@ -69,7 +70,7 @@
 
 	
 
-	$testo="ha utilizzato ".$nomedisc.".".$livellopot." ".$pot;
+	$testo="ha utilizzato ".$disciplina.".".$livello." ".$potere;
 	$xtesto=mysqli_real_escape_string($db, $testo);
 	//$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( $idutente, '$xnomepg', NOW(), '$xtesto' , $idutente ) ";
 	$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( $idutente, '$xnomepg', NOW(), '$xtesto' , 0 ) ";
@@ -82,23 +83,48 @@
 	$Result = mysqli_query($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
 
-	if ( $res['PScorrenti'] == 1  ) {
+	if ( $PScorrenti <= $frenesia ) {
 		$testo=$nomepg." è a rischio Frenesia";
 		master2master( $testo);
 		$xtesto=mysqli_real_escape_string($db, $testo);
 		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( $idutente, '$xnomepg', NOW(), 'è a rischio Frenesia' , 0 ) ";
 		mysqli_query($db, $Mysql);
+	} else if ( $PScorrenti <= $cacciaobbligata ) {
+		$testo=$nomepg." è in Caccia Obbligata";
+		master2master( $testo);
+		$xtesto=mysqli_real_escape_string($db, $testo);
+		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( $idutente, '$xnomepg', NOW(), 'è in Caccia Obbligata' , 0 ) ";
+		mysqli_query($db, $Mysql);
 	}
 
 
-	// Imposto PS
-	if ($livellopot == 5 ) {
-		$out1=array('ps' => 2);
-	} else {
-		$out1=array('ps' => 1);
+	$mysq="SELECT iddisciplina from poteri_main WHERE idpotere=$idpotere";
+	$Result=mysqli_query ($db, $mysq);
+	$res=mysqli_fetch_array($Result);
+	$iddisciplina=$res['iddisciplina'];
+
+	$mysql="SELECT focus, livello from discipline WHERE iddisciplina=$iddisciplina and idutente=$idutente";
+	$Result=mysqli_query ($db, $mysql);
+	$res=mysqli_fetch_array($Result);
+	$focus=$res['focus'];
+	$livellodisc=$res['livello'];
+
+
+	$base = $livellodisc + $attivazione;
+	if ( $focus == 1) {
+		$base = $base + $bonusdisc;
 	}
-	$output = json_encode ($out1, JSON_UNESCAPED_UNICODE);
+
+	$dado = rand(1,5);
+	$totale = $base * $dado;
+
+
+	$out = [
+		'tiro' => $totale,
+	];
+	
+	$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
 	echo $output;
-	die();
+	
 
 ?>

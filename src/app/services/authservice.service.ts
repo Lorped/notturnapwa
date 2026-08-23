@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -90,6 +91,10 @@ export class AuthserviceService {
   caccia(userid: number, bs: number) {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/caccia.php?id=' + userid + '&BS=' + bs);
   }
+  cacciaanim(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/caccia-anim.php?id=' + userid);
+  }
+
   modifcanote(userid: number, note: string) {
     return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/modificanote.php', {
       idutente: userid,
@@ -107,6 +112,16 @@ export class AuthserviceService {
 
   focusattr(userid: number) {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/focusattr.php?id=' + userid);
+  }
+
+  usopotere(userid: number, potere: string, idpotere: number, livello: number, disciplina: string) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/usopotere.php', {
+      idutente: userid,
+      potere: potere,
+      idpotere: idpotere,
+      livello: livello,
+      disciplina: disciplina
+    });
   }
 
 

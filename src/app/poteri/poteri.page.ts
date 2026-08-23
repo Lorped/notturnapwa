@@ -1,8 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, apoteri2 , Userskill } from '../globals';
+import { User, Potere, Userskill } from '../globals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+
+import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
+
+export interface EsitoPotere {
+  tiro: number;
+}
 
 @Component({
   selector: 'app-poteri',
@@ -16,27 +21,23 @@ export class PoteriPage implements OnInit {
   nomed = '';
   CacciaAnimalita = 0;
 
-  mypoteri: Array<apoteri2> = [];
+  mypoteri: Array<Potere> = [];
+
+  esito: EsitoPotere = { 
+    tiro: 0
+  };
 
   constructor(
     public router: Router,
     public user: User,
     public userskill: Userskill,
     public activatedroute: ActivatedRoute,
-    public http: HttpClient,
+
+    public authservice: AuthserviceService,
     public alertCtrl: AlertController
   ) {}
 
-  ngOnInit() {
-    let tt = new Date(this.user['lastcaccia']);
-    let tn = new Date();
-
-    let diff = tn.getTime() - tt.getTime();
-
-    if (diff / (60 * 1000) > 60) {
-      this.CacciaAnimalita = 1;
-    }
-  }
+  ngOnInit() {  }
 
   ionViewWillEnter() {
     // console.log ("poteripage..");
@@ -55,73 +56,64 @@ export class PoteriPage implements OnInit {
     }
   }
 
-  gopotere(pot: string, livellopot: number) {
+  gopotere(pot: string, livellopot: number, idpotere: number) {
     // console.log(pot);
+
     if (pot == 'Telepatia') {
       this.router.navigate(['/tabs/telepatia']);
     } else if (pot == 'Richiamo' && livellopot == 3) {
       //non è il richiamo di Ascendente 4
       this.cacciaanim();
-    } else if (pot == 'Bacio Selvaggio') {
-      var id = 1;
-      this.router.navigate(['/tabs/caccia', id]);
     } else {
-      var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
-      var mypost = JSON.stringify({
-        idutente: this.user.idutente,
-        potere: pot,
-        livello: livellopot,
-        aDisciplina: this.disc,
-      });
-      this.http.post<any>(url, mypost).subscribe((res) => {
-        //console.log(res);
-        let ps = res.ps;
-        //console.log(ps);
-        //this.navParams.get("parentPage").loadDadi();
-        this.user['PScorrenti'] = this.user['PScorrenti'] - ps;
 
-        this.showalert(pot);
+      this.authservice.usopotere(this.user['idutente'], pot, idpotere,  livellopot, this.nomed).subscribe((res) => {
 
-        if (this.disc == 2 && livellopot == 5) {
-          //MAESTA
+        this.esito.tiro = res.tiro;
+
+        console.log('esito potere: ' + this.esito.tiro);
+
+
+        
+        if (livellopot == 5 ) {
+          this.user.PScorrenti = this.user.PScorrenti - 2;
+        } else {
+          this.user.PScorrenti = this.user.PScorrenti - 1;
+        }
+        if (idpotere== 15) {
           this.user.nummaesta = this.user.nummaesta - 1;
         }
 
-        if (this.user['PScorrenti'] == 0) {
-          // VAI VIA
-          this.router.navigate(['/tabs/tab5']);
-        }
+        this.showalert(pot);
+
+        if (this.user.PScorrenti <= this.user.frenesia) {
+          console.log('a rischio frenesia');
+        } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+          console.log('in caccia obbligata');
+        } 
+
       });
     }
   }
 
   async showalert(pot: string) {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Uso ' + this.nomed,
       subHeader: pot,
+      message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
       buttons: ['OK'],
     });
     alert.present();
   }
 
   cacciaanim() {
-    this.CacciaAnimalita = 1;
-    var link =
-      'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-      this.user['idutente'] +
-      '&recuperati=3&anim=1';
-
-    this.http.get<any>(link).subscribe((res) => {
-      this.user['PScorrenti'] = this.user['PScorrenti'] + 3;
-      if (this.user['PScorrenti'] > this.user['maxps']) {
-        this.user['PScorrenti'] = this.user['maxps'];
-      }
-
-      this.user['lastcaccia'] = res.last;
-
+    this.authservice.cacciaanim(this.user['idutente']).subscribe(() => {
+      this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
       this.showalert('Richiamo');
-      //console.log(this.myuser);
       this.router.navigate(['/tabs/tab5']);
     });
   }
+
+    
+
+  
 }

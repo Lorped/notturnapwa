@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { IonModal } from '@ionic/angular';
 import { User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { HttpClient } from '@angular/common/http';
@@ -14,12 +15,20 @@ import { AuthserviceService } from '../services/authservice.service';
   standalone: false,
 })
 export class Tab5Page implements OnInit {
+  @ViewChild(IonModal) modal!: IonModal;
+
+
   public alertButtons = ['OK'];
   tiridado: Array<FeedItem>;
 
   isResist1Open = false;
   isResist2Open = false;
   esito = 0;
+
+  canDismiss = false;   // per il modal
+  presentingElement: HTMLElement | null = null;   // per il modal
+  messaggioArbitro = '';
+
 
   constructor(
     public user: User,
@@ -126,7 +135,21 @@ export class Tab5Page implements OnInit {
   }
 
 
+  mandaArbitro() {
+    this.canDismiss = true;
 
+    // console.log('Arbitro in Nero');
+    // console.log('Messaggio da inviare: ', this.messaggioArbitro);
+    this.messaggioArbitro = this.messaggioArbitro.trim(); // Rimuove spazi bianchi iniziali e finali
+
+    this.messaggioArbitro = "Richiesta di intervento da parte di un Arbitro in Nero. " + this.messaggioArbitro;
+   
+    this.authservice.msgtomaster(this.user.idutente, this.messaggioArbitro).subscribe(() => {
+      // console.log('Messaggio inviato con successo');
+      this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
+      this.modal.dismiss(); // Chiude il modal dopo l'invio
+    });
+  }
  
 
 

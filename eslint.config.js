@@ -39,7 +39,7 @@ module.exports = tseslint.config(
     //},
   },
   {
-    files: ["**/*.html"],
+    //files: ["**/*.html"],
     ignores: ["projects/**/*"],
     //extends: [...angular.configs.templateRecommended],
     rules: {},

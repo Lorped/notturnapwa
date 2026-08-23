@@ -23,7 +23,7 @@
  header('Content-Type: text/html; charset=utf-8');
 
 
-include ("db2.inc.php"); // NEW MYSQL //
+  require_once __DIR__ . "/db2.inc.php"; // NEW MYSQL //
 
   $postdata = file_get_contents("php://input");
   $request = json_decode($postdata);
@@ -47,10 +47,10 @@ include ("db2.inc.php"); // NEW MYSQL //
 
 
 		$tiro=rand(1,5);
-    if ( ($idutente == 228 || $idutente == 3040012 ) && $tiro == 5 ) {
+    if ( ($idutente == 307 ) && $tiro == 5 ) {
       $tiro=rand(1,5);
     }
-    if ( $idutente == 5 && $tiro == 1 ) {
+    if ( $idutente == 3 && $tiro == 1 ) {
       $tiro=rand(1,5);
     }
 		$testo="tira ".$tiro;

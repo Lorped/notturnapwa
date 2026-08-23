@@ -1,43 +1,48 @@
-<ion-header>
 
+
+
+
+<ion-header>
   <ion-toolbar color="medium">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+        <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Poteri di {{nomed}}</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
-<ion-content class="master" color="dark" padding>
+<ion-content  padding>
 
   @for (p of mypoteri; track p) {
     <ion-row>
       @if (p.attivo=='N' && p.livellopot<5 ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot,p.idpotere)"  color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
-      @if (p.attivo=='N' && p.livellopot==5 && disc != 2) {
+      @if (p.attivo=='N' && p.livellopot==5 && p.idpotere != 15) {  <!-- un 5' potere non maesta'-->
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere, p.livellopot, p.idpotere)"  color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
-      @if (p.attivo=='N' && p.livellopot==5 && disc == 2) {
+      @if (p.idpotere == 15) {  <!-- maesta -->
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2 || user.nummaesta == 0 " >{{p.livellopot}} - {{p.nomepotere}} [{{user.nummaesta}}]</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere, p.livellopot, p.idpotere)"  color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2 || user.nummaesta == 0 " >{{p.livellopot}} - {{p.nomepotere}} [{{user.nummaesta}}]</ion-button>
         </ion-col>
       }
+      @if (p.idpotere == 4) {  <!-- richiamo di Animalità NON di Ascendente-->
+        <ion-col >
+          <ion-button  (click)="cacciaanim()" color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+        </ion-col>
+      }
+
+      <!--  NON ESISTONO POTERI DI LIVELLO 6, MA SE CI FOSSE QUESTO E' IL CODICE DA USARE
       @if (p.attivo=='N' && p.livellopot >5 ) {
         <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
+          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)"  color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti<2" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>
       }
-      @if (p.attivo=='X'  ) {
-        <ion-col >
-          <ion-button  (click)="gopotere(p.nomepotere,p.livellopot)" color="danger" class="submit-btn2" shape="round" size="full" type="submit" [disabled]="user.PScorrenti==user.maxps || CacciaAnimalita == 0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
-        </ion-col>
-      }
+      -->
 
       @if (p.attivo=='S') {
         <ion-col  style="font-size: 1.1em; text-align: center;">

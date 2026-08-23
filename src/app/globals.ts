@@ -56,25 +56,7 @@ export class Disciplina {
 
 
 
-@Injectable()
-export class apoteri2  {
-    public nomepotere = '';
-    public attivo = '';
-    public livellopot = 0;    
-}
 
-@Injectable()
-export class apoteri  {
-    public iddisciplina: number;
-    public nomedisc: string;
-    public poteri: Array<apoteri2>;
-
-    constructor () {
-        this.iddisciplina = 0;
-        this.nomedisc = '';
-        this.poteri = [];
-    }
-}
 
 @Injectable({ providedIn: 'root' })
 export class User  {
