@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { CapacitorConfig } from '@capacitor/cli';
 import { FCM } from '@capacitor-community/fcm';
 
+
+
 import {
   ActionPerformed,
   PushNotificationSchema,
@@ -70,7 +72,6 @@ export class LoginPage implements OnInit {
     prefersDark.addEventListener('change', (mediaQuery) => {
       this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || mediaQuery.matches;
     });
-
 
   }
 

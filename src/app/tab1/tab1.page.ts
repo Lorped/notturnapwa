@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User , Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -13,7 +14,8 @@ export class Tab1Page implements OnInit{
   constructor(
     public user: User,
     public userskill: Userskill,
-    private authentication: AuthserviceService
+    private authentication: AuthserviceService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -23,11 +25,11 @@ export class Tab1Page implements OnInit{
     console.log ("2 user - " , this.user);
   } 
 
-  /*
+  
   public logoutx() {
     this.router.navigate(['login']);
   }
-  */
+  
 
   
   doRefresh(event: any) {    
