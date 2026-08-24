@@ -259,13 +259,8 @@ export class Legame {
 }
 
 export class Utente {
-	nomepg: string;
-	id: number;
-
-	constructor(nomepg: string, id: number) {
-		this.nomepg = nomepg;
-		this.id = id;
-	}
+	nomepg = '';
+	idutente = 0;
 
 }
 

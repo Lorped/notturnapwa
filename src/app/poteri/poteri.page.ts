@@ -9,6 +9,7 @@ export interface EsitoPotere {
   tiro: number;
 }
 
+
 @Component({
   selector: 'app-poteri',
   templateUrl: './poteri.page.html',
@@ -26,6 +27,12 @@ export class PoteriPage implements OnInit {
   esito: EsitoPotere = { 
     tiro: 0
   };
+
+  canDismiss = false;   // per il modal
+  presentingElement: HTMLElement | null = null;   // per il modal
+  messaggioTelepatico = '';
+  isModalOpen = false;
+
 
   constructor(
     public router: Router,
@@ -60,7 +67,7 @@ export class PoteriPage implements OnInit {
     // console.log(pot);
 
     if (pot == 'Telepatia') {
-      this.router.navigate(['/tabs/telepatia']);
+      this.isModalOpen = true;
     } else {
 
       this.authservice.usopotere(this.user['idutente'], pot, idpotere,  livellopot, this.nomed).subscribe((res) => {
@@ -107,12 +114,23 @@ export class PoteriPage implements OnInit {
     this.authservice.cacciaanim(this.user['idutente']).subscribe(() => {
       this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
       this.showalert('Richiamo', 3);
-      this.CacciaAnimalita = 1;
-      // this.router.navigate(['/tabs/tab5']);
+      this.CacciaAnimalita = 0;
+
+      setTimeout(() => {
+        this.CacciaAnimalita = 1;
+      }, 3600000); // 60 minuti in millisecondi 
+      
+
     });
   }
 
     
-
+  mandaMessaggio() {
+    this.isModalOpen = false;
+    console.log('mandaMessaggio: ' + this.messaggioTelepatico);
+  }
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
   
 }

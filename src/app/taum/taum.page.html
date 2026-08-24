@@ -16,16 +16,21 @@
       <ion-col size="2"><hr/></ion-col>
       <ion-col size="8" style="text-align: center; font-size: 1em;">{{t.nometaum}}</ion-col>
       <ion-col size="2"><hr/></ion-col>
-      @for (pp of t.poteri; track pp) {
+    </ion-row>
+    @for (pp of t.poteri; track pp) {
+      <ion-row>
+        
+      @if (pp.idtaum2!=5) {
         <ion-col size="12">
-          @if (pp.idtaum2!=5) {
-            <ion-button  (click)="gotaum(pp.livello, pp.nometaum2, t.nometaum, pp.idtaum2)"  shape="round" color="danger" size="full" type="submit" [disabled]="(user.PScorrenti==0)||(user.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
-          }
-          @if (pp.idtaum2==5) {
-            <ion-button  (click)="gofurto()"  shape="round" color="danger" size="full" type="submit" [disabled]="(user.PScorrenti==user.maxps)||(FurtoVitae==0 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
-          }
+        <ion-button  (click)="gotaum(pp.livello, pp.nometaum2, t.nometaum, pp.idtaum2)"  shape="round" color="danger" size="full" type="submit" [disabled]="(user.PScorrenti==0)||(user.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
         </ion-col>
       }
-    </ion-row>
+      @if (pp.idtaum2==5) {
+        <ion-col size="12">
+        <ion-button  (click)="gofurto()"  shape="round" color="danger" size="full" type="submit" [disabled]="(user.PScorrenti==user.maxps)||(FurtoVitae==0 )" >{{pp.livello}} - {{pp.nometaum2}}</ion-button>
+        </ion-col>
+      }
+      </ion-row>
+    }
   }
 </ion-content>

@@ -37,7 +37,9 @@ export class TelepatiaPage implements OnInit {
       if (res != null) {
         for (let i = 0; i < res.length; i++) {
           let item = res[i];
-          let newutente = new Utente(item.nomepg, item.idutente);
+          let newutente = new Utente();
+          newutente.nomepg = item.nomepg;
+          newutente.idutente = item.idutente;
           this.listautenti.push(newutente);
         }
       }

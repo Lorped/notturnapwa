@@ -72,6 +72,9 @@ export class TaumPage implements OnInit {
 
       this.showalert('Patto della Vitae', 'Rigenerazione della Vitae', 4);
 
+      setTimeout(() => {
+        this.FurtoVitae = 1;
+      }, 1800000); // 30 minuti in millisecondi 
     });
   }
 

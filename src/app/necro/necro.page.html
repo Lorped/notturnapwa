@@ -1,32 +1,40 @@
 <ion-header>
-
   <ion-toolbar color="medium">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
+        <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Necromanzie</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
+<ion-content  padding>
 
-<ion-content class="master" color="dark" padding>
-  @for (p of userskill.necro; track p) {
+
+  @for (n of userskill.necro; track n) {
     <ion-row>
-      <ion-col size="2"><hr/></ion-col>
-      <ion-col size="8" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">{{p.nomenecro}}</ion-col>
-      <ion-col size="2"><hr/></ion-col>
-      @for (pp of p.poteri; track pp) {
-        <ion-col size="12" text-center>
-          @if (pp.attivo=='N') {
-            <ion-button  (click)="gonecro(pp.livello, pp.nomenecro2, p.nomenecro)"  class="submit-btn2" shape="round" size="full" color="danger" type="submit" [disabled]="(user.PScorrenti==0)||(user.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nomenecro2}}</ion-button>
-          }
-          @if (pp.attivo=='S') {
-            <span   style="font-size: 1.1em;">{{pp.livello}} - {{pp.nomenecro2}} (attivo)</span>
-          }
-        </ion-col>
-      }
+        <ion-col size="2"><hr/></ion-col>
+        <ion-col size="8" style=" text-align: center; font-size: 1em;">{{n.nomenecro}}</ion-col>
+        <ion-col size="2"><hr/></ion-col>
     </ion-row>
+    @for (pp of n.poteri; track pp) {
+      <ion-row>
+        @if (pp.attivo=='N') {
+          <ion-col >  
+            <ion-button  (click)="gonecro(pp.livello, pp.nomenecro2, n.nomenecro, pp.idnecro2)"  shape="round" size="full" color="danger" type="submit" [disabled]="(user.PScorrenti==0)||(user.PScorrenti==1 && pp.livello==5 )" >{{pp.livello}} - {{pp.nomenecro2}}</ion-button>
+          </ion-col>
+        }
+        @if (pp.attivo=='S') {
+            <ion-col style="font-size: 1.1em; text-align: center;">
+              {{pp.livello}} - {{pp.nomenecro2}} (attivo)
+            </ion-col>
+        }
+      </ion-row>
+    }
   }
+  
+
+    
+  
+  
 </ion-content>
 

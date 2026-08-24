@@ -19,7 +19,7 @@
   </ion-item>
 
 
-  <form (ngSubmit)="invia()" #modificaForm="ngForm">
+
 
     <ion-list >
       <ion-item >
@@ -28,16 +28,16 @@
         <ion-icon slot="start" name="person-outline"></ion-icon>
         <!--<div slot="label">Possibile Domitor </div>-->
           @for (pg of listautenti; track pg) {
-            <ion-select-option value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
+            <ion-select-option value="{{pg.idutente}}" >{{pg.nomepg}}</ion-select-option>
           }
         </ion-select>
       </ion-item>
 
     </ion-list>
-  </form>
+
   <ion-row>
     <ion-col>
-      <ion-button shape="round" expand="full" type="submit" color="danger" [disabled]="pgscelto===0" >Accetta</ion-button>
+      <ion-button shape="round" expand="full" type="submit" color="danger" [disabled]="pgscelto===0" (click)="invia()">Accetta</ion-button>
     </ion-col>
   </ion-row>
 

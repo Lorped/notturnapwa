@@ -18,7 +18,7 @@
         <ion-icon name="contact" item-start color="danger" ></ion-icon>
         <ion-select label = "PG" [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
           @for (pg of listautenti; track pg) {
-            <ion-select-option value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
+            <ion-select-option value="{{pg.idutente}}" >{{pg.nomepg}}</ion-select-option>
           }
         </ion-select>
       </ion-item>

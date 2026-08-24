@@ -141,5 +141,20 @@ export class AuthserviceService {
     });
   }
 
+  listautenti(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/utenti.php?excl=' + userid);
+  }
+
+  invialegame(userid: number, pgscelto: number) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/legami.php', {
+      target: userid,
+      domitor: pgscelto
+    });
+  }
+
+  getlegami(userid: number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getlegami.php?id=' + userid);
+  }
+
 
 }
