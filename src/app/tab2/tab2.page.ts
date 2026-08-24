@@ -44,7 +44,7 @@ export class Tab2Page {
     this.artigli = 0;
 
 
-    for (var i = 0; i < this.userskill.otherskill.length; i++) {
+    for (let i = 0; i < this.userskill.otherskill.length; i++) {
       if (this.userskill.otherskill[i].idskill == 42) {  //rissa
         this.rissa = Number(this.userskill.otherskill[i].livello);
       }

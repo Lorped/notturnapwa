@@ -4,21 +4,25 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
+        <!--
         <ion-buttons slot="primary">
         <ion-button (click)="logoutx()">
           <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
+      -->
     </ion-toolbar>
   </ion-header>
 
 
-<ion-content  style="font-size: 0.9em;"; no-padding >
+<ion-content no-padding >
 
-  <!-- <ion-spinner *ngIf="loading" id="feed-spinner"></ion-spinner> -->
+
+
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
 
   <h3 class="mypad2">{{user['nomepg']}}</h3>
 
@@ -98,8 +102,8 @@
       <ion-grid no-padding >
         <ion-row style="align-items: center;">
           <ion-col size="1" ><hr/></ion-col>
-          <ion-col size="5" style="text-align: center;">Attributi Fisici </ion-col>
-          <ion-col ><hr/></ion-col>
+        <ion-col size="5" style="text-align: center;">Attributi Fisici </ion-col>
+        <ion-col ><hr/></ion-col>
         </ion-row>
         <ion-row>
           <ion-col>Forza</ion-col>
@@ -107,124 +111,122 @@
           <ion-col>Attutimento</ion-col>
         </ion-row>
         <ion-row>
- 
           <ion-col>
             @for (item of 5|times ; track item; let ix = $index) {
               <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.forza}"></i>
-              }<br>
-              @if (this.user.maxstat >5){
-                @for (item of 5|times ; track item; let ix = $index) {
-                  <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.forza}"></i>
-                }
-              }
-            </ion-col>
-            <ion-col>
+            }<br>
+            @if (this.user.maxstat >5){
               @for (item of 5|times ; track item; let ix = $index) {
-                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.destrezza}"></i>
-                }<br>
-              @if (this.user.maxstat >5){
-                @for (item of 5|times ; track item; let ix = $index) {
-                  <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.destrezza}"></i>
-                }
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.forza}"></i>
               }
-              </ion-col>
-              <ion-col>
-                @for (item of 5|times ; track item; let ix = $index) {
-                  <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.attutimento}"></i>
-                  }<br>
-                @if (this.user.maxstat >5){
-                  @for (item of 5|times ; track item; let ix = $index) {
-                    <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.attutimento}"></i>
-                  }
-                }
-                </ion-col>
-              </ion-row>
-              <ion-row style="align-items: center;">
-                <ion-col size="1" ><hr/></ion-col>
-                <ion-col size="5" style="text-align: center;">Attributi Sociali</ion-col>
-                <ion-col><hr/></ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>Carisma</ion-col>
-                <ion-col>Persuasione</ion-col>
-                <ion-col>Saggezza</ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  @for (item of 5|times ; track item; let ix = $index) {
-                    <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.carisma}"></i>
-                    }<br>
-                  @if (this.user.maxstat >5){
-                      @for (item of 5|times ; track item; let ix = $index) {
-                        <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.carisma}"></i>
-                      }
-                    }
-                  </ion-col>
-                  <ion-col>
-                    @for (item of 5|times ; track item; let ix = $index) {
-                      <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.persuasione}"></i>
-                      }<br>
-                    @if (this.user.maxstat >5){
-                        @for (item of 5|times ; track item; let ix = $index) {
-                          <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.persuasione}"></i>
-                        }
-                      }
-                    </ion-col>
-                    <ion-col>
-                      @for (item of 5|times ; track item; let ix = $index) {
-                        <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.saggezza}"></i>
-                        }<br>
-                      @if (this.user.maxstat >5){
-                          @for (item of 5|times ; track item; let ix = $index) {
-                            <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.saggezza}"></i>
-                          }
-                        }
-                      </ion-col>
-                    </ion-row>
-                    <ion-row style="align-items: center;">
-                      <ion-col size="1" ><hr/></ion-col>
-                      <ion-col size="5" style="text-align: center;">Attributi Mentali</ion-col>
-                      <ion-col><hr/></ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col>Percezione</ion-col>
-                      <ion-col>Intelligenza</ion-col>
-                      <ion-col>Prontezza</ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col>
-                        @for (item of 5|times ; track item; let ix = $index) {
-                          <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.percezione}"></i>
-                          }<br>
-                          @if (this.user.maxstat >5){
-                              @for (item of 5|times ; track item; let ix = $index) {
-                                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.percezione}"></i>
-                              }
-                          }
-                        </ion-col>
-                        <ion-col>
-                          @for (item of 5|times ; track item; let ix = $index) {
-                            <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.intelligenza}"></i>
-                            }<br>
-                          @if (this.user.maxstat >5){
-                              @for (item of 5|times ; track item; let ix = $index) {
-                                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.intelligenza}"></i>
-                              }
-                            }
-                          </ion-col>
-                          <ion-col>
-                            @for (item of 5|times ; track item; let ix = $index) {
-                              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.prontezza}"></i>
-                            }<br>
-                            @if (this.user.maxstat >5){
-                                @for (item of 5|times ; track item; let ix = $index) {
-                                  <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.prontezza}"></i>
-                                }
-                              }
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </div>
-
-                    </ion-content>
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.destrezza}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.destrezza}"></i>
+              }
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.attutimento}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.attutimento}"></i>
+              }
+            }
+          </ion-col>
+        </ion-row>
+        <ion-row style="align-items: center;">
+          <ion-col size="1" ><hr/></ion-col>
+          <ion-col size="5" style="text-align: center;">Attributi Sociali</ion-col>
+          <ion-col><hr/></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Carisma</ion-col>
+          <ion-col>Persuasione</ion-col>
+          <ion-col>Saggezza</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.carisma}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.carisma}"></i>
+              }
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.persuasione}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.persuasione}"></i>
+              }
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.saggezza}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.saggezza}"></i>
+              }
+            }
+          </ion-col>
+        </ion-row>
+        <ion-row style="align-items: center;">
+          <ion-col size="1" ><hr/></ion-col>
+          <ion-col size="5" style="text-align: center;">Attributi Mentali</ion-col>
+          <ion-col><hr/></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Percezione</ion-col>
+          <ion-col>Intelligenza</ion-col>
+          <ion-col>Prontezza</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.percezione}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.percezione}"></i>
+              }
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.intelligenza}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.intelligenza}"></i>
+              }
+            }
+          </ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix < user.prontezza}"></i>
+            }<br>
+            @if (this.user.maxstat >5){
+              @for (item of 5|times ; track item; let ix = $index) {
+                <i class="fa fa-circle-o myxsmallicon " [ngClass]="{'fa-circle myred2': ix+5 < user.prontezza}"></i>
+              }
+            }
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+</ion-content>
 

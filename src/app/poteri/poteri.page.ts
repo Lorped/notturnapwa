@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, Potere, Userskill } from '../globals';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { User, Potere, Userskill, Utente } from '../globals';
+import { ActivatedRoute } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
 
@@ -33,22 +32,26 @@ export class PoteriPage implements OnInit {
   messaggioTelepatico = '';
   isModalOpen = false;
 
+  listautenti: Array<Utente> = [];
+  pgscelto = 0;
+
 
   constructor(
-    public router: Router,
     public user: User,
     public userskill: Userskill,
     public activatedroute: ActivatedRoute,
-
     public authservice: AuthserviceService,
     public alertCtrl: AlertController
   ) {}
 
-  ngOnInit() {  }
+  ngOnInit() { 
+    this.authservice.listautenti(this.user.idutente).subscribe((res: Array<Utente>) => {
+      this.listautenti = res;
+    });
+  }
 
   ionViewWillEnter() {
-    // console.log ("poteripage..");
-
+    
     this.activatedroute.paramMap.subscribe((paramMap) => {
       this.disc = Number(paramMap.get('disc'));
       this.nomed = paramMap.get('nomed')!;
@@ -67,6 +70,8 @@ export class PoteriPage implements OnInit {
     // console.log(pot);
 
     if (pot == 'Telepatia') {
+      this.pgscelto = 0;
+      this.messaggioTelepatico = '';
       this.isModalOpen = true;
     } else {
 
@@ -74,8 +79,7 @@ export class PoteriPage implements OnInit {
 
         this.esito.tiro = res.tiro;
 
-        console.log('esito potere: ' + this.esito.tiro);
-
+        // console.log('esito potere: ' + this.esito.tiro);
 
         
         if (livellopot == 5 ) {
@@ -128,7 +132,17 @@ export class PoteriPage implements OnInit {
   mandaMessaggio() {
     this.isModalOpen = false;
     console.log('mandaMessaggio: ' + this.messaggioTelepatico);
+    console.log('pgscelto: ' + this.pgscelto);
+    this.authservice.inviamessaggiotente(this.user['idutente'], this.pgscelto, this.messaggioTelepatico).subscribe(() => {
+      this.user['PScorrenti']--;
+      this.showalert('Telepatia', 1);
+      this.pgscelto = 0;
+      this.messaggioTelepatico = '';
+    });
+
   }
+
+
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }

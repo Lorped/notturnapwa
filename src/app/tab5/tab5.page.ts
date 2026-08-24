@@ -2,9 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/
 import { IonModal } from '@ionic/angular';
 import { User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
@@ -18,7 +16,7 @@ export class Tab5Page implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
 
-  public alertButtons = ['OK'];
+  alertButtons = ['OK'];
   tiridado: Array<FeedItem>;
 
   isResist1Open = false;
@@ -34,16 +32,14 @@ export class Tab5Page implements OnInit {
     public user: User,
     public userskill: Userskill,
     public feed: FeedService,
-    public http: HttpClient,
     public router: Router,
-    private iab: InAppBrowser,
     public authservice: AuthserviceService
   ) {
     this.tiridado = [];
     this.loadDadi();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   handleRefresh(event: any) {
     setTimeout(() => {
@@ -52,22 +48,20 @@ export class Tab5Page implements OnInit {
     }, 2000);
   }
 
-  loadDadi(): any {
-    this.feed.getDadi(this.user['idutente']).subscribe((allFeeds: any) => {
-      this.tiridado = allFeeds;
+  loadDadi():any {
+    this.feed.getDadi(this.user['idutente']).subscribe((res: any) => {
+      this.tiridado = res;
     });
   }
 
   tiraildado() {
-    var link = 'https://www.roma-by-night.it/ionicPHP/lanciadado.php';
-    var mypost = JSON.stringify({ userid: this.user['idutente'] });
-
-    this.http.post<any>(link, mypost).subscribe((res) => {
+    this.authservice.lanciadado(this.user['idutente']).subscribe(() => {
       setTimeout(this.loadDadi(), 1000);
     });
   }
+
   usafdv() {
-    this.authservice.usofdv(this.user['idutente']).subscribe((res) => {
+    this.authservice.usofdv(this.user['idutente']).subscribe(() => {
       setTimeout(this.loadDadi(), 1000);
     });
 
@@ -80,17 +74,15 @@ export class Tab5Page implements OnInit {
         this.user['fdv']) /
         5
     );
-
   }
+
   menops() {
-    this.authservice.menops(this.user['idutente']).subscribe((res) => {
+    this.authservice.menops(this.user['idutente']).subscribe(() => {
       this.user.PScorrenti--;
       setTimeout(this.loadDadi(), 1000);
     });
-
   }
 
- 
 
   resistidisc(){
     const base = Number(this.user['fdv']) + Number(this.user['attivazione']);
@@ -103,7 +95,8 @@ export class Tab5Page implements OnInit {
       setTimeout(this.loadDadi(), 1000);
     });
   }
-   resistidisc2(){
+
+  resistidisc2(){
     const base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
     const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
@@ -114,6 +107,7 @@ export class Tab5Page implements OnInit {
       setTimeout(this.loadDadi(), 1000);
     });
   }
+
   togglealert(isOpen: boolean) {
     this.isResist1Open = isOpen;
     this.isResist2Open = isOpen;
@@ -143,29 +137,13 @@ export class Tab5Page implements OnInit {
     this.messaggioArbitro = this.messaggioArbitro.trim(); // Rimuove spazi bianchi iniziali e finali
 
     this.messaggioArbitro = "Richiesta di intervento da parte di un Arbitro in Nero. " + this.messaggioArbitro;
-   
+
     this.authservice.msgtomaster(this.user.idutente, this.messaggioArbitro).subscribe(() => {
       // console.log('Messaggio inviato con successo');
       this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
       this.modal.dismiss(); // Chiude il modal dopo l'invio
     });
   }
- 
-
-
-
-
-
-
-  openUrl2() {
-    const link =
-      'https://drive.google.com/file/d/0BwbyMyT-GT-UZFBwNmp4SHZ6SFk/view';
-    //const browser = this.iab.create(this.link);
-    this.iab.create(link, '_system');
-  }
-
-
-
 
   ionViewWillEnter() {
     this.tiridado = [];

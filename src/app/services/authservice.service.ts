@@ -156,5 +156,26 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/getlegami.php?id=' + userid);
   }
 
+  lanciadado(userid: number) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/lanciadado.php', {
+      userid: userid
+    });
+  }
+
+  inviamessaggiotente(userid: number, destinatario: number, messaggio: string) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/inviamessaggioutente.php', {
+      idutente: userid,
+      destinatario: destinatario,
+      messaggio: messaggio
+    });
+  }
+
+  updateid(userid: number, id: string) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/updateid.php?id=' + id + '&userid=' + userid );
+  }
+
+  getregistra() {
+    return this.http.get<any>('https://www.roma-by-night.it/Notturna2/wsPHP/getregistra.php');
+  }
 
 }

@@ -188,7 +188,7 @@ export class LoginPage implements OnInit {
             // all done
             this.loadingCtrl.dismiss();
 
-            //this.pushsetup();    //  Da verificare se possibile semplificare
+            this.pushsetup();    //  Da verificare se possibile semplificare
 
             //console.log ("user ", this.user);
             //console.log ("userskill ", this.userskill);
@@ -198,6 +198,7 @@ export class LoginPage implements OnInit {
           (error) => {
             this.loadingCtrl.dismiss();
             alert('Error loading data4');  //SKILL
+            console.log('error', error);
           }
         );
     },
@@ -251,18 +252,14 @@ export class LoginPage implements OnInit {
     PushNotifications.addListener('registration', (token: Token) => {
       //alert('Push registration success, token: ' + token.value);
 
-      let updateurl =
-        'https://www.roma-by-night.it/ionicPHP/updateid.php?userid=' +
-        this.user.idutente +
-        '&id=' +
-        token.value;
-      this.http.get(updateurl).subscribe((res) => {
+      this.authentication.updateid(this.user.idutente, token.value).subscribe(() => {
         // updated
         //alert('Device registered '+token.value);
       });
+
     });
 
-    PushNotifications.addListener('registrationError', (error: any) => {
+    PushNotifications.addListener('registrationError', (error) => {
       alert('Error on registration: ' + JSON.stringify(error));
     });
 
@@ -281,25 +278,24 @@ export class LoginPage implements OnInit {
     );
 
     FCM.subscribeTo({ topic: 'user' })
-      .then((r) => console.log(`subscribed to topic: user `))
+      .then(() => console.log(`subscribed to topic: user `))
       .catch((err) => console.log(err));
 
-    this.http
-      .get('https://www.roma-by-night.it/Notturna2/wsPHP/getregistra.php')
-      .subscribe((data: any) => {
-        this.listaclan = data.clan;
+    this.authentication.getregistra().subscribe((data) => {
+      this.listaclan = data.clan;
 
-        this.listaclan.forEach((element) => {
-          if (element.idclan != Number(this.user.idclan)) {
-            FCM.unsubscribeFrom({ topic: element.nomeclan });
-            //console.log(`unsubscribed from topic: `, element.nomeclan);
-          }
-        });
+      this.listaclan.forEach((element) => {
+        if (element.idclan != Number(this.user.idclan)) {
+          FCM.unsubscribeFrom({ topic: element.nomeclan });
+          //console.log(`unsubscribed from topic: `, element.nomeclan);
+        }
       });
+    });
 
-    var atopic2 = this.user.nomeclan;
+
+    const atopic2 = this.user.nomeclan;
     FCM.subscribeTo({ topic: atopic2 })
-      .then((r) => console.log(`subscribed to topic: `, atopic2))
+      .then(() => console.log(`subscribed to topic: `, atopic2))
       .catch((err) => console.log(err));
 
     this.router.navigate(['tabs']);

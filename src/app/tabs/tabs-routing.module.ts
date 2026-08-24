@@ -75,15 +75,7 @@ const routes: Routes = [
       {
         path: 'focusattr',
         loadChildren: () => import('../focusattr/focusattr.module').then( m => m.FocusattrPageModule)
-      },
-
-      {
-        path: 'telepatia',
-        loadChildren: () => import('../telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
-      },
-
-    
-        
+      },        
       {
         path: '',
         redirectTo: '/tabs/tab1',

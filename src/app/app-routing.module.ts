@@ -17,11 +17,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./tabs/tabs.module').then((m) => m.TabsPageModule),
   },
-  {
-    path: 'telepatia',
-    loadChildren: () =>
-      import('./telepatia/telepatia.module').then((m) => m.TelepatiaPageModule),
-  },
+
   {
     path: 'rubrica',
     loadChildren: () =>

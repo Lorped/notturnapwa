@@ -49,7 +49,7 @@
   }
 
 
-  <ion-modal [isOpen]="isModalOpen" >
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="setOpen(false)" >
       <ng-template>
         <ion-header>
           <ion-toolbar color="medium">
@@ -60,11 +60,23 @@
           </ion-toolbar>
         </ion-header>
         <ion-content>
-          <p class="ion-padding-horizontal">Il messaggio che scriverai arriverà al personaggio selezionato.</p>
+           <ion-item>
+            <ion-label>
+              <p class="ion-padding-horizontal">Il messaggio che scriverai arriverà al personaggio selezionato.</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-select  placeholder="Seleziona PG" label ="Destinatario telepatia" labelPlacement="stacked"  [(ngModel)]="pgscelto" name="pgscelto" required>
+              <ion-icon slot="start" name="person-outline"></ion-icon>
+              @for (pg of listautenti; track pg) {
+                <ion-select-option value="{{pg.idutente}}" >{{pg.nomepg}}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
           <ion-item>
             <ion-input placeholder="Messaggio telepatico" [(ngModel)]="messaggioTelepatico" name="messaggioTelepatico"></ion-input >
           </ion-item>
-          <ion-button color="danger" shape="round" type="submit" expand="full"  (click)="mandaMessaggio()">Invia</ion-button>
+          <ion-button color="danger" shape="round" type="submit" expand="full"  (click)="mandaMessaggio()" [disabled]="pgscelto==0||messaggioTelepatico.trim()=='' ">Invia</ion-button>
         </ion-content>
       </ng-template>
     </ion-modal>
