@@ -35,9 +35,9 @@
 	$out2 = [];
 
 		if ($excl == '') {
-			$MySql = "SELECT idutente, nomepg FROM personaggio ORDER BY nomepg ";
+			$MySql = "SELECT idutente, nomepg FROM personaggio WHERE IDcronaca != 99 ORDER BY nomepg ";
 		} else {
-			$MySql = "SELECT idutente, nomepg FROM personaggio WHERE idutente != $excl ORDER BY nomepg";
+			$MySql = "SELECT idutente, nomepg FROM personaggio WHERE IDcronaca != 99 and idutente != $excl ORDER BY nomepg";
 		}
 		$Result = mysqli_query($db, $MySql);
 		while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {

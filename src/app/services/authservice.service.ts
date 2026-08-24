@@ -124,5 +124,22 @@ export class AuthserviceService {
     });
   }
 
+  usonecrotaum(userid: number, potere: string, idpotere: number, livello: number, disciplina: string, necrotaum: string) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/usonecrotaum.php', {
+      idutente: userid,
+      potere: potere,
+      idpotere: idpotere,
+      livello: livello,
+      disciplina: disciplina,
+      necrotaum: necrotaum
+    });
+  }
+
+  furtodivitae(userid: number) {
+    return this.http.post<any>('https://www.roma-by-night.it/ionicPHP/furtodivitae.php', {
+      idutente: userid
+    });
+  }
+
 
 }

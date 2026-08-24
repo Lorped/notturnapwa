@@ -1,7 +1,3 @@
-
-
-
-
 <ion-header>
   <ion-toolbar color="medium">
     <ion-buttons slot="start">
@@ -15,7 +11,7 @@
 
   @for (p of mypoteri; track p) {
     <ion-row>
-      @if (p.attivo=='N' && p.livellopot<5 ) {
+      @if (p.attivo=='N' && p.livellopot<5 && p.idpotere !=4 ) { <!-- un potere non Animalità.3/Richiamo -->
         <ion-col >
           <ion-button  (click)="gopotere(p.nomepotere,p.livellopot,p.idpotere)"  color="danger"  shape="round" size="full" type="submit" [disabled]="user.PScorrenti==0" >{{p.livellopot}} - {{p.nomepotere}}</ion-button>
         </ion-col>

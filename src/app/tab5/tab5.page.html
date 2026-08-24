@@ -97,7 +97,8 @@
     subHeader="Resistere a una disciplina"
     message="Il tiro di resistenza è {{esito}}. "
     [buttons]="alertButtons"
-    (didDismiss)="togglealert(false)">
+    (didDismiss)="togglealert(false)"
+    class="myalert">
   </ion-alert>
    <ion-alert
     [isOpen]="isResist2Open"
@@ -105,7 +106,8 @@
     subHeader="Resistere a Dominazione"
     message="Il tiro di resistenza è {{esito}}. "
     [buttons]="alertButtons"
-    (didDismiss)="togglealert(false)">
+    (didDismiss)="togglealert(false)"
+    class="myalert">
   </ion-alert>
 
 

@@ -1,8 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, Userskill } from '../globals';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
+
+export interface EsitoPotere {
+  tiro: number;
+}
+
 
 @Component({
   selector: 'app-taum',
@@ -12,91 +16,72 @@ import { AlertController } from '@ionic/angular';
   standalone: false,
 })
 export class TaumPage implements OnInit {
-  FurtoVitae = 0;
+
+  FurtoVitae = 1;
+  
+  esito: EsitoPotere = { 
+    tiro: 0
+  };
+  
 
   constructor(
     public user: User,
     public userskill: Userskill,
-    public http: HttpClient,
-    public router: Router,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public authService: AuthserviceService
   ) {}
 
-  ngOnInit() {
-    let tt = new Date(this.user['lastps']);
-    let tn = new Date();
+  ngOnInit() {  }
 
-    let diff = tn.getTime() - tt.getTime();
-
-    if (diff / (60 * 1000) > 60) {
-      this.FurtoVitae = 1;
-    }
-
-    //console.log(this.user.taum);
-  }
-
-  gotaum(livellopot: number, pot: string, pot2: string) {
+  gotaum(livellopot: number, pot: string, taum: string, idtaum2: number) {
     //console.log(pot2);
     //console.log(livellopot);
 
-    var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
-    var mypost = JSON.stringify({
-      idutente: this.user.idutente,
-      potere: pot,
-      livello: livellopot,
-      aTAUMNECRO: pot2,
+  this.authService.usonecrotaum(this.user['idutente'], pot, idtaum2,  livellopot, taum, 'T').subscribe((res) => {
+
+    this.esito.tiro = res.tiro;
+
+    console.log('esito potere: ' + this.esito.tiro);
+
+
+    if (livellopot == 5 ) {
+      this.user.PScorrenti = this.user.PScorrenti - 2;
+    } else {
+      this.user.PScorrenti = this.user.PScorrenti - 1;
+    }
+
+    this.showalert(taum, pot, livellopot);
+
+      if (this.user.PScorrenti <= this.user.frenesia) {
+        console.log('a rischio frenesia');
+      } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+        console.log('in caccia obbligata');
+      } 
     });
-    this.http.post<any>(url, mypost).subscribe((res) => {
-      //console.log(res);
-      let ps = res.ps;
-      //console.log(ps);
 
-
-      this.user['PScorrenti'] = this.user['PScorrenti'] - ps;
-
-      this.showalert(pot2, pot);
-
-      if (this.user['PScorrenti'] == 0) {
-        // VAI VIA
-        this.router.navigate(['/tabs/tab5']);
-      }
-    });
   }
 
   gofurto() {
-    this.FurtoVitae = 0;
 
-    var link =
-      'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' +
-      this.user['idutente'] +
-      '&recuperati=3&vitae=1';
 
-    this.http.get(link).subscribe(
-      (res: any) => {
-        this.user['PScorrenti'] = this.user['PScorrenti'] + 3;
-        if (this.user['PScorrenti'] > this.user['maxps']) {
-          this.user['PScorrenti'] = this.user['maxps'];
-        }
+    this.authService.furtodivitae(this.user['idutente']).subscribe(() => {
 
-        this.user['lastps'] = res.lastps;
+      this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
+      
+      this.FurtoVitae = 0;
 
-        this.FurtoVitae = 0;
+      this.showalert('Patto della Vitae', 'Rigenerazione della Vitae', 4);
 
-        this.showalert('Patto della Vitae', 'Rigenerazione della Vitae');
-
-        this.router.navigate(['/tabs/tab5']);
-      },
-      (err) => {
-        this.FurtoVitae = 1;
-      }
-    );
+    });
   }
 
-  async showalert(pot2: string, pot: string) {
-    let alert = await this.alertCtrl.create({
-      header: 'Uso ' + pot2,
-      subHeader: pot,
+  async showalert(taum: string, pot: string, livellopot: number) {
+    const alert = await this.alertCtrl.create({
+      header: pot,
+      subHeader: taum + ' (Lvl. ' + livellopot + ')',
+      //message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
       buttons: ['OK'],
+      cssClass: 'myalert',
     });
     alert.present();
   }

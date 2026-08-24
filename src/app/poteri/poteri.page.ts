@@ -19,7 +19,7 @@ export interface EsitoPotere {
 export class PoteriPage implements OnInit {
   disc = 0;
   nomed = '';
-  CacciaAnimalita = 0;
+  CacciaAnimalita = 1;
 
   mypoteri: Array<Potere> = [];
 
@@ -61,9 +61,6 @@ export class PoteriPage implements OnInit {
 
     if (pot == 'Telepatia') {
       this.router.navigate(['/tabs/telepatia']);
-    } else if (pot == 'Richiamo' && livellopot == 3) {
-      //non è il richiamo di Ascendente 4
-      this.cacciaanim();
     } else {
 
       this.authservice.usopotere(this.user['idutente'], pot, idpotere,  livellopot, this.nomed).subscribe((res) => {
@@ -83,7 +80,7 @@ export class PoteriPage implements OnInit {
           this.user.nummaesta = this.user.nummaesta - 1;
         }
 
-        this.showalert(pot);
+        this.showalert(pot, livellopot);
 
         if (this.user.PScorrenti <= this.user.frenesia) {
           console.log('a rischio frenesia');
@@ -95,12 +92,13 @@ export class PoteriPage implements OnInit {
     }
   }
 
-  async showalert(pot: string) {
+  async showalert(pot: string, livellopot: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Uso ' + this.nomed,
-      subHeader: pot,
+      header: pot,
+      subHeader: this.nomed + ' (Livello ' + livellopot + ')',
       message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
       buttons: ['OK'],
+      cssClass: 'myalert',
     });
     alert.present();
   }
@@ -108,8 +106,9 @@ export class PoteriPage implements OnInit {
   cacciaanim() {
     this.authservice.cacciaanim(this.user['idutente']).subscribe(() => {
       this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
-      this.showalert('Richiamo');
-      this.router.navigate(['/tabs/tab5']);
+      this.showalert('Richiamo', 3);
+      this.CacciaAnimalita = 1;
+      // this.router.navigate(['/tabs/tab5']);
     });
   }
 
