@@ -71,7 +71,8 @@
 // l'header dell'alert va allineato tramite le classi interne del componente.
 .myalert .alert-head,
 .myalert .alert-title,
-.myalert .alert-sub-title {
+.myalert .alert-sub-title,
+.myalert .alert-message {
     text-align: center;
 }
 

@@ -91,7 +91,11 @@ export class PoteriPage implements OnInit {
           this.user.nummaesta = this.user.nummaesta - 1;
         }
 
-        this.showalert(pot, livellopot);
+        if (this.nomed == 'Ascendente' || this.nomed == 'Dominazione' || this.nomed == 'Demenza' || this.nomed == 'Serpentis'  ) {
+          this.showalert(pot, livellopot,"T");
+        } else {
+          this.showalert(pot, livellopot, "NT");
+        }
 
         if (this.user.PScorrenti <= this.user.frenesia) {
           console.log('a rischio frenesia');
@@ -103,11 +107,19 @@ export class PoteriPage implements OnInit {
     }
   }
 
-  async showalert(pot: string, livellopot: number) {
+  async showalert(pot: string, livellopot: number, tipo: string) {
+
+    let messaggio = '';
+    if (tipo == "T") {
+      messaggio = '[Tiro contrapposto: ' + this.esito.tiro + ']';
+    } else {
+      messaggio = '';
+    }
+
     const alert = await this.alertCtrl.create({
       header: pot,
       subHeader: this.nomed + ' (Livello ' + livellopot + ')',
-      message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
+      message: messaggio,
       buttons: ['OK'],
       cssClass: 'myalert',
     });
@@ -117,7 +129,7 @@ export class PoteriPage implements OnInit {
   cacciaanim() {
     this.authservice.cacciaanim(this.user['idutente']).subscribe(() => {
       this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
-      this.showalert('Richiamo', 3);
+      this.showalert('Richiamo', 3, "NT");
       this.CacciaAnimalita = 0;
 
       setTimeout(() => {
@@ -131,11 +143,11 @@ export class PoteriPage implements OnInit {
     
   mandaMessaggio() {
     this.isModalOpen = false;
-    console.log('mandaMessaggio: ' + this.messaggioTelepatico);
-    console.log('pgscelto: ' + this.pgscelto);
+    // console.log('mandaMessaggio: ' + this.messaggioTelepatico);
+    // console.log('pgscelto: ' + this.pgscelto);
     this.authservice.inviamessaggiotente(this.user['idutente'], this.pgscelto, this.messaggioTelepatico).subscribe(() => {
       this.user['PScorrenti']--;
-      this.showalert('Telepatia', 1);
+      this.showalert('Telepatia', 1, "NT");
       this.pgscelto = 0;
       this.messaggioTelepatico = '';
     });
