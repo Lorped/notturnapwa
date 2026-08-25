@@ -194,6 +194,26 @@
 	$Result8=mysqli_query($db, $Mysql8);
 
 	$res8=mysqli_fetch_array($Result8);
+
+	if ( mysqli_num_rows($Result8) == 0 ) {
+		$out = [
+			'nomeoggetto' => 'ATTENZIONE',
+			'descrizione' => 'Oggetto non definito',
+			'esito' => [],
+			'esitoSI' => [],
+			'esitoNO' => [],
+			'domanda' => null,
+			'R1' => null,
+			'R2' => null,
+		];
+		$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
+		echo $output;
+		die();
+	}
+
+
+
+
 	$idx=$res8['idoggetto'];
 	$nomeoggetto=$res8['nomeoggetto'];
 	$descrizione=$res8['descrizione'];
