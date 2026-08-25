@@ -23,10 +23,9 @@ export class Tab5Page implements OnInit {
   isResist2Open = false;
   esito = 0;
 
-  canDismiss = false;   // per il modal
-  presentingElement: HTMLElement | null = null;   // per il modal
-  messaggioArbitro = '';
 
+  messaggioArbitro = '';
+  isModalOpen = false;
 
   constructor(
     public user: User,
@@ -41,10 +40,9 @@ export class Tab5Page implements OnInit {
 
   ngOnInit() { }
 
-  handleRefresh(event: any) {
+  handleRefresh() {
     setTimeout(() => {
-      this.loadDadi();
-      event.target.complete();
+      this.loadDadi();     
     }, 2000);
   }
 
@@ -56,13 +54,13 @@ export class Tab5Page implements OnInit {
 
   tiraildado() {
     this.authservice.lanciadado(this.user['idutente']).subscribe(() => {
-      setTimeout(this.loadDadi(), 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
   }
 
   usafdv() {
     this.authservice.usofdv(this.user['idutente']).subscribe(() => {
-      setTimeout(this.loadDadi(), 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
 
     this.user['fdv']--;
@@ -79,7 +77,7 @@ export class Tab5Page implements OnInit {
   menops() {
     this.authservice.menops(this.user['idutente']).subscribe(() => {
       this.user.PScorrenti--;
-      setTimeout(this.loadDadi(), 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
   }
 
@@ -92,7 +90,7 @@ export class Tab5Page implements OnInit {
     this.isResist1Open = true;
 
     this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
-      setTimeout(this.loadDadi(), 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
   }
 
@@ -104,7 +102,7 @@ export class Tab5Page implements OnInit {
     this.isResist2Open = true;
 
     this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
-      setTimeout(this.loadDadi(), 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
   }
 
@@ -130,7 +128,7 @@ export class Tab5Page implements OnInit {
 
 
   mandaArbitro() {
-    this.canDismiss = true;
+    this.setOpen(false);
 
     // console.log('Arbitro in Nero');
     // console.log('Messaggio da inviare: ', this.messaggioArbitro);
@@ -141,12 +139,16 @@ export class Tab5Page implements OnInit {
     this.authservice.msgtomaster(this.user.idutente, this.messaggioArbitro).subscribe(() => {
       // console.log('Messaggio inviato con successo');
       this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
-      this.modal.dismiss(); // Chiude il modal dopo l'invio
+      this.setOpen(false); // Chiude il modal dopo l'invio
     });
   }
 
   ionViewWillEnter() {
     this.tiridado = [];
     this.loadDadi();
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 }

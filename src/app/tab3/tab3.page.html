@@ -28,11 +28,13 @@
         @if (ogg.esito.length > 0) {
           <ion-card-content>
             <ion-item>
-              <ion-label>
+
                 @for (xx of ogg.esito ; track xx) {
-                  <p><ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </p>                         
+                  <span class="selectable">
+                  <p><ion-text color="primary"><strong>{{xx.motivo}}</strong></ion-text> {{xx.descrizione}} </p>
+                  </span>
                 }
-              </ion-label>
+
             </ion-item>
           </ion-card-content>
         }

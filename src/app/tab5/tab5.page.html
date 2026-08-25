@@ -10,11 +10,11 @@
 
 <ion-content>
 
-  <!--
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" class="master">
+  
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh()" >
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  -->
+  
 
   <ion-list>
 
@@ -46,19 +46,19 @@
 
     <ion-item>
       <ion-icon name="logo-appflow" size="small"></ion-icon>
-      <ion-button id="arbitri" fill="clear" color="dark" type="submit"  >Arbitro in Nero </ion-button>
+      <ion-button  fill="clear" color="dark" type="submit" (click)="setOpen(true)">Arbitro in Nero </ion-button>
     </ion-item>
 
   </ion-list>
 
 
-  <ion-modal #modal trigger="arbitri" [canDismiss]="canDismiss" [presentingElement]="presentingElement">
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="setOpen(false)">
       <ng-template>
         <ion-header>
           <ion-toolbar color="medium">
             <ion-title>Arbitro in Nero</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="modal.dismiss()">Chiudi</ion-button>
+              <ion-button (click)="setOpen(false)">Chiudi</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
