@@ -227,6 +227,8 @@
 	if ( $res9=mysqli_fetch_array($Result9) ) { // esiste un oggetto gemello
 
 		//inserisco il log di questo oggetto e cancello i log più vecchi di 2 ore
+		$MySql3 = "DELETE FROM `logscan` WHERE IDoggetto = $idx AND IDutente = $idutente ";
+	  	$Result3 = mysqli_query($db, $MySql3);
       	$MySql3 = "INSERT INTO logscan (IDoggetto, IDutente ) VALUES ($idx, $idutente ) ";
       	$Result3 = mysqli_query($db, $MySql3);
 		$MySql3 = "DELETE FROM `logscan` WHERE DATE_ADD(logscan.data, INTERVAL 120 MINUTE ) < NOW() ";
