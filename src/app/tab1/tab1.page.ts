@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { User , Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
+export interface datips {
+  PScorrenti: number;
+}
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -19,10 +23,10 @@ export class Tab1Page implements OnInit{
   ) {}
 
   ngOnInit() {
-    console.log ("user - " , this.user);
+    // console.log ("user - " , this.user);
   }
   ionViewWillEnter() {
-    console.log ("2 user - " , this.user);
+    // console.log ("2 user - " , this.user);
   } 
 
   
@@ -32,12 +36,12 @@ export class Tab1Page implements OnInit{
   
 
   
-  doRefresh(event: any) {    
+  doRefresh() {    
     setTimeout(() => {
-      this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: any) => {
+      this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: datips) => {
           this.user.PScorrenti = data.PScorrenti;
         });
-      event.target.complete();
+      // event.target.complete();
     }, 2000);
   }
   

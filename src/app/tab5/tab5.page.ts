@@ -26,6 +26,10 @@ export class Tab5Page implements OnInit {
 
   messaggioArbitro = '';
   isModalOpen = false;
+  isToastOpen = false;
+
+  messaggioToast = '';
+  
 
   constructor(
     public user: User,
@@ -46,9 +50,9 @@ export class Tab5Page implements OnInit {
     }, 2000);
   }
 
-  loadDadi():any {
-    this.feed.getDadi(this.user['idutente']).subscribe((res: any) => {
-      this.tiridado = res;
+  loadDadi() {
+    this.feed.getDadi(this.user['idutente']).subscribe((res: FeedItem[] | null) => {
+      this.tiridado = res ?? [];
     });
   }
 
@@ -77,6 +81,8 @@ export class Tab5Page implements OnInit {
   menops() {
     this.authservice.menops(this.user['idutente']).subscribe(() => {
       this.user.PScorrenti--;
+      this.checkToast();
+
       setTimeout(() => this.loadDadi(), 1000);
     });
   }
@@ -120,8 +126,7 @@ export class Tab5Page implements OnInit {
       // go NECRO
       this.router.navigate(['/tabs/necro']);
     } else {
-      // go GENERICo
-      // console.log("disc ", disc, "nomed ", nomed)
+      // go GENERICO
       this.router.navigate(['/tabs/poteri', disc, nomed]);
     }
   }
@@ -146,9 +151,27 @@ export class Tab5Page implements OnInit {
   ionViewWillEnter() {
     this.tiridado = [];
     this.loadDadi();
+    this.checkToast();
   }
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
+  setToastOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  checkToast() {
+    this.isToastOpen = false;
+    if (this.user.PScorrenti <= this.user.frenesia) {
+        //console.log('a rischio frenesia');
+        this.messaggioToast = 'Attenzione! Sei a rischio frenesia!!';
+        this.setToastOpen(true);
+    } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+        //console.log('in caccia obbligata');
+        this.messaggioToast = 'Attenzione! Devi andare a Caccia al più presto!!';
+        this.setToastOpen(true);
+    } 
+  }
+
 }
