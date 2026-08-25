@@ -1,24 +1,28 @@
-<ion-header>
-  <ion-toolbar color="medium">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Morte Ultima</ion-title>
-  </ion-toolbar>
+<ion-content >
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Morte Ultima</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
 
-</ion-header>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Attenzione</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Premere <ion-text color="danger">solo se il PG ha raggiunto la Morte Ultima</ion-text>. La scheda non verrà cancellata nè verranno modificati i dati.<br>
+        La Narrazione verrà però avvertita dell'evento, così come saranno avvisati tutti coloro con i quali il PG ha un legame di sangue (come Domitor).
+        Tali legami saranno automaticamente recisi.
 
+      </ion-card-content>
+    </ion-card>
 
-<ion-content padding class="master" color="dark">
-
-  <ion-row class="master" color="dark">
-    <ion-col>
-      <span style="font-size:1.2em; border-bottom: 5px; text-align: center;"><br><p>Premere solo se il PG ha raggiunto la</p> <p>Morte Ultima</p></span> 
-    </ion-col>
-  </ion-row>
   
   <form (ngSubmit)="morte()" #registerForm="ngForm" >
-  <ion-button class="submit-btn2" shape="round" size="full" color="danger" type="submit" >Morte Ultima<br>Conferma</ion-button>
+  <ion-button shape="round" size="full" color="danger" type="submit" >Conferma Morte Ultima</ion-button>
   </form>
 
 </ion-content>

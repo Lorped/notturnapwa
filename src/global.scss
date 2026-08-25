@@ -10,20 +10,31 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import '@ionic/angular/css/display.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+@import '@ionic/angular/css/display.css';
+
+/**
+ * Ionic Dark Palette
+ * -----------------------------------------------------
+ * For more information, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+ @import "@ionic/angular/css/palettes/dark.class.css"; 
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
 
 
 @import 'font-awesome/css/font-awesome.css'; 
@@ -32,22 +43,10 @@
 //@import 'font-awesome/css/font-awesome.css';
 
 
-.master {
-    background-color: #000000;
-    color: #FFFFFF;
-    font-size: 1em;
-}
-.mysmall {
-    color: #999999;
-    font-size: 0.8em;
-}
-.mymed {
-    color: #CCCCCC;
-    font-size: 0.9em;
-}
-.myred {
-    color: #ff0000;
-}
+
+
+
+
 .mymedicon {
     font-size: 0.9em;
     padding-right: 2px;
@@ -66,31 +65,22 @@
 .mywhite {
     color: #ffffff;
 }
-.alertCustomCss{
-    background-color: #333333;
-    color: blue;
-    button{
-        color: blue;
-    }
+
+
+// Ionic 8 non espone piu' $alert-md-head-text-align (variabile Sass di Ionic 3/4):
+// l'header dell'alert va allineato tramite le classi interne del componente.
+.myalert .alert-head,
+.myalert .alert-title,
+.myalert .alert-sub-title,
+.myalert .alert-message {
+    text-align: center;
 }
-.submit-btn {
-    background: #ff1010;
-    border-radius: 30px !important;
-    border: 1px solid #ffffff;
-    color: #FFFFFF;
-}
-.submit-btn2 {
-    background: #ff3030;
-    border-radius: 30px !important;
-    border: 1px solid #ffffff;
-}
-.submit-btn3 {
-    background: #3030ff;
-    border-radius: 30px !important;
-    border: 1px solid #ffffff;
-}
+
+
+
+
 .login-box {
-    background: #090909;
+    /*background: #090909;*/
     padding: 20px 20px 0px 20px;
     margin-top: 20px;
 }
@@ -114,8 +104,10 @@ hr {
     user-select: text;
 }
 
-.mysmaller{
-    font-size: 0.9em;
+
+
+.alc {
+    text-align: center;
 }
 
 

@@ -1,30 +1,27 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../globals';
-import { HttpClient } from '@angular/common/http';
+import { AuthserviceService } from '../services/authservice.service';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-morte',
-    templateUrl: './morte.page.html',
-    styleUrls: ['./morte.page.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+  selector: 'app-morte',
+  templateUrl: './morte.page.html',
+  styleUrls: ['./morte.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class MortePage implements OnInit {
+  constructor(
+    public user: User,
+    public authservice: AuthserviceService,
+    public router: Router
+  ) {}
 
-  constructor(public user: User, public http: HttpClient, public router: Router) { }
+  ngOnInit() {}
 
-  ngOnInit() {
-  }
   morte() {
-
-
-    var link = 'https://www.roma-by-night.it/ionicPHP/morte.php?id='+this.user['userid'];
-    this.http.get(link)
-    .subscribe( res => {
+    this.authservice.morteultima(this.user['idutente']).subscribe((res) => {
       this.router.navigate(['/login']);
-    }); 
-
-
+    });
   }
 }

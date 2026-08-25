@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 
-import { Tab3Page } from './tab3.page';
+import { Tab3Page } from './tab3.page.ts';
 
 describe('Tab3Page', () => {
   let component: Tab3Page;

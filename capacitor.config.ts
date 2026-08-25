@@ -1,9 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'notturnapwa',
-  webDir: 'www',
+  appId: 'notturna.gdr.larp',
+  appName: 'Notturnapwa',
+  webDir: 'www/browser',
   server: {
     androidScheme: 'https'
   }

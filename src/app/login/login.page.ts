@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { map }  from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { User } from '../globals';
+import { User , Userskill} from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
 import { LoadingController } from '@ionic/angular';
@@ -44,14 +43,22 @@ export class LoginPage implements OnInit {
   username = '' ;
 	userid = 0 ;
 
-  listaclan: Array<Clan>=[];
+  listaclan: Array<Clan> = [];
+
+  isDarkMode = false;
 
 	saveme= {
 		checked: false
 	};
   registerCredentials = { username: '' , password: '' };
 
-  constructor(private router: Router, private http: HttpClient, private authentication: AuthserviceService , private user: User, private loadingCtrl: LoadingController) { 
+  constructor(
+    private router: Router, 
+    private http: HttpClient, 
+    private authentication: AuthserviceService , 
+    private user: User,
+    public userskill: Userskill, 
+    private loadingCtrl: LoadingController) { 
 
       this.registerCredentials.username = window.localStorage.getItem( "notturnauserid" ) ! ;
       this.registerCredentials.password = window.localStorage.getItem( "notturnapasswd" ) ! ;
@@ -60,7 +67,17 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    if (window.localStorage.getItem('notturnadarkmode') == 'true') {
+      document.documentElement.classList.add('ion-palette-dark');
+    }
+
+    this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || prefersDark.matches;
+    prefersDark.addEventListener('change', (mediaQuery) => {
+      this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || mediaQuery.matches;
+    });
+
   }
 
   public login() {
@@ -81,189 +98,134 @@ export class LoginPage implements OnInit {
           window.localStorage.removeItem( "notturnapasswd" );
         }
 
-        this.user.username = this.registerCredentials.username;
-        this.user.userid = data['idutente'];
-        this.user.fulldata = data;
-
-        // fix
-        this.user.fulldata['sete'] = Number( this.user.fulldata['sete'] );
-        this.user.fulldata['addsete'] = Number( this.user.fulldata['addsete'] );
-        this.user.fulldata['PScorrenti'] = Number( this.user.fulldata['PScorrenti'] ) ;
-
-        this.user.fulldata['forza'] = Number( this.user.fulldata['forza'] );
-        this.user.fulldata['destrezza'] = Number( this.user.fulldata['destrezza'] );
-        this.user.fulldata['attutimento'] = Number( this.user.fulldata['attutimento'] );
-        this.user.fulldata['carisma'] = Number( this.user.fulldata['carisma'] );
-        this.user.fulldata['persuasione'] = Number( this.user.fulldata['persuasione'] );
-        this.user.fulldata['saggezza'] = Number( this.user.fulldata['saggezza'] );
-        this.user.fulldata['prontezza'] = Number( this.user.fulldata['prontezza'] );
-        this.user.fulldata['intelligenza'] = Number( this.user.fulldata['intelligenza'] );
-        this.user.fulldata['percezione'] = Number( this.user.fulldata['percezione'] );
-
-        this.user.fulldata['fdv'] = Number( this.user.fulldata['fdv'] );
-        this.user.fulldata['fama1'] = Number( this.user.fulldata['fama1'] );
-        this.user.fulldata['fama2'] = Number( this.user.fulldata['fama2'] );
-        this.user.fulldata['fama3'] = Number( this.user.fulldata['fama3'] );
-
-        this.user.fulldata['xp'] = Number( this.user.fulldata['xp'] );
-
-        // this.user.fulldata['note']=this.nl2br(this.user.fulldata['note']);
-        // this.user.fulldata['notemaster']=this.nl2br(this.user.fulldata['notemaster']);
-        //
-
-        this.user.fulldata['psvuoti'] = this.user.fulldata['sete']+this.user.fulldata['addsete']-this.user.fulldata['PScorrenti'];
-
-        this.user.fulldata['setetot'] = this.user.fulldata['sete']+this.user.fulldata['addsete'];
-
-        this.authentication.skill(this.user.userid)
-        .subscribe(
-          data => {
-            this.user.skill = data;
+        //this.user = data;
+        Object.assign(this.user, data);
 
 
-            this.authentication.poteri(this.user.userid)
-            .subscribe(
-              data => {
-                this.user.poteri = data;
+               // fix
 
-                this.authentication.taum(this.user.userid)
-                .subscribe(
-                  data => {
-                    this.user.taum=data[0].taum;
-                    this.user.necro=data[0].necro;
+        this.user['PScorrenti'] = Number(this.user['PScorrenti']);
+        this.user['forza'] = Number(this.user['forza']);
+        this.user['destrezza'] = Number(this.user['destrezza']);
+        this.user['attutimento'] = Number(this.user['attutimento']);
+        this.user['carisma'] = Number(this.user['carisma']);
+        this.user['persuasione'] = Number(this.user['persuasione']);
+        this.user['saggezza'] = Number(this.user['saggezza']);
+        this.user['prontezza'] = Number(this.user['prontezza']);
+        this.user['intelligenza'] = Number(this.user['intelligenza']);
+        this.user['percezione'] = Number(this.user['percezione']);
 
-                    // SETUP ALTRI VALORI
+        this.user['fdv'] = Number(this.user['fdv']);
+        this.user['fdvmax'] = Number(this.user['fdvmax']);
+        this.user['fama1'] = Number(this.user['fama1']);
+        this.user['fama2'] = Number(this.user['fama2']);
+        this.user['fama3'] = Number(this.user['fama3']);
 
-                    this.user.fulldata['rd'] = Math.floor(
-                      (this.user.fulldata['carisma'] + this.user.fulldata['intelligenza'] + this.user.fulldata['prontezza'] + this.user.fulldata['percezione'] + this.user.fulldata['fdv'] )/5
-                    );
-                    this.user.fulldata.pf = ( 3 + this.user.fulldata['attutimento'])*2;
-                
-                    this.user.fulldata.rp = Math.floor ( this.user.fulldata['attutimento'] / 2 ) ;
-                
-                    for (let i = 0 ; i < this.user.skill.length ; i++) {
-                      this.user.skill[i].livello = Number (this.user.skill[i].livello);
-                
-                      if ( this.user.skill[i].nomeskill == 'Schivare' ) {
-                        this.user.fulldata.pf +=  this.user.skill[i].livello;
-                      }
-                      if ( this.user.skill[i].nomeskill == 'Robustezza' ) {
-                        this.user.fulldata.pf +=  this.user.skill[i].livello;
-                
-                        this.user.fulldata.rp = Math.floor ( ( this.user.fulldata['attutimento'] + this.user.skill[i].livello ) / 2 ) ;
-                
-                        // vedo se ha poteri attivi
-                        for (let j = 0 ; j< this.user.poteri.length ; j++) {
-                          if (this.user.poteri[j].iddisciplina == 12) {
-                            for (let k = 0 ; k< this.user.poteri[j].poteri.length ; k++) {
-                              // console.log(this.myuser.poteri[j].poteri[k]);
-                              if (this.user.poteri[j].poteri[k].nomepotere=='Resilienza') this.user.fulldata.pf += 5 + this.user.skill[i].livello;
-                              if (this.user.poteri[j].poteri[k].nomepotere=='Sconfiggere le Debolezze') this.user.fulldata.pf += 5 ; //perchè +5 da liv.1
-                            }
-                          }
-                        }
-                      }
-                      if ( this.user.skill[i].nomeskill == 'Ferita Permanente' ) {
-                        this.user.fulldata.pf -=  3;
-                      }
-                      if ( this.user.skill[i].nomeskill == 'Nove Vite' ) {
-                        this.user.fulldata.pf +=  10;
-                      }
-                    }
+        this.user['xp'] = Number(this.user['xp']);
+        this.user['contanti'] = Number(this.user['contanti']);
+            
+        this.user['PScorrenti'] = Number(this.user['PScorrenti']);
+        this.user['maxps'] = Number(this.user['maxps']);
 
-                    var cura = this.user.fulldata.rigen;
-                    for (let i = 0 ; i< this.user.skill.length ; i++) {
-                      if ( this.user.skill[i].nomeskill == 'Ferita Aperta #2' ) {
-                        cura -=  1;
-                      }
-                      if ( this.user.skill[i].nomeskill == 'Ferita Aperta #3' ) {
-                        cura -=  2;
-                      }
-                      if ( this.user.skill[i].nomeskill == 'Ferita Aperta #4' ) {
-                        cura -=  3;
-                      }
-                    }
-                    for (let i = 0 ; i< this.user.skill.length ; i++) {
-                      if ( this.user.skill[i].nomeskill == 'Guarigione Lenta' ) {
-                        cura =  Math.ceil(cura/2);
-                      }
-                    }
-                    this.user.fulldata.rigen = cura;
+        this.user['bonusrigen'] = Number(this.user['bonusrigen']);
+        this.user['rigen'] = Number(this.user['rigen']);
 
-                    this.authentication.listamalgame(this.user.userid).subscribe(
-                      (data: any) => {
-                        this.user.amalgame = data.amalgame;
-                        //console.log(this.user.amalgame);
-                        this.user.amalgame.forEach(element => {
-                          element.fdv = Number (element.fdv);
-                          element.ps = Number (element.ps);
-                        });
-                        //console.log(this.user.amalgame);
+        if (this.user.idlds == 21 ) {
+          this.user.bonusdisc = Number (this.user.bonusdisc) + 1;
+        }
 
-                      }
-                    );
+      this.authentication.skill(this.user.idutente).subscribe(
+          (data) => {
+            this.userskill.skill = data.skill;
+            this.userskill.otherskill = data.otherskill;
+            this.userskill.discipline = data.discipline;
+            this.userskill.background = data.background;
+            this.userskill.alleati = data.alleati;
+            this.userskill.contatti = data.contatti;
 
-                    // console.log ('user finale: ', this.user);
+            this.user.pf = (3 + this.user['attutimento']) * 2;
+
+            this.user.rp = Math.floor(this.user['attutimento'] / 2 );
 
 
-                    // all done
-                    this.loadingCtrl.dismiss();
-
-                    this.pushsetup();
-
-                    //this.router.navigate(['tabs']);
-
-                  },
-                  error => {
-                    this.loadingCtrl.dismiss();
-                    alert ('Error loading data4');
-                  }
-                );
-
-              },
-              error => {
-                this.loadingCtrl.dismiss();
-                alert ('Error loading data3');
+            for (let i = 0; i < this.userskill.skill.length; i++) {
+              this.userskill.skill[i].livello = Number(this.userskill.skill[i].livello);
+            }
+            for (let i = 0; i < this.userskill.otherskill.length; i++) {
+              this.userskill.otherskill[i].livello = Number(this.userskill.otherskill[i].livello);  
+              if (this.userskill.otherskill[i].idskill == 47) {  //schivare
+                this.user.pf += this.userskill.otherskill[i].livello;
               }
-            )
+            }
 
-          },
-          error => {
+            const rob = this.userskill.discipline.find ( xx => xx.iddisciplina == 12 ); //robustezza
+
+            if ( rob ) {
+              this.user.pf += rob.livello;
+              this.user.rp = Math.floor( (this.user['attutimento'] + rob.livello) / 2 );
+
+              for ( let j= 0 ; j < rob.poteri.length ; j++) {
+                if (rob.poteri[j].idpotere == 70 ) { this.user.pf += (5+rob.livello);}
+                if (rob.poteri[j].idpotere == 74 ) { this.user.pf += 5;}
+              }
+            }                
+
+            this.user['rd'] = Math.floor(
+              (this.user['carisma'] +
+                this.user['intelligenza'] +
+                this.user['prontezza'] +
+                this.user['percezione'] +
+                this.user['fdv']) /
+                5
+            );
+
+            this.authentication.taum(this.user.idutente).subscribe(
+              (data) => {
+                this.userskill.taum = data[0].taum;
+                this.userskill.necro = data[0].necro;
+                this.userskill.rituali = data[0].rituali;
+            });
+
+
+            // all done
             this.loadingCtrl.dismiss();
-            alert ('Error loading data2');
+
+
+            this.pushsetup();
+
+             //console.log ("user ", this.user);
+            //console.log ("userskill ", this.userskill);
+
+            //this.router.navigate(['tabs']);
+
+        },
+          (error) => {
+            this.loadingCtrl.dismiss();
+            alert('Error loading data4');  //SKILL
+            console.log('error', error);
           }
         );
-
-        // console.log ('user: ', this.user);
-      },
-      error => {
-        this.loadingCtrl.dismiss();
-        switch ( error['status'] ) {
-          case 401:
-            alert("Non autorizzato");
-          break;
-          case 404:
-            alert("Scheda non trovata");
-          break;
-          default:
-            alert("Server error");
+    },
+        (error) => {
+          this.loadingCtrl.dismiss();
+          //console.log(error);
+          switch (error['status']) {
+            case 401:
+              alert('Non autorizzato');
+              break;
+            case 404:
+              alert('Scheda non trovata');
+              break;
+            default:
+              alert('Server error');
+          }
+          // console.log('error');
         }
-        // console.log('error');
-      }
-    );
-
+      );
   }
 
-  nl2br (str: string) {
-		// Some latest browsers when str is null return and unexpected null value
-		if (typeof str === 'undefined' || str === null) {
-    		return '';
-		}
-		// Adjust comment to avoid issue on locutus.io display
-  		var breakTag =  '<br>'   ;
-  		return (str + '')
-    		.replace(/(\r\n|\n\r|\r|\n)/g, breakTag + '$1')
-	}
+
+
 
 
   pushsetup() {
@@ -290,19 +252,21 @@ export class LoginPage implements OnInit {
     FirebaseMessaging.requestPermissions().then( result => {
       if (result.receive === 'granted') { 
 
-        console.log("granted");
+        // console.log("granted");
 
         this.getToken().then( (token: any) => {
 
-          console.log(token);
+          // console.log(token);
 
-          let updateurl = 'https://www.roma-by-night.it/ionicPHP/updateid.php?userid='+ this.user.userid+'&id='+token;
+          let updateurl = 'https://www.roma-by-night.it/ionicPHP/updateid.php?userid='+ this.user.idutente+'&id='+token;
           this.http.get(updateurl)
           .subscribe(res =>  {
               // updated
               //alert('Device registered '+token);
           });
 
+        }, error => {
+          console.log("error getting token: ", error);
         });
 
       } else {
@@ -311,90 +275,7 @@ export class LoginPage implements OnInit {
     });
 
 
-    /** 
     
-    PushNotifications.requestPermissions().then(result => {
-      if (result.receive === 'granted') {  // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {  // Show some error
-      }
-    });
-
-     
-
-    PushNotifications.createChannel(
-      {
-        name: 'Notturna Channel',
-        id: 'PushPluginChannel',
-        description: 'Notturna Channel',
-        importance: 5,
-        sound: 'notturna_sound'
-      }
-    );
-
-    const config: CapacitorConfig = {
-      plugins: {
-        PushNotifications: {
-          presentationOptions: ["badge", "sound", "alert"],
-        },
-      },
-    };
-    
-
-    PushNotifications.addListener('registration', (token: Token) => {
-      //alert('Push registration success, token: ' + token.value);
-
-      let updateurl = 'https://www.roma-by-night.it/ionicPHP/updateid.php?userid='+ this.user.userid+'&id='+token.value;
-			this.http.get(updateurl)
-			.subscribe(res =>  {
-					// updated
-					//alert('Device registered '+token.value);
-			});
-
-    });
-
-    PushNotifications.addListener('registrationError', (error: any) => {
-      alert('Error on registration: ' + JSON.stringify(error));
-    });
-
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotificationSchema) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-      },
-    );
-
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (notification: ActionPerformed) => {
-        //alert('Push action performed: ' + JSON.stringify(notification));
-      },
-    );
-
-    */
-
-    /*
-    FCM.subscribeTo({ topic: 'user' })
-    .then(r => console.log(`subscribed to topic: user `))
-    .catch(err => console.log(err));
-
-    this.http.get('https://www.roma-by-night.it/Notturna2/wsPHP/getregistra.php' ).subscribe( (data:any) => {
-      this.listaclan = data.clan;
-
-      this.listaclan.forEach(element => {
-        if ( element.idclan != Number(this.user.fulldata.idclan)){
-          FCM.unsubscribeFrom({ topic: element.nomeclan });
-          //console.log(`unsubscribed from topic: `, element.nomeclan);
-        }
-      });
-    });
-
-    var atopic2 =  this.user.fulldata.nomeclan;
-    FCM.subscribeTo({ topic: atopic2 })
-    .then(r => console.log(`subscribed to topic: `, atopic2))
-    .catch(err => console.log(err));
-
-    */
 
     this.router.navigate(['tabs']);
 
@@ -404,7 +285,7 @@ export class LoginPage implements OnInit {
 
   public async getToken(): Promise<any> {
 
-    console.log(environment.firebase);
+    // console.log(environment.firebase);
     const options: GetTokenOptions = {
       vapidKey: environment.firebase.vapidKey,
     };
@@ -413,7 +294,7 @@ export class LoginPage implements OnInit {
         await navigator.serviceWorker.register("firebase-messaging-sw.js");
     }
     const { token } = await FirebaseMessaging.getToken(options);
-    console.log ("token ", token);
+    // console.log ("token ", token);
     return token;
   }
 

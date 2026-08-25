@@ -1,132 +1,162 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User, apoteri2 } from '../globals';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { User, Potere, Userskill, Utente } from '../globals';
+import { ActivatedRoute } from '@angular/router';
+import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
 
+export interface EsitoPotere {
+  tiro: number;
+}
+
+
 @Component({
-    selector: 'app-poteri',
-    templateUrl: './poteri.page.html',
-    styleUrls: ['./poteri.page.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+  selector: 'app-poteri',
+  templateUrl: './poteri.page.html',
+  styleUrls: ['./poteri.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class PoteriPage implements OnInit {
-
-  disc = 0 ;
+  disc = 0;
   nomed = '';
-  CacciaAnimalita = 0;
+  CacciaAnimalita = 1;
 
-  mypoteri: Array<apoteri2> = [];
+  mypoteri: Array<Potere> = [];
 
-  constructor(public router: Router, public user: User, public activatedroute: ActivatedRoute, public http: HttpClient, public alertCtrl: AlertController) { }
+  esito: EsitoPotere = { 
+    tiro: 0
+  };
 
-  ngOnInit() {
+  canDismiss = false;   // per il modal
+  presentingElement: HTMLElement | null = null;   // per il modal
+  messaggioTelepatico = '';
+  isModalOpen = false;
 
-    let tt = new Date ( this.user.fulldata['lastcaccia'] );
-    let tn = new Date ( );
+  listautenti: Array<Utente> = [];
+  pgscelto = 0;
 
-    let diff = tn.getTime() - tt.getTime();
 
-    if ( diff / (60*1000) > 60 ) {
-      this.CacciaAnimalita = 1 ;
-    }
+  constructor(
+    public user: User,
+    public userskill: Userskill,
+    public activatedroute: ActivatedRoute,
+    public authservice: AuthserviceService,
+    public alertCtrl: AlertController
+  ) {}
 
-    
+  ngOnInit() { 
+    this.authservice.listautenti(this.user.idutente).subscribe((res: Array<Utente>) => {
+      this.listautenti = res;
+    });
   }
 
-	ionViewWillEnter(){
-
-    // console.log ("poteripage..");
-
-    this.activatedroute.paramMap.subscribe(paramMap => { 
-      this.disc = Number ( paramMap.get('disc') ) ; 
-      this.nomed =   paramMap.get('nomed') ! ; 
+  ionViewWillEnter() {
+    
+    this.activatedroute.paramMap.subscribe((paramMap) => {
+      this.disc = Number(paramMap.get('disc'));
+      this.nomed = paramMap.get('nomed')!;
       // console.log(paramMap);
     });
 
-
-    for (let i=0 ; i< this.user.poteri.length ; i++) {
-      if (this.user.poteri[i].iddisciplina == this.disc) {
-        this.mypoteri = this.user.poteri[i].poteri;
+    for (let i = 0; i < this.userskill.discipline.length; i++) {
+      if (this.userskill.discipline[i].iddisciplina == this.disc) {
+        this.mypoteri = this.userskill.discipline[i].poteri;
         // console.log(this.mypoteri);
       }
     }
-
   }
 
-
-
-  gopotere(pot: string,livellopot: number) {
+  gopotere(pot: string, livellopot: number, idpotere: number) {
     // console.log(pot);
-    if (pot == "Telepatia") {
-      this.router.navigate(['/tabs/telepatia']);
-    } else if (pot =="Richiamo" && livellopot==3)  {  //non è il richiamo di Ascendente 4
-      this.cacciaanim();
-    } else if ( pot =="Bacio Selvaggio") {
-      var id = 1;
-      this.router.navigate(['/tabs/caccia',id]);
+
+    if (pot == 'Telepatia') {
+      this.pgscelto = 0;
+      this.messaggioTelepatico = '';
+      this.isModalOpen = true;
     } else {
 
-      var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
-      var mypost = JSON.stringify({idutente: this.user.userid , potere: pot, livello: livellopot, aDisciplina: this.disc});
-      this.http.post<any>(url, mypost)
-      .subscribe(res =>  {
-        //console.log(res);
-        let ps=res.ps;
-        //console.log(ps);
-        //this.navParams.get("parentPage").loadDadi();
-        this.user.fulldata['psvuoti'] = this.user.fulldata['psvuoti']+ps;
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti']-ps;
+      this.authservice.usopotere(this.user['idutente'], pot, idpotere,  livellopot, this.nomed).subscribe((res) => {
 
-        this.showalert(pot);
+        this.esito.tiro = res.tiro;
 
-        if ( this.disc == 2 && livellopot == 5) {  //MAESTA
-          this.user.fulldata.nummaesta = this.user.fulldata.nummaesta - 1 ;
+        // console.log('esito potere: ' + this.esito.tiro);
+
+        
+        if (livellopot == 5 ) {
+          this.user.PScorrenti = this.user.PScorrenti - 2;
+        } else {
+          this.user.PScorrenti = this.user.PScorrenti - 1;
+        }
+        if (idpotere== 15) {
+          this.user.nummaesta = this.user.nummaesta - 1;
         }
 
-        if (this.user.fulldata['PScorrenti']==0) {
-          // VAI VIA
-          this.router.navigate(['/tabs/tab5']);
+        if (this.nomed == 'Ascendente' || this.nomed == 'Dominazione' || this.nomed == 'Demenza' || this.nomed == 'Serpentis'  ) {
+          this.showalert(pot, livellopot,"T");
+        } else {
+          this.showalert(pot, livellopot, "NT");
         }
+
+        if (this.user.PScorrenti <= this.user.frenesia) {
+          console.log('a rischio frenesia');
+        } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+          console.log('in caccia obbligata');
+        } 
+
       });
     }
   }
 
-  async showalert(pot: string){
-    let alert =  await this.alertCtrl.create({
-      header: 'Uso '+this.nomed,
-      subHeader: pot,
-      buttons: ['OK']
+  async showalert(pot: string, livellopot: number, tipo: string) {
+
+    let messaggio = '';
+    if (tipo == "T") {
+      messaggio = '[Tiro contrapposto: ' + this.esito.tiro + ']';
+    } else {
+      messaggio = '';
+    }
+
+    const alert = await this.alertCtrl.create({
+      header: pot,
+      subHeader: this.nomed + ' (Livello ' + livellopot + ')',
+      message: messaggio,
+      buttons: ['OK'],
+      cssClass: 'myalert',
     });
     alert.present();
   }
 
   cacciaanim() {
+    this.authservice.cacciaanim(this.user['idutente']).subscribe(() => {
+      this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
+      this.showalert('Richiamo', 3, "NT");
+      this.CacciaAnimalita = 0;
 
-    this.CacciaAnimalita = 1;
-    var link = 'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' + this.user['userid']+  '&recuperati=3&anim=1' ;
+      setTimeout(() => {
+        this.CacciaAnimalita = 1;
+      }, 3600000); // 60 minuti in millisecondi 
+      
 
-    this.http.get<any>(link)
-    .subscribe( res => {
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] + 3;
-      if ( this.user.fulldata['PScorrenti'] > this.user.fulldata['setetot'] ) {
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['setetot'] ;
-      }
-      this.user.fulldata['psvuoti'] = this.user.fulldata['setetot'] - this.user.fulldata['PScorrenti'];
-
-      this.user.fulldata['lastcaccia'] = res.last;
-
-      this.showalert('Richiamo');
-      //console.log(this.myuser);
-      this.router.navigate(['/tabs/tab5']);
     });
+  }
 
+    
+  mandaMessaggio() {
+    this.isModalOpen = false;
+    // console.log('mandaMessaggio: ' + this.messaggioTelepatico);
+    // console.log('pgscelto: ' + this.pgscelto);
+    this.authservice.inviamessaggiotente(this.user['idutente'], this.pgscelto, this.messaggioTelepatico).subscribe(() => {
+      this.user['PScorrenti']--;
+      this.showalert('Telepatia', 1, "NT");
+      this.pgscelto = 0;
+      this.messaggioTelepatico = '';
+    });
 
   }
 
 
-
-
-
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+  
 }

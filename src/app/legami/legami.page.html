@@ -1,51 +1,65 @@
-<ion-header>
+<ion-content>
 
-  <ion-toolbar color="medium">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab5"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Legami di Sangue</ion-title>
-  </ion-toolbar>
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Legami di Sangue</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
 
-</ion-header>
 
-<ion-content color="dark" padding class="master">
+ <ion-item>
+    <ion-label>
+      <p>Accettando la vitae di un altro PG per instaurare un legame di sangue, quest'ultimo perderà 1 PS e un Punto di Forza di Volontà.</p>
+      <p>Se esistono le condizioni In Game, il legame di sangue verrà inserito o - se già presente - rafforzato.</p>
+      <p>Non è possibile rafforzare un legame due volte nella stessa notte.</p>
+    </ion-label>
+  </ion-item>
 
-  <form (ngSubmit)="invia()" #modificaForm="ngForm">
 
-    <ion-list color="dark" class="master">
-      <ion-item color="dark"  style="background-color: #444444">
-        <ion-icon name="contact" item-start color="danger" ></ion-icon>
-        <ion-select label="PG" [(ngModel)]="pgscelto" name="pgscelto" style="max-width:85%;color:#ffffff;" required>
+
+
+    <ion-list >
+      <ion-item >
+        
+        <ion-select  placeholder="Seleziona PG" label ="Possibile Domitor" labelPlacement="stacked"  [(ngModel)]="pgscelto" name="pgscelto" required>
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <!--<div slot="label">Possibile Domitor </div>-->
           @for (pg of listautenti; track pg) {
-            <ion-select-option value="{{pg.id}}" >{{pg.nomepg}}</ion-select-option>
+            <ion-select-option value="{{pg.idutente}}" >{{pg.nomepg}}</ion-select-option>
           }
         </ion-select>
       </ion-item>
-      <ion-item  color="dark">
-        <!-- <ion-button color="danger" class="submit-btn" shape="round" size="full" type="submit" [disabled]="!modificaForm.form.valid" >Accetta</ion-button> -->
-        <ion-button color="danger" class="submit-btn" shape="round" size="full" type="submit" [disabled]="pgscelto==0" >Accetta</ion-button>
-      </ion-item>
-    </ion-list>
-  </form>
 
-  @if (listalegami ) {
-    <ion-grid no-padding>
-      <ion-row style="align-items: center;">
-        <ion-col size="1" ><hr/></ion-col>
+    </ion-list>
+
+  <ion-row>
+    <ion-col>
+      <ion-button shape="round" expand="full" type="submit" color="danger" [disabled]="pgscelto===0" (click)="invia()">Accetta</ion-button>
+    </ion-col>
+  </ion-row>
+
+  @if (listalegami.length>0) {
+
+      <ion-row >
+        <ion-col size="3" ><hr/></ion-col>
         <ion-col size="6" style="text-align: center;">Legami esistenti</ion-col>
-        <ion-col ><hr/></ion-col>
+        <ion-col size="3" ><hr/></ion-col>
       </ion-row>
-    </ion-grid>
+
   }
 
 
 
-  <ion-list class="master"  color="black">
+  <ion-list >
     @for (item of listalegami; track item) {
-      <ion-item style="background-color:#000000" class="master"  color="black" >
-        <h2 style="color:#ff0000;">{{item.nomepg}} - Livello {{item.livello}}</h2>
-        <p class="mymed">{{item.dataultima}}</p>
+      <ion-item >
+        <ion-label>
+          <h3 >{{item.nomepg}} - Livello {{item.livello}}</h3>
+          <p >{{item.dataultima}}</p>
+        </ion-label>
       </ion-item>
     }
   </ion-list>

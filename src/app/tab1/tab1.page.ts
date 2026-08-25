@@ -1,8 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { RefresherCustomEvent } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { User } from '../globals';
+import { User , Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
+
+export interface datips {
+  PScorrenti: number;
+}
 
 @Component({
     selector: 'app-tab1',
@@ -12,32 +16,32 @@ import { AuthserviceService } from '../services/authservice.service';
     standalone: false
 })
 export class Tab1Page {
+  constructor( 
+    public user: User , 
+    public userskill: Userskill,
+    private authentication: AuthserviceService,
+    private router: Router
+  ) {  }
 
-  constructor( public user: User , private router: Router, private authentication: AuthserviceService) {
+  ngOnInit() {
+    // console.log ("user - " , this.user);
+  }
+  ionViewWillEnter() {
+    // console.log ("2 user - " , this.user);
+  } 
+
+  
+  public logoutx() {
+    this.router.navigate(['login']);
   }
 
-
-
-  public logoutx() {
-		this.router.navigate(['login']);
-	}
-
-  doRefresh(event: any) {
+  doRefresh(event: RefresherCustomEvent) {    
     setTimeout(() => {
-      
-      this.authentication.loadpscorrenti(this.user.userid)
-      .subscribe(
-        (data:any) => {
-          this.user.fulldata.PScorrenti=data.PScorrenti
-          this.user.fulldata.psvuoti=data.psvuoti
-        }
-      )
-
+      this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: datips) => {
+          this.user.PScorrenti = data.PScorrenti;
+        });
       event.target.complete();
     }, 2000);
   }
-
-
-
 
 }

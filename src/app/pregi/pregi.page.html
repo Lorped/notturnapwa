@@ -1,0 +1,54 @@
+<ion-content>
+
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Pregi e difetti</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Pregio di sangue</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{this.user.pregiolds}}
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Difetto di sangue</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{this.user.difettolds}}
+      </ion-card-content>
+    </ion-card>
+
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Altri pregi e difetti</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list>
+            @for (pr of this.listapregi; track pr) {
+              <ion-item>
+                <ion-label>{{ pr.nomepregio}}</ion-label>
+                @if (pr.valore>0) {
+                  <ion-note slot="start" color="primary">{{ pr.classe}}.+{{pr.valore}}</ion-note>
+                }
+                @if (pr.valore<0) {
+                  <ion-note slot="start" color="danger">{{ pr.classe}}.{{pr.valore}}</ion-note>
+                }
+              </ion-item>
+            }
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+  
+
+  </ion-content>

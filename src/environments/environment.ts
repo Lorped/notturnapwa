@@ -10,7 +10,7 @@ export const environment = {
     authDomain: "notturna-93b8f.firebaseapp.com",
     databaseURL: "https://notturna-93b8f.firebaseio.com",
     projectId: "notturna-93b8f",
-    storageBucket: "notturna-93b8f.appspot.com",
+    storageBucket: "notturna-93b8f.firebasestorage.app",
     messagingSenderId: "842960782494",
     appId: "1:842960782494:web:64996246aae6549fe3278f",
     measurementId: "G-5S8EV6YK2E",

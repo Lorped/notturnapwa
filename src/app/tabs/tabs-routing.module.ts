@@ -21,20 +21,20 @@ const routes: Routes = [
         loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
       },
       {
-        path: 'tab4',
-        loadChildren: () => import('../tab4/tab4.module').then( m => m.Tab4PageModule)
-      },
-      {
         path: 'tab5',
         loadChildren: () => import('../tab5/tab5.module').then( m => m.Tab5PageModule)
       },
       {
-        path: 'oggetto',
-        loadChildren: () => import('../oggetto/oggetto.module').then( m => m.OggettoPageModule)
-      },
-      {
         path: 'modificanote',
         loadChildren: () => import('../modificanote/modificanote.module').then( m => m.ModificanotePageModule)
+      },
+      {
+        path: 'background',
+        loadChildren: () => import('../background/background.module').then( m => m.BackgroundPageModule)
+      },
+      {
+        path: 'rubrica',
+        loadChildren: () => import('../rubrica/rubrica.module').then( m => m.RubricaPageModule)
       },
       {
         path: 'addcontatto',
@@ -45,7 +45,11 @@ const routes: Routes = [
         loadChildren: () => import('../changecontatto/changecontatto.module').then( m => m.ChangecontattoPageModule)
       },
       {
-        path: 'caccia/:id',
+        path: 'pregi',
+        loadChildren: () => import('../pregi/pregi.module').then( m => m.PregiPageModule)
+      },
+      {
+        path: 'caccia',
         loadChildren: () => import('../caccia/caccia.module').then( m => m.CacciaPageModule)
       },
       {
@@ -69,19 +73,9 @@ const routes: Routes = [
         loadChildren: () => import('../morte/morte.module').then( m => m.MortePageModule)
       },
       {
-        path: 'addpx',
-        loadChildren: () => import('../addpx/addpx.module').then( m => m.AddpxPageModule)
-      },
-      {
-        path: 'telepatia',
-        loadChildren: () => import('../telepatia/telepatia.module').then( m => m.TelepatiaPageModule)
-      },
-      {
-        path: 'amalgame',
-        loadChildren: () => import('../amalgame/amalgame.module').then( m => m.AmalgamePageModule)
-      },
-    
-        
+        path: 'focusattr',
+        loadChildren: () => import('../focusattr/focusattr.module').then( m => m.FocusattrPageModule)
+      },       
       {
         path: '',
         redirectTo: '/tabs/tab1',

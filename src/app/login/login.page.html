@@ -1,18 +1,16 @@
 <ion-header>
-
   <ion-toolbar color="medium">
-    <ion-title>Notturna - Login</ion-title>
+    <ion-title>Notturna - Young Blood - Login</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
 
-<ion-content color="dark" padding>
+<ion-content padding>
 
 
-  <ion-row class="logo-row">
-    <ion-col>
-      <img src="assets/img/logo3.jpg"/>
+  <ion-row >
+    <ion-col class="alc">
+      <img [src]="isDarkMode ? 'assets/img/logo-young-blood-dark.png' : 'assets/img/logo-young-blood.png'"/>
     </ion-col>
   </ion-row>
 
@@ -27,7 +25,9 @@
             </ion-item>
 
             <ion-item>
-              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
+              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="registerCredentials.password" required>
+                <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+              </ion-input>
             </ion-item>
 
           </ion-list>
@@ -43,15 +43,15 @@
       </ion-row>
         <ion-row>
         <ion-col size="1">
-          <ion-checkbox name="saveme" checked="false" [(ngModel)]="saveme.checked" style="vertical-align:middle;" color="dark"></ion-checkbox>
+          <ion-checkbox name="saveme" checked="false" [(ngModel)]="saveme.checked" style="vertical-align:middle;" ></ion-checkbox>
         </ion-col>
-				<ion-col><div style="color:#b0b0b0" >Ricordami</div></ion-col>
+				<ion-col><div><ion-text color="medium">Ricordami</ion-text></div></ion-col>
       </ion-row>
       <ion-row>
         <ion-col>&nbsp;</ion-col>
       </ion-row>
       <ion-row>
-        <ion-col><div style="color:#b0b0b0; font-size:0.75em;" >v 2.0.04 (PWA)</div></ion-col>
+        <ion-col><div style=" font-size:0.75em;"><ion-text color="medium">v 3.0.04 -PWA (Aurelius) </ion-text></div></ion-col>
       </ion-row>
     </form>
   </div>

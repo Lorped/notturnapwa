@@ -1,0 +1,102 @@
+<ion-content>
+
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Background</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
+
+
+  <ion-row style="align-items: center;">
+    <ion-col ><hr/></ion-col>
+    <ion-col size="6" style="text-align: center; font-size: 1em;">Background</ion-col>
+    <ion-col ><hr/></ion-col>
+  </ion-row>
+
+  @for (dd of this.userskill.background; track dd) {
+
+    <ion-row>
+      <ion-col size="7">{{ dd.nomeback}}</ion-col>
+      <ion-col>
+          @for (item of 5|times ; track item; let ix = $index) {
+            <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < dd.livello}"></i>
+          }
+      </ion-col>
+    </ion-row>
+
+    @if ((dd.idback == 77 || dd.idback == 88) && dd.livello > 5) {
+      <ion-row>
+        <ion-col size="7">&nbsp;</ion-col>
+        <ion-col>
+          @for (item of 5|times ; track item; let ix = $index) {
+            <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix+5 < dd.livello}"></i>
+          } 
+        </ion-col>
+      </ion-row>
+    }
+  }
+
+      <ion-row>
+      <ion-col size="7">Contanti</ion-col>
+      <ion-col>
+          {{this.user.contanti}}
+      </ion-col>
+    </ion-row>
+
+  @if (this.userskill.contatti.length) {
+
+    <ion-row style="align-items: center;">
+      <ion-col ><hr/></ion-col>
+      <ion-col size="6" style="text-align: center; font-size: 1em;">Contatti</ion-col>
+      <ion-col ><hr/></ion-col>
+    </ion-row>
+
+
+    @for (dd of this.userskill.contatti; track dd) {
+        <ion-row>
+          <ion-col size="7">{{ dd.nomecontatto}}</ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < dd.livello}"></i>
+            } 
+          </ion-col>
+        </ion-row>
+      }
+  }
+
+    @if (this.userskill.alleati.length) {
+
+      <ion-row style="align-items: center;">
+        <ion-col ><hr/></ion-col>
+        <ion-col size="6" style="text-align: center; font-size: 1em;">Alleati</ion-col>
+        <ion-col ><hr/></ion-col>
+      </ion-row>
+
+
+      @for (dd of this.userskill.alleati; track dd) {
+        <ion-row>
+          <ion-col size="7">{{ dd.nomealleato}}</ion-col>
+          <ion-col>
+            @for (item of 5|times ; track item; let ix = $index) {
+              <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < dd.livello}"></i>
+            } 
+          </ion-col>
+        </ion-row>
+      }
+    }
+
+    <ion-row style="align-items: center;">
+        <ion-col ><hr/></ion-col>
+        <ion-col size="6" style="text-align: center; font-size: 1em;">Rifugio</ion-col>
+        <ion-col ><hr/></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">{{ this.user.rifugio}}</ion-col>
+      <ion-col size="6">{{ this.user.zona}}</ion-col>
+    </ion-row>
+
+
+</ion-content>

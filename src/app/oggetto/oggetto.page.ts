@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { User, Oggetto } from '../globals';
 import { HttpClient } from '@angular/common/http';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
     selector: 'app-oggetto',
@@ -12,23 +14,18 @@ import { HttpClient } from '@angular/common/http';
 export class OggettoPage implements OnInit {
 
 
+  // isModalOpen = false;
+  // oggetto: Oggetto = new Oggetto();
 
-	nomeoggetto: string = '';
-	descrizione: string = '';
-  ifdomanda: number  = 0 ;
-  esito: number  = 0 ;
-  nodoppioesito: number = 0 ;
-  esitotext: string = '';
-  domanda: string ='';
-  r1: string = '';
-  r2: string = '';
+  giarisposto = false;
+  rispostaselezionata = '';
+
+  oldscan: Array<Oggetto> = [];
 
 
 
 
-
-  constructor(public user: User , public oggetto: Oggetto, private http: HttpClient) { 
-  }
+  constructor(public user: User , private authservice: AuthserviceService, private http: HttpClient, public oggetto: Oggetto, private router: Router) {	}
   
   ionViewWillEnter(){  
     if ( this.oggetto.id.length > 12 ) {
@@ -36,68 +33,36 @@ export class OggettoPage implements OnInit {
       this.oggetto.id = newbarcode;
     }
 
-    var url = 'https://www.roma-by-night.it/ionicPHP/barcode.php?id='+this.user.userid+'&barcode='+this.oggetto.id;
+    this.authservice.barcode(this.user.idutente, this.oggetto.id).subscribe((data) => {
 
-    this.http.get<any>(url)
-		.subscribe( data => {
-      // console.log (data)
-			this.nomeoggetto=data[0];
-			this.descrizione=data[1];
-      this.ifdomanda  = 0 ;
-			// console.log(this.descrizione);
-      // console.log (data.length);
-      if(data.length >2  ) {
+      // this.isModalOpen = true;
+      
+      // console.log(data);
 
-        this.esito = 0;
-        this.nodoppioesito = 0 ;
-        this.ifdomanda = 1;
-        this.domanda = data[2].Domanda;
-        this.r1 = data[2].R1;
-        this.r2 = data[2].R2;
-         // console.log (this.domanda);
-         // console.log (this.r1);
-         // console.log (this.r2);
-      }
+      this.oggetto.nomeoggetto = data.nomeoggetto;
+      this.oggetto.descrizione = data.descrizione;
+      this.oggetto.esito = data.esito;
+      this.oggetto.domanda = data.domanda;
+      this.oggetto.R1 = data.R1;
+      this.oggetto.R2 = data.R2;
+      this.oggetto.esitoSI = data.esitoSI;
+      this.oggetto.esitoNO = data.esitoNO;  
+
+      this.giarisposto = false;
+      this.rispostaselezionata = '';
 
 		});
   }
 
-  rispSI () {
-
-    var msg: string;
-    this.esito = 1 ;
-    this.esitotext = this.r1;
-
-    msg="Ha risposo SI alla domanda \""+this.domanda+"\" relativa all'oggetto "+this.nomeoggetto;
-    if (this.nodoppioesito == 0 ) {
-      this.comunicaesito(msg);
-      this.nodoppioesito = 1;
-    }
-  }
-  rispNO () {
-    var msg: string;
-
-    this.esito = 2 ;
-    this.esitotext = this.r2;
-
-    msg="Ha risposo NO alla domanda \""+this.domanda+"\" relativa all'oggetto "+this.nomeoggetto;
-    if (this.nodoppioesito == 0 ) {
-      this.comunicaesito(msg);
-      this.nodoppioesito = 1;
-    }
+  risposta(risposta: string) {
+    //console.log('Risposta selezionata:', risposta);
+    this.giarisposto = true;
+    this.rispostaselezionata = risposta;
   }
 
-  comunicaesito(messaggio:string){
 
-
-    // let headers = new Headers();
-    // headers.append('Content-Type', 'application/json');
-    var link = 'https://www.roma-by-night.it/ionicPHP/msgtomaster.php';
-    var mypost = JSON.stringify({idutente: this.user.userid , messaggio: messaggio});
-
-    // console.log(messaggio);
-    this.http.post(link, mypost)
-    .subscribe();
+  cancel() {
+    this.router.navigate(['/tabs/tab3']);
   }
 
 

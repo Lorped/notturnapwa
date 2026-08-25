@@ -1,98 +1,91 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { User, Userskill } from '../globals';
+import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
 
+export interface EsitoPotere {
+  tiro: number;
+}
+
+
 @Component({
-    selector: 'app-taum',
-    templateUrl: './taum.page.html',
-    styleUrls: ['./taum.page.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+  selector: 'app-taum',
+  templateUrl: './taum.page.html',
+  styleUrls: ['./taum.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaumPage implements OnInit {
 
-  FurtoVitae = 0;
+  FurtoVitae = 1;
+  
+  esito: EsitoPotere = { 
+    tiro: 0
+  };
+  
 
-  constructor(public user: User, public http: HttpClient, public router: Router, public alertCtrl: AlertController) { }
+  constructor(
+    public user: User,
+    public userskill: Userskill,
+    public alertCtrl: AlertController,
+    public authService: AuthserviceService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {  }
 
-    let tt = new Date ( this.user.fulldata['lastvitae'] );
-    let tn = new Date ( );
-
-    let diff = tn.getTime() - tt.getTime();
-
-    if ( diff / (60*1000) > 60 ) {
-      this.FurtoVitae = 1 ;
-    }
-
-    //console.log(this.user.taum);
-  }
-
-  gotaum(livellopot: number, pot: string, pot2: string) {
+  gotaum(livellopot: number, pot: string, taum: string, idtaum2: number) {
     //console.log(pot2);
     //console.log(livellopot);
 
+  this.authService.usonecrotaum(this.user['idutente'], pot, idtaum2,  livellopot, taum, 'T').subscribe((res) => {
 
-    var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
-  	var mypost = JSON.stringify({idutente: this.user.userid , potere: pot, livello: livellopot, aTAUMNECRO: pot2});
-    this.http.post<any>(url, mypost)
-    .subscribe(res =>  {
+    this.esito.tiro = res.tiro;
 
-      //console.log(res);
-      let ps=res.ps;
-      //console.log(ps);
+    console.log('esito potere: ' + this.esito.tiro);
 
-      this.user.fulldata['psvuoti'] = this.user.fulldata['psvuoti']+ps;
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti']-ps;
 
-      this.showalert(pot2, pot);
+    if (livellopot == 5 ) {
+      this.user.PScorrenti = this.user.PScorrenti - 2;
+    } else {
+      this.user.PScorrenti = this.user.PScorrenti - 1;
+    }
 
-      if (this.user.fulldata['PScorrenti']==0) {
-        // VAI VIA
-        this.router.navigate(['/tabs/tab5']);
-      }
+    this.showalert(taum, pot, livellopot);
+
+      if (this.user.PScorrenti <= this.user.frenesia) {
+        console.log('a rischio frenesia');
+      } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+        console.log('in caccia obbligata');
+      } 
     });
-  
+
   }
 
-  gofurto () {
+  gofurto() {
 
-    this.FurtoVitae = 0;
 
-    var link = 'https://www.roma-by-night.it/ionicPHP/caccia.php?id=' + this.user['userid']+  '&recuperati=3&vitae=1' ;
+    this.authService.furtodivitae(this.user['idutente']).subscribe(() => {
 
-    this.http.get(link)
-    .subscribe( (res: any) => {
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti'] + 3;
-      if ( this.user.fulldata['PScorrenti'] > this.user.fulldata['setetot'] ) {
-        this.user.fulldata['PScorrenti'] = this.user.fulldata['setetot'] ;
-      }
-      this.user.fulldata['psvuoti'] = this.user.fulldata['setetot'] - this.user.fulldata['PScorrenti'];
-
-      this.user.fulldata['lastvitae'] = res.lastvitae;
+      this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
       
       this.FurtoVitae = 0;
-    
-      this.showalert('Patto della Vitae','Rigenerazione della Vitae');
 
-      this.router.navigate(['/tabs/tab5']);
-    }, (err) => {
-      this.FurtoVitae = 1;
+      this.showalert('Patto della Vitae', 'Rigenerazione della Vitae', 4);
+
+      setTimeout(() => {
+        this.FurtoVitae = 1;
+      }, 1800000); // 30 minuti in millisecondi 
     });
-
-
   }
 
-  async showalert(pot2: string, pot: string){
-    let alert =  await this.alertCtrl.create({
-      header: 'Uso '+ pot2,
-      subHeader: pot,
-      buttons: ['OK']
+  async showalert(taum: string, pot: string, livellopot: number) {
+    const alert = await this.alertCtrl.create({
+      header: pot,
+      subHeader: taum + ' (Lvl. ' + livellopot + ')',
+      //message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
+      buttons: ['OK'],
+      cssClass: 'myalert',
     });
     alert.present();
   }
-
 }

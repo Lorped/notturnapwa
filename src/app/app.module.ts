@@ -11,7 +11,7 @@ import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/com
 
 import { User, Oggetto, ToChange } from './globals';
 import { PipesModule } from './pipes/pipes.module';
-import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
+
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
@@ -21,5 +21,5 @@ import { ServiceWorkerModule } from '@angular/service-worker';
             // Register the ServiceWorker as soon as the application is stable
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
-        })], providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, User, Oggetto, BarcodeScanner, InAppBrowser, ToChange, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
+        })], providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, User, Oggetto,  InAppBrowser, ToChange, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
 export class AppModule {}

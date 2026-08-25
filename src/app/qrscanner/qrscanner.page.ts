@@ -30,7 +30,7 @@ export class QrscannerPage implements OnInit {
     private loadingCtrl: LoadingController,
     private plt: Platform,
     public oggetto: Oggetto,
-    private router: Router
+    public router: Router
   ) { 
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
@@ -45,8 +45,12 @@ export class QrscannerPage implements OnInit {
 
   ngAfterViewInit (){
     this.canvasElement = this.canvas?.nativeElement;
-    this.canvasContext = this.canvasElement.getContext('2d');
+    this.canvasContext = this.canvasElement?.getContext('2d');
     this.videoElement = this.video?.nativeElement;
+  }
+
+  ngOnDestroy() {
+    this.stopScan();
   }
 
   /*
@@ -73,36 +77,72 @@ export class QrscannerPage implements OnInit {
 
   stopScan() {
     this.scanActive = false;
+
+    if (this.videoElement?.srcObject) {
+      const stream = this.videoElement.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      this.videoElement.srcObject = null;
+    }
+
+    if (this.loading) {
+      this.loading.dismiss().catch(() => undefined);
+      this.loading = undefined;
+    }
   }
 
   async startScan() {
-    // Not working on iOS standalone mode!
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
-    });
-  
-    this.videoElement.srcObject = stream;
-    // Required for Safari
-    this.videoElement.setAttribute('playsinline', true);
-  
-    this.loading = await this.loadingCtrl.create({});
-    await this.loading.present();
-  
-    this.videoElement.play();
-    requestAnimationFrame(this.scan.bind(this));
+
+    // TEST ONLY
+    //    this.oggetto.id = "543478635197";
+    //    this.router.navigate(['oggetto']);
+    /***************** */
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.error('Camera non supportata in questo browser');
+      return;
+    }
+
+    if (!this.videoElement || !this.canvasElement || !this.canvasContext) {
+      console.error('Video/canvas non inizializzati');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } }
+      });
+
+      this.videoElement.srcObject = stream;
+      this.videoElement.setAttribute('playsinline', true);
+      this.videoElement.muted = true;
+
+      this.loading = await this.loadingCtrl.create({});
+      await this.loading.present();
+
+      await this.videoElement.play();
+      this.scanActive = true;
+      requestAnimationFrame(() => this.scan());
+    } catch (error) {
+      console.error('Errore apertura camera', error);
+      this.stopScan();
+    }
   }
   
   async scan() {
+    if (!this.videoElement || !this.canvasElement || !this.canvasContext) {
+      return;
+    }
+
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
       if (this.loading) {
-        await this.loading.dismiss();
-        //this.loading = null;
-        this.scanActive = true;
+        await this.loading.dismiss().catch(() => undefined);
+        this.loading = undefined;
       }
-  
+
+      this.scanActive = true;
       this.canvasElement.height = this.videoElement.videoHeight;
       this.canvasElement.width = this.videoElement.videoWidth;
-  
+
       this.canvasContext.drawImage(
         this.videoElement,
         0,
@@ -110,29 +150,36 @@ export class QrscannerPage implements OnInit {
         this.canvasElement.width,
         this.canvasElement.height
       );
+
       const imageData = this.canvasContext.getImageData(
         0,
         0,
         this.canvasElement.width,
         this.canvasElement.height
       );
+
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: 'dontInvert'
       });
-  
+
       if (code) {
         this.scanActive = false;
         this.scanResult = code.data;
-        this.oggetto.id=this.scanResult;
-        this.router.navigate(['/tabs/oggetto']);
-        //this.showQrToast();
-      } else {
-        if (this.scanActive) {
-          requestAnimationFrame(this.scan.bind(this));
+        this.oggetto.id = this.scanResult;
+
+        if (this.videoElement?.srcObject) {
+          const stream = this.videoElement.srcObject as MediaStream;
+          stream.getTracks().forEach((track) => track.stop());
+          this.videoElement.srcObject = null;
         }
+
+        // alert('Scansione completata: ' + this.scanResult);
+        this.router.navigateByUrl('/oggetto');
+      } else if (this.scanActive) {
+        requestAnimationFrame(() => this.scan());
       }
-    } else {
-      requestAnimationFrame(this.scan.bind(this));
+    } else if (this.scanActive) {
+      requestAnimationFrame(() => this.scan());
     }
   }
 

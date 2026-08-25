@@ -1,0 +1,43 @@
+<ion-content>
+
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title>Focus Attributi</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header> 
+
+  <ion-item lines="none">
+    <ion-label>
+      <p>Una singola chiamata per notte.</p>
+      <p>Si ricorda che i poteri di <ion-text color="secondary">Saggezza</ion-text>, <ion-text color="secondary">Intelligenza</ion-text> e <ion-text color="secondary">Percezione</ion-text> sono utilizzabili solo via DT.</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list>
+  @for (item of listafocusattr; track item) {
+
+    @if (item.bonus.length > 0) {
+    <ion-item-group>
+      <ion-item-divider >
+        <ion-label color="secondary">
+          <h2>{{item.attr}}</h2>
+        </ion-label>
+      </ion-item-divider>
+      @for (bonus of item.bonus; track bonus) {
+        <ion-item lines="none">
+          <ion-label>
+            <p>{{bonus.bonus}}</p>
+          </ion-label>
+        </ion-item>
+      }
+      </ion-item-group>
+    }
+        
+    }
+  </ion-list>
+
+
+</ion-content>

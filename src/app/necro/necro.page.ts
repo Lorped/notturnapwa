@@ -1,59 +1,70 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
-import { Router } from '@angular/router';
+import { User, Userskill } from '../globals';
+import { AuthserviceService } from '../services/authservice.service';
 import { AlertController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
+
+export interface EsitoPotere {
+  tiro: number;
+}
 
 @Component({
-    selector: 'app-necro',
-    templateUrl: './necro.page.html',
-    styleUrls: ['./necro.page.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+  selector: 'app-necro',
+  templateUrl: './necro.page.html',
+  styleUrls: ['./necro.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class NecroPage implements OnInit {
-
-  constructor(public user: User, public router: Router, public alertCtrl: AlertController, public http: HttpClient) { }
-
-  ngOnInit() {
-  }
-
-
-  gonecro(livellopot: number, pot: string, pot2: string) {
-    //console.log(pot2);
-    //console.log(livellopot);
-
-
-    var url = 'https://www.roma-by-night.it/ionicPHP/usopotere.php';
-  	var mypost = JSON.stringify({idutente: this.user.userid , potere: pot, livello: livellopot, aTAUMNECRO: pot2});
-    this.http.post<any>(url, mypost)
-    .subscribe( (res: any) =>  {
-
-      //console.log(res);
-      let ps=res.ps;
-      //console.log(ps);
-
-      this.user.fulldata['psvuoti'] = this.user.fulldata['psvuoti']+ps;
-      this.user.fulldata['PScorrenti'] = this.user.fulldata['PScorrenti']-ps;
-
-      this.showalert(pot2, pot);
-
-      if (this.user.fulldata['PScorrenti']==0) {
-        // VAI VIA
-        this.router.navigate(['/tabs/tab5']);
-      }
-    });
   
+  esito: EsitoPotere = { 
+    tiro: 0
+  };
+
+
+  constructor(
+    public user: User,
+    public userskill: Userskill,
+    public alertCtrl: AlertController,
+    public authService: AuthserviceService
+  ) {}
+
+  ngOnInit() {}
+
+  gonecro(livellopot: number, pot: string, necro: string, idnecro2: number) {
+
+    this.authService.usonecrotaum(this.user['idutente'], pot, idnecro2,  livellopot, necro, 'N').subscribe((res) => {
+
+    this.esito.tiro = res.tiro;
+
+    console.log('esito potere: ' + this.esito.tiro);
+
+
+    if (livellopot == 5 ) {
+      this.user.PScorrenti = this.user.PScorrenti - 2;
+    } else {
+      this.user.PScorrenti = this.user.PScorrenti - 1;
+    }
+
+    this.showalert(necro, pot, livellopot);
+
+      if (this.user.PScorrenti <= this.user.frenesia) {
+        console.log('a rischio frenesia');
+      } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+        console.log('in caccia obbligata');
+      } 
+    });
+
   }
 
-  async showalert(pot2: string, pot: string){
-    let alert =  await this.alertCtrl.create({
-      header: 'Uso '+ pot2,
-      subHeader: pot,
-      buttons: ['OK']
+
+  async showalert(necro: string, pot: string, livellopot: number) {
+    const alert = await this.alertCtrl.create({
+      header: pot,
+      subHeader: necro + ' (Lvl. ' + livellopot + ')',
+      //message: '[Tiro contrapposto: ' + this.esito.tiro + ']',
+      buttons: ['OK'],
+      cssClass: 'myalert',
     });
     alert.present();
   }
-
-
 }

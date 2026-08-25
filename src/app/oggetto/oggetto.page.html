@@ -1,56 +1,77 @@
-<ion-header>
 
-  <ion-toolbar color="medium">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Oggetto</ion-title>
-  </ion-toolbar>
+<!------   E' il MODAL della versiona APP normale -->
 
-</ion-header>
+    <ion-header>
+        <ion-toolbar color="medium">
+          <ion-buttons slot="end">
+            <ion-button (click)="cancel()">Indietro</ion-button>
+          </ion-buttons>
+          <ion-title>Analisi</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content >
+  
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{oggetto.nomeoggetto}}</ion-card-title>
+            <ion-card-subtitle>{{oggetto.descrizione}}</ion-card-subtitle>
+          </ion-card-header>
+  
+          @if (this.oggetto.esito.length > 0) {
+            <ion-card-content>
+              <ion-list>
+              @for (xx of this.oggetto.esito ; track xx) {
+                  <ion-item>
+                    <ion-label> <ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </ion-label>               
+                  </ion-item>            
+              }
+            </ion-list>
+            </ion-card-content>
+          }
+        </ion-card>
+
+        @if (this.oggetto.domanda && this.oggetto.domanda != '') {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{oggetto.domanda}}</ion-card-title>
+            </ion-card-header>
+
+            <div style="text-align:center; justify-content: center; display: flex; ">
+            <ion-button *ngIf="rispostaselezionata != 'NO'" size="small" color="success" (click)="risposta('SI')"  [disabled]="giarisposto" style="margin-left: 15%;margin-right: 15%;">SI</ion-button>
+            <ion-button *ngIf="rispostaselezionata != 'SI'" size="small" color="danger" (click)="risposta('NO')" [disabled]="giarisposto" style="margin-left: 15%;margin-right: 15%;">NO</ion-button>
+            </div>
 
 
-<ion-content class="master" color="dark" padding>
+    
+            <ion-card-content>
+               @if (rispostaselezionata == 'SI' ) {  
+                <ion-list>
+                  <ion-item>
+                    <ion-label> {{oggetto.R1}} </ion-label>               
+                  </ion-item>   
 
-  <ion-row style="align-items: center;">
-    <ion-col ><hr/></ion-col>
-    <ion-col size="6" style="color:#FFFFFF; text-align: center; font-size: 1.1em;">Analisi Oggetto</ion-col>
-    <ion-col ><hr/></ion-col>
-  </ion-row>
+                  @for (xx of this.oggetto.esitoSI ; track xx) {
+                      <ion-item>
+                        <ion-label> <ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </ion-label>               
+                      </ion-item>            
+                  }
+                </ion-list>
+              }
+              @if (rispostaselezionata == 'NO' ) {
+                <ion-list>
+                  <ion-item>
+                    <ion-label> {{oggetto.R2}} </ion-label>               
+                  </ion-item>  
 
-  <ion-row >
-    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;"><h3 class="mypad2">{{nomeoggetto}}</h3></ion-col>
-  </ion-row>
-  <ion-row >
-    <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" class="selectable">{{descrizione}}</ion-col>
-  </ion-row>
+                  @for (xx of this.oggetto.esitoNO ; track xx) {
+                      <ion-item>
+                        <ion-label> <ion-text color="primary"> {{xx.motivo}} </ion-text> {{xx.descrizione}} </ion-label>               
+                      </ion-item>            
+                  }
+                </ion-list>
+              }
+            </ion-card-content>
+          </ion-card>
+        }
 
-  @if (ifdomanda != 0) {
-    <ion-row >
-      <ion-col ><hr/></ion-col>
-    </ion-row>
-  }
-  @if (ifdomanda != 0) {
-    <ion-row >
-      <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" ><h3 class="mypad2">{{domanda}}</h3></ion-col>
-    </ion-row>
-  }
-
-  @if (ifdomanda != 0) {
-    <ion-row >
-      @if (esito != 2) {
-        <ion-col style="text-align: center;" ><ion-button color="tertiary" shape="round" fill="outline" (click)="rispSI()" >SI</ion-button></ion-col>
-      }
-      @if (esito != 1) {
-        <ion-col style="text-align: center;" ><ion-button color="tertiary" shape="round" fill="outline" (click)="rispNO()" >NO</ion-button></ion-col>
-      }
-    </ion-row>
-  }
-
-  @if (ifdomanda != 0 && esito !=0 ) {
-    <ion-row >
-      <ion-col style="color:#FFFFFF; text-align: center; font-size: 1.1em;" class="selectable">{{esitotext}}</ion-col>
-    </ion-row>
-  }
-
-</ion-content>
+      </ion-content>

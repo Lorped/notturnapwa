@@ -1,135 +1,182 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../globals';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { IonModal } from '@ionic/angular';
+import { User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
-    selector: 'app-tab5',
-    templateUrl: './tab5.page.html',
-    styleUrls: ['./tab5.page.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+  selector: 'app-tab5',
+  templateUrl: './tab5.page.html',
+  styleUrls: ['./tab5.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class Tab5Page implements OnInit {
+  @ViewChild(IonModal) modal!: IonModal;
 
-  public alertButtons = ['OK'];
+
+  alertButtons = ['OK'];
   tiridado: Array<FeedItem>;
 
+  isResist1Open = false;
+  isResist2Open = false;
+  esito = 0;
 
-  constructor(public user: User, public feed: FeedService, public http: HttpClient, public router: Router) { 
+
+  messaggioArbitro = '';
+  isModalOpen = false;
+  isToastOpen = false;
+
+  messaggioToast = '';
+  
+
+  constructor(
+    public user: User,
+    public userskill: Userskill,
+    public feed: FeedService,
+    public router: Router,
+    public authservice: AuthserviceService
+  ) {
     this.tiridado = [];
     this.loadDadi();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  handleRefresh(event: any) {
+  /*
+  handleRefresh() {
     setTimeout(() => {
-      this.loadDadi();
-      event.target.complete();
+      this.loadDadi();     
     }, 2000);
   }
+  */
 
-
-
-  loadDadi() : any {
-    this.feed.getDadi(this.user['userid']).subscribe(
-      (allFeeds : any) => {
-        this.tiridado = allFeeds;
-      });
+  loadDadi() {
+    this.feed.getDadi(this.user['idutente']).subscribe((res: FeedItem[] | null) => {
+      this.tiridado = res ?? [];
+    });
   }
 
-  tiraildado(){
-
-    var link = 'https://www.roma-by-night.it/ionicPHP/lanciadado.php';
-    var mypost = JSON.stringify({userid: this.user['userid'] });
-
-    this.http.post<any>(link, mypost)
-    .subscribe(res =>  {
-      setTimeout( this.loadDadi() , 1000);
+  tiraildado() {
+    this.authservice.lanciadado(this.user['idutente']).subscribe(() => {
+      setTimeout(() => this.loadDadi(), 1000);
     });
-
   }
-  usafdv(){
-    var link = 'https://www.roma-by-night.it/ionicPHP/usofdv.php';
-    var mypost = JSON.stringify({userid: this.user['userid'] });
 
-    this.http.post<any>(link, mypost)
-    .subscribe(res =>  {
-      setTimeout( this.loadDadi() , 1000);
+  usafdv() {
+    this.authservice.usofdv(this.user['idutente']).subscribe(() => {
+      setTimeout(() => this.loadDadi(), 1000);
     });
 
-
-    this.user.fulldata['fdv']--;
-    this.user.fulldata['rd'] = Math.floor(
-      (this.user.fulldata['carisma'] + this.user.fulldata['intelligenza'] + this.user.fulldata['prontezza'] + this.user.fulldata['percezione'] + this.user.fulldata['fdv'] )/5
+    this.user['fdv']--;
+    this.user['rd'] = Math.floor(
+      (this.user['carisma'] +
+        this.user['intelligenza'] +
+        this.user['prontezza'] +
+        this.user['percezione'] +
+        this.user['fdv']) /
+        5
     );
-
-
   }
-  menops(){
 
-    var link = 'https://www.roma-by-night.it/ionicPHP/menops2.php?id='+this.user['userid']
+  menops() {
+    this.authservice.menops(this.user['idutente']).subscribe(() => {
+      this.user.PScorrenti--;
+      this.checkToast();
 
-    this.http.get<any>(link)
-    .subscribe(res =>  {
-
-      this.user.fulldata.PScorrenti-- ;
-      this.user.fulldata.psvuoti++;
-      
-      setTimeout( this.loadDadi() , 1000);
+      setTimeout(() => this.loadDadi(), 1000);
     });
   }
 
-  gocaccia(){
-    var id = 0;
-    this.router.navigate(['/tabs/caccia',id]);
+
+  resistidisc(){
+    const base = Number(this.user['fdv']) + Number(this.user['attivazione']);
+    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
+
+    this.esito = base * dad ;
+    this.isResist1Open = true;
+
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
+      setTimeout(() => this.loadDadi(), 1000);
+    });
   }
 
+  resistidisc2(){
+    const base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
+    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
-  golegami(){
-    this.router.navigate(['/tabs/legami']);
+    this.esito = base * dad ;
+    this.isResist2Open = true;
+
+    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
+      setTimeout(() => this.loadDadi(), 1000);
+    });
   }
 
-  gomorte(){
-    this.router.navigate(['/tabs/morte']);
+  togglealert(isOpen: boolean) {
+    this.isResist1Open = isOpen;
+    this.isResist2Open = isOpen;
   }
+ 
 
-  godisciplina(disc:number , nomed: string){
-
+  godisciplina(disc: number, nomed: string) {
     if (disc == 98) {
       // go TAUM
       this.router.navigate(['/tabs/taum']);
-      
     } else if (disc == 99) {
       // go NECRO
       this.router.navigate(['/tabs/necro']);
-     
     } else {
-      // go GENERICo
-      // console.log("disc ", disc, "nomed ", nomed)
-      this.router.navigate(['/tabs/poteri',disc, nomed]);
-      
-      
-  	}
+      // go GENERICO
+      this.router.navigate(['/tabs/poteri', disc, nomed]);
+    }
   }
 
-  addpx(){
-    var id = 0;
-    this.router.navigate(['/tabs/addpx']);
-  }
-  
-  goamalgame(){
-    //console.log("amalgame");
-    // go NECRO
-    this.router.navigate(['/tabs/amalgame']);
+
+  mandaArbitro() {
+
+    // console.log('Arbitro in Nero');
+    // console.log('Messaggio da inviare: ', this.messaggioArbitro);
+    this.messaggioArbitro = this.messaggioArbitro.trim(); // Rimuove spazi bianchi iniziali e finali
+
+    this.messaggioArbitro = "Richiesta di intervento da parte di un Arbitro in Nero. " + this.messaggioArbitro;
+
+    this.authservice.msgtomaster(this.user.idutente, this.messaggioArbitro).subscribe(() => {
+      // console.log('Messaggio inviato con successo');
+      // this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
+      this.setOpen(false); // Chiude il modal dopo l'invio
+    }, error => {
+      this.setOpen(false); // Chiude il modal dopo l'invio
+      console.error('Errore durante invio messaggio', error);
+    }); 
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter() {
     this.tiridado = [];
     this.loadDadi();
+    this.checkToast();
   }
+
+  setOpen(isOpen: boolean) {
+    this.messaggioArbitro = '';
+    this.isModalOpen = isOpen;
+  }
+  setToastOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  checkToast() {
+    this.isToastOpen = false;
+    if (this.user.PScorrenti <= this.user.frenesia) {
+        //console.log('a rischio frenesia');
+        this.messaggioToast = 'Attenzione! Sei a rischio frenesia!!';
+        this.setToastOpen(true);
+    } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+        //console.log('in caccia obbligata');
+        this.messaggioToast = 'Attenzione! Devi andare a Caccia al più presto!!';
+        this.setToastOpen(true);
+    } 
+  }
+
 }
