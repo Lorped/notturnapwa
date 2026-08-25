@@ -44,11 +44,13 @@ export class Tab5Page implements OnInit {
 
   ngOnInit() { }
 
+  /*
   handleRefresh() {
     setTimeout(() => {
       this.loadDadi();     
     }, 2000);
   }
+  */
 
   loadDadi() {
     this.feed.getDadi(this.user['idutente']).subscribe((res: FeedItem[] | null) => {
@@ -133,7 +135,6 @@ export class Tab5Page implements OnInit {
 
 
   mandaArbitro() {
-    this.setOpen(false);
 
     // console.log('Arbitro in Nero');
     // console.log('Messaggio da inviare: ', this.messaggioArbitro);
@@ -143,9 +144,12 @@ export class Tab5Page implements OnInit {
 
     this.authservice.msgtomaster(this.user.idutente, this.messaggioArbitro).subscribe(() => {
       // console.log('Messaggio inviato con successo');
-      this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
+      // this.messaggioArbitro = ''; // Pulisce il campo di input dopo l'invio
       this.setOpen(false); // Chiude il modal dopo l'invio
-    });
+    }, error => {
+      this.setOpen(false); // Chiude il modal dopo l'invio
+      console.error('Errore durante invio messaggio', error);
+    }); 
   }
 
   ionViewWillEnter() {
@@ -155,6 +159,7 @@ export class Tab5Page implements OnInit {
   }
 
   setOpen(isOpen: boolean) {
+    this.messaggioArbitro = '';
     this.isModalOpen = isOpen;
   }
   setToastOpen(isOpen: boolean) {

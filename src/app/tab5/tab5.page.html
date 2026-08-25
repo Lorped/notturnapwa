@@ -10,11 +10,11 @@
 
 <ion-content>
 
-  
+  <!--
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh()" >
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
+  -->
 
   <ion-list>
 
@@ -65,11 +65,11 @@
         <ion-content>
           <p class="ion-padding-horizontal">Stai per richiamare l'attenzione di un Arbitro in Nero.<ion-text color="danger">Sei sicuro di voler procedere?</ion-text></p>
           <p class="ion-padding-horizontal">L'Arbitro in Nero riceverà un messaggio con il tuo nome e quello del tuo PG, e potrà contattarti in privato per risolvere la questione.</p>
-          <p class="ion-padding-horizontal">Puoi mandare un messaggio all'Arbitro in Nero per spiegare la situazione, ma non è obbligatorio.</p>
+          <p class="ion-padding-horizontal">Indica dove ti trovi ed eventuali altri dettagli.</p>
           <ion-item>
             <ion-input placeholder="Messaggio per l'Arbitro in Nero" [(ngModel)]="messaggioArbitro" name="messaggioArbitro"></ion-input >
           </ion-item>
-          <ion-button color="danger" shape="round" type="submit" expand="full"  (click)="mandaArbitro()">Invia richiesta</ion-button>
+          <ion-button color="danger" shape="round" type="submit" expand="full"  (click)="mandaArbitro()" [disabled]="messaggioArbitro.trim()==''">Invia richiesta</ion-button>
         </ion-content>
       </ng-template>
     </ion-modal>

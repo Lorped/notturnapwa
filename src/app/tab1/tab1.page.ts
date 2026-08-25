@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { RefresherCustomEvent } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { User , Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
@@ -36,12 +37,12 @@ export class Tab1Page implements OnInit{
   
 
   
-  doRefresh() {    
+  doRefresh(event: RefresherCustomEvent) {    
     setTimeout(() => {
       this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: datips) => {
           this.user.PScorrenti = data.PScorrenti;
         });
-      // event.target.complete();
+      event.target.complete();
     }, 2000);
   }
   
