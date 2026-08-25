@@ -29,11 +29,11 @@
 
 	$idutente=$_GET['id'];
 	if ($idutente=="" || $idutente == 0 ) {
-		$esito = [];
+
 		$out = [
 			'nomeoggetto' => 'ATTENZIONE',
 			'descrizione' => 'oggetto non definito',
-			'esito' => $esito,
+			'esito' => [],
 			'domanda' => null
 		];
 		$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
@@ -44,21 +44,17 @@
 
 	$barcode=$_GET['barcode'];
 
-	// SEGRETERIA DA RIFARE MA CI PENSIAMO DOPO !!! //
 
-	if ( $barcode == "999999999999" ) {
+	if ( $barcode == "999999999999" || $barcode == "999999999998" || $barcode == "999999999997" || $barcode == "999999999996" ) {
 
 
-		$esito = [];
-		$esito[] = 'SEGRETERIA';
-
-		$Mysql = "SELECT nomeplayer, xp  FROM personaggio WHERE idutente ='$idutente' ";
+		$Mysql = "SELECT nomeplayer, xp , IDcronaca FROM personaggio WHERE idutente ='$idutente' ";
 		$Result = mysqli_query($db, $Mysql);
 		$res= mysqli_fetch_array($Result);
 
 		$nome = $res['nomeplayer'];
 		$xp = $res['xp'];
-
+		$IDcronaca = $res['IDcronaca'];
 
 		$Mysql = "SELECT * FROM segreteria WHERE idutente ='$idutente'  ";
 		$Result = mysqli_query($db,$Mysql);
@@ -72,9 +68,18 @@
 				$testo= $nome . " hai già effettuato la segreteria il " . $res2['Ora'];
 				
 
-				$esito[] = $testo;
+				$out = [
+					'nomeoggetto' => 'SEGRETERIA',
+					'descrizione' => $testo,
+					'esito' => [],
+					'esitoSI' => [],
+					'esitoNO' => [],
+					'domanda' => null,
+					'R1' => null,
+					'R2' => null,
+				];
 				
-				$output = json_encode ($esito, JSON_UNESCAPED_UNICODE);
+				$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
     			echo $output;
 				die();
 
@@ -88,6 +93,20 @@
 				if ( $saldo  == '0' ) {
 	
 					$testo = $testo . ". Verifica la tua situazione con la Narrazione e riprova.";
+					$out = [
+						'nomeoggetto' => 'SEGRETERIA',
+						'descrizione' => $testo,
+						'esito' => [],
+						'esitoSI' => [],
+						'esitoNO' => [],
+						'domanda' => null,
+						'R1' => null,
+						'R2' => null,
+					];
+				
+					$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
+					echo $output;
+					die();
 	
 				} else {
 					$num = $res ['eventi'];
@@ -95,53 +114,70 @@
 					$num = $num + 1 ;
 		
 					$testo = $testo . ". Questo è il tuo evento numero ".$num . '.';
-		
+
+					$fc = 0;
+					$check = (int)$barcode + (int)$IDcronaca;
+					if ( $check != 1000000000000 ) {
+						$fc = 1;
+						$testo = "Sei un ospite in una cronaca diversa dalla tua. Grazie per essere qui!";
+					} else {
+						$testo = $testo . " Hai ". ($xp+1) . " eventi validi per la progressione.";
+						$Mysql = "UPDATE personaggio SET xp = xp +1 WHERE idutente = '$idutente'";
+						mysqli_query($db, $Mysql);
+					}
+
 					// AGGIORNO TABELLA !!! //
 					$Mysql = "UPDATE segreteria set  eventi = eventi +1 , eventodata = NOW() , saldo = 0 WHERE idutente = '$idutente' ";
 					mysqli_query($db, $Mysql);
-		
-					$Mysql = "UPDATE personaggio SET xp = xp +2 WHERE idutente = '$idutente'";
+
+					$date = new DateTime();
+					$log =  "Segreteria ev. " . $date->format('d-m-Y') ;
+
+					if ( $fc == 1 ) { 
+						$log = $log . " (ospite)";
+					}
+					
+					$Mysql = "INSERT INTO logpx (idutente, px, Azione ) VALUES ('$idutente', 0 , '$log' ) ";
 					mysqli_query($db, $Mysql);
 					
-					$Mysql = "INSERT INTO logpx (idutente, px, Azione ) VALUES ('$idutente', 2 , 'Segreteria ADD' ) ";
-					mysqli_query($db, $Mysql);
-					
-					$testo = $testo . " Hai ". ($xp+2) . " punti esperienza in totale.";
 					$testo= $testo . " Segreteria effettuata, lunga notte!";
 				}
 
 			}
+
+			$out = [
+				'nomeoggetto' => 'SEGRETERIA',
+				'descrizione' => $testo,
+				'esito' => [],
+				'esitoSI' => [],
+				'esitoNO' => [],
+				'domanda' => null,
+				'R1' => null,
+				'R2' => null,
+			];		
+
+
+			$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
+			echo $output;
+			die();
+
 		} else {
-
-			$testo='';		
-			$testo = "Benvenuto a Notturna, ". $nome ;
 		
+			$out = [
+				'nomeoggetto' => 'SEGRETERIA',
+				'descrizione' => 'Errore: non esiste un record di segreteria per questo utente',
+				'esito' => [],
+				'esitoSI' => [],
+				'esitoNO' => [],
+				'domanda' => null,
+				'R1' => null,
+				'R2' => null,
+			];
+			$output = json_encode ($out, JSON_UNESCAPED_UNICODE);
+			echo $output;
+			die();		
 
-			// Primo LIVE //
-			$testo = $testo . ". Questo è il tuo primo evento! ";
-
-			
-
-			// AGGIORNO TABELLA !!! //
-			$Mysql = "INSERT INTO segreteria ( idutente, eventi, eventodata) VALUES ( '$idutente' , 1 , NOW() )";
-			mysqli_query($db, $Mysql);
-
-			$Mysql = "UPDATE personaggio SET xp = xp +2 WHERE idutente = '$idutente'";
-			mysqli_query($db, $Mysql);
-			$Mysql = "INSERT INTO logpx (idutente, px, Azione ) VALUES ('$idutente', 2 , 'Segreteria ADD' ) ";
-			mysqli_query($db, $Mysql);
-
-			$testo = $testo . " Hai ". ($xp+2) . " punti esperienza in totale.";
-			$testo = $testo . " Segreteria effettuata, lunga notte!";
 		}
-
-		
-
-
-		$esito[] = $testo;
-		$output = json_encode ($esito, JSON_UNESCAPED_UNICODE);
-    	echo $output;
-		die();
 
 	}
 
@@ -440,6 +476,17 @@
 				VALUES ('$idutente', '$idx', '$mot', '$descr') ";
 			mysqli_query($db, $mysql3);
 
+		}
+	} else {
+		// Cancello i logscanfull esistenti per questo oggetto e li reinserisco
+		$mysql4 = "DELETE FROM logscanfull WHERE idutente = '$idutente' AND idoggetto = '$idx' ";
+		mysqli_query($db, $mysql4);
+		foreach ($esito as $riga) {
+			$mot = mysqli_real_escape_string($db, $riga['motivo']);
+			$descr=mysqli_real_escape_string($db, $riga['descrizione']);
+			$mysql3 = "INSERT INTO logscanfull  (idutente, idoggetto, motivo, descrizione)
+				VALUES ('$idutente', '$idx', '$mot', '$descr') ";
+			mysqli_query($db, $mysql3);
 		}
 	}
 
