@@ -67,17 +67,21 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    this.applyAppPalette();
 
-    if (window.localStorage.getItem('notturnadarkmode') == 'true') {
-      document.documentElement.classList.add('ion-palette-dark');
+    console.log('Dark mode is ' + (this.isDarkMode ? 'enabled' : 'disabled'));
+  }
+
+  private applyAppPalette() {
+    let savedDarkMode = window.localStorage.getItem('notturnadarkmode');
+    if (savedDarkMode === null) {
+      savedDarkMode = 'false';
+      window.localStorage.setItem('notturnadarkmode', savedDarkMode);
     }
 
-    this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || prefersDark.matches;
-    prefersDark.addEventListener('change', (mediaQuery) => {
-      this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark') || mediaQuery.matches;
-    });
-
+    this.isDarkMode = savedDarkMode === 'true';
+    document.documentElement.classList.toggle('ion-palette-dark', this.isDarkMode);
+    document.documentElement.classList.remove('ion-palette-light');
   }
 
   public login() {
@@ -299,7 +303,11 @@ export class LoginPage implements OnInit {
   }
 
 
+ionViewWillEnter() {
+    this.applyAppPalette();
 
+    console.log('Dark mode is ' + (this.isDarkMode ? 'enabled' : 'disabled'));
+  }
 	
 
 }
