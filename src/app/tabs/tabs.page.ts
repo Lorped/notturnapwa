@@ -14,22 +14,14 @@ export class TabsPage implements OnInit {
   constructor(public router: Router, public user: User) {}
 
   ngOnInit() {
-    // Use matchMedia to check the user preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (window.localStorage.getItem('notturnadarkmode') == 'true') {
-      document.documentElement.classList.add('ion-palette-dark');
-      this.paletteToggle = true;
-    } else {
-      // Initialize the dark palette based on the initial
-      // value of the prefers-color-scheme media query
-      this.initializeDarkPalette(prefersDark.matches);
+    let savedDarkMode = window.localStorage.getItem('notturnadarkmode');
+    if (savedDarkMode === null) {
+      savedDarkMode = 'false';
+      window.localStorage.setItem('notturnadarkmode', savedDarkMode);
     }
 
-  
-
-    // Listen for changes to the prefers-color-scheme media query
-    prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkPalette(mediaQuery.matches));
+    this.paletteToggle = savedDarkMode === 'true';
+    this.toggleDarkPalette(this.paletteToggle, false);
 
 
   }
@@ -38,7 +30,8 @@ export class TabsPage implements OnInit {
     this.paletteToggle = isDark;
     this.toggleDarkPalette(isDark);
 
-    //console.log ('Dark mode is ' + (isDark ? 'enabled' : 'disabled'));
+
+    console.log ('Dark mode is ' + (isDark ? 'enabled' : 'disabled'));
 
     window.localStorage.setItem(
       'notturnadarkmode',
@@ -48,12 +41,22 @@ export class TabsPage implements OnInit {
 
   // Listen for the toggle check/uncheck to toggle the dark palette
   toggleChange(event: CustomEvent) {
-    this.toggleDarkPalette(event.detail.checked);
+    const shouldAdd = event.detail.checked;
+    this.paletteToggle = shouldAdd;
+
+    console.log('Dark mode is ' + (shouldAdd ? 'enabled' : 'disabled'));
+
+    this.toggleDarkPalette(shouldAdd);
   }
 
   // Add or remove the "ion-palette-dark" class on the html element
-  toggleDarkPalette(shouldAdd: boolean) {
+  toggleDarkPalette(shouldAdd: boolean, savePreference = true) {
     document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
+    document.documentElement.classList.remove('ion-palette-light');
+    if (!savePreference) {
+      return;
+    }
+
         window.localStorage.setItem(
       'notturnadarkmode',
       shouldAdd ? 'true' : 'false'
