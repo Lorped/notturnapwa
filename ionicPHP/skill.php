@@ -48,7 +48,7 @@ header('Content-Type: text/html; charset=utf-8');
     while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
       
       $nomeskill = $res['nomeskill'];
-      $livello = $res['livello'];
+      $livello = intval($res['livello']);
       $idx= $res['idskill'];
       $subskill = [];
 
@@ -102,7 +102,7 @@ header('Content-Type: text/html; charset=utf-8');
 
       $idisciplina = $res['iddisciplina'];
       $nomedisc = $res ['nomedisc'];
-      $livello = $res [ 'livello'];
+      $livello = intval($res [ 'livello']);
 
       $poteri = [];
 
