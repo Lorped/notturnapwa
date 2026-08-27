@@ -92,7 +92,7 @@ header('Content-Type: text/html; charset=utf-8');
 
     $discipline = [];
 
-    $MySql = "SELECT  discipline.iddisciplina , nomedisc ,livello   FROM discipline
+    $MySql = "SELECT  discipline.iddisciplina , nomedisc ,livello , focus  FROM discipline
           LEFT JOIN discipline_main ON discipline_main.iddisciplina=discipline.iddisciplina
           WHERE idutente = '$userid'
           ORDER BY discipline.iddisciplina";
@@ -103,6 +103,7 @@ header('Content-Type: text/html; charset=utf-8');
       $idisciplina = $res['iddisciplina'];
       $nomedisc = $res ['nomedisc'];
       $livello = intval($res [ 'livello']);
+      $focus = intval($res [ 'focus']);
 
       $poteri = [];
 
@@ -118,6 +119,7 @@ header('Content-Type: text/html; charset=utf-8');
         'iddisciplina' => $idisciplina,
         'nomedisc' => $nomedisc,
         'livello' => $livello,
+        'focus' => $focus,
         'poteri' => $poteri
       ];
     }
@@ -198,7 +200,7 @@ header('Content-Type: text/html; charset=utf-8');
     }
 
 
-    /******************     necro / taum  */
+    /******************     necro / taum  
 
     $taum =[];
 
@@ -224,59 +226,9 @@ header('Content-Type: text/html; charset=utf-8');
       $necro[] =  $res;
     }
 
-
-
-    $MySql = "SELECT  nomecontatto as nomeskill  ,livello,tipologia  FROM contatti
-          WHERE idutente = '$userid'
-          ORDER BY livello DESC";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-    $MySql = "SELECT  nomealleato as nomeskill  ,livello,tipologia  FROM alleati
-          WHERE idutente = '$userid'
-          ORDER BY livello DESC";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-
-    $MySql = "SELECT  nomepregio as nomeskill  ,valore as livello,tipologia  FROM pregidifetti
-      LEFT JOIN pregidifetti_main ON pregidifetti_main.idpregio=pregidifetti.idpregio
-          WHERE idutente = '$userid' ";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-
-    $MySql = "SELECT  nomerituale as nomeskill  ,livello,tipologia  FROM rituali_t
-      LEFT JOIN rituali_t_main ON rituali_t_main.idrituale=rituali_t.idrituale
-               WHERE idutente = '$userid' ";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
-     $MySql = "SELECT  nomerituale as nomeskill  ,livello,tipologia  FROM rituali_n
-      LEFT JOIN rituali_n_main ON rituali_n_main.idrituale=rituali_n.idrituale
-               WHERE idutente = '$userid' ";
-
-    $Result = mysqli_query($db, $MySql);
-    while ( $res = mysqli_fetch_array($Result,MYSQLI_ASSOC)   ) {
-
-      $out1[] =  $res;
-    }
+  */
 
     
-
-    // influenze
 
     
     $out = [
@@ -286,8 +238,8 @@ header('Content-Type: text/html; charset=utf-8');
       'background' => $background,
       'alleati' => $alleati,
       'contatti' => $contatti,
-      'necro' => $necro,
-      'taum' => $taum,
+      //'necro' => $necro,
+      //'taum' => $taum,
     ];
 
 

@@ -178,4 +178,8 @@ export class AuthserviceService {
     return this.http.get<any>('https://www.roma-by-night.it/Notturna2/wsPHP/getregistra.php');
   }
 
+  tiroresistenza(userid: number, dom:number) {
+    return this.http.get<any>('https://www.roma-by-night.it/ionicPHP/tiroresistenza.php?id=' + userid + '&dom=' + dom );
+  }
+
 }

@@ -5,6 +5,12 @@ import { FeedService, FeedItem } from '../services/feed.service';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 
+
+export interface EsitoResistenza {
+  tiro: number;
+}
+
+
 @Component({
   selector: 'app-tab5',
   templateUrl: './tab5.page.html',
@@ -91,28 +97,26 @@ export class Tab5Page implements OnInit {
 
 
   resistidisc(){
-    const base = Number(this.user['fdv']) + Number(this.user['attivazione']);
-    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
 
-    this.esito = base * dad ;
-    this.isResist1Open = true;
-
-    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
-      setTimeout(() => this.loadDadi(), 1000);
+    this.authservice.tiroresistenza(this.user['idutente'], 0).subscribe((res: EsitoResistenza) => {
+      this.esito = res.tiro;
+      this.isResist1Open = true;
+      this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
+        setTimeout(() => this.loadDadi(), 1000);
+        });
     });
   }
 
   resistidisc2(){
-    const base = Number(this.user['fdv']) + Number(this.user['attivazione'])+Number(this.user['rd']);
-    const dad = Math.floor(Math.random() * 5) + 1;    // da 0 a 5 
-
-    this.esito = base * dad ;
-    this.isResist2Open = true;
-
-    this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
-      setTimeout(() => this.loadDadi(), 1000);
+    this.authservice.tiroresistenza(this.user['idutente'], this.user.rd).subscribe((res: EsitoResistenza) => {
+      this.esito = res.tiro;
+      this.isResist2Open = true;
+      this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
+        setTimeout(() => this.loadDadi(), 1000);
+        });
     });
   }
+    
 
   togglealert(isOpen: boolean) {
     this.isResist1Open = isOpen;
