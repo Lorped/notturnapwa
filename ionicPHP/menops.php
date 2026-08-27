@@ -26,20 +26,16 @@
 
 
 	include ('messaggi.inc.php');
-	include ('db2.inc.php');  // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
  	$idutente=$_GET['id'];
 
-	$Mysql="SELECT PScorrenti, sete, lastps, nomepg FROM personaggio
-		LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-		LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+	$Mysql="SELECT PScorrenti,   nomepg FROM personaggio
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
 
 	$PScorrenti=$res['PScorrenti'];
-	$setetot=$res['sete']+$res['addsete'];
-	$lastps=$res['lastps'];
 	$nomepg=$res['nomepg'];
 
 	if ($PScorrenti > 0 ) {

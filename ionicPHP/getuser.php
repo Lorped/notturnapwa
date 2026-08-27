@@ -232,7 +232,7 @@ function controlla_maesta ( $idutente, $db) {  //inizio test su ps
 
     $discipline = [];
 
-    $MySql = "SELECT  discipline.iddisciplina , nomedisc ,livello   FROM discipline
+    $MySql = "SELECT  discipline.iddisciplina , nomedisc ,livello , focus  FROM discipline
           LEFT JOIN discipline_main ON discipline_main.iddisciplina=discipline.iddisciplina
           WHERE idutente = '$idutente'
           ORDER BY discipline.iddisciplina";
@@ -243,6 +243,7 @@ function controlla_maesta ( $idutente, $db) {  //inizio test su ps
       $idisciplina = $res['iddisciplina'];
       $nomedisc = $res ['nomedisc'];
       $livello = intval($res [ 'livello']);
+      $focus = intval($res [ 'focus']);
 
       $poteri = [];
 
@@ -258,6 +259,7 @@ function controlla_maesta ( $idutente, $db) {  //inizio test su ps
         'iddisciplina' => $idisciplina,
         'nomedisc' => $nomedisc,
         'livello' => $livello,
+        'focus' => $focus,
         'poteri' => $poteri
       ];
     }

@@ -26,23 +26,21 @@
 
 
 
-	include ('db2.inc.php');   // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';   // NEW MYSQL //
 
  	$idutente=$_GET['id'];
 
- 	$Mysql="SELECT PScorrenti, sete, lastps, nomepg, addsete FROM personaggio
-		LEFT JOIN statuscama ON personaggio.idstatus = statuscama.idstatus
-		LEFT JOIN blood ON personaggio.bloodp = blood.bloodp
+ 	$Mysql="SELECT PScorrenti,  maxps, nomepg FROM personaggio
+		LEFT JOIN generazione ON personaggio.generazione = generazione.generazione
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db,$Mysql);
 	$res=mysqli_fetch_array($Result);
 
 	$PScorrenti=$res['PScorrenti'];
-	$setetot=$res['sete']+$res['addsete'];
-	$lastps=$res['lastps'];
+	$maxps=$res['maxps'];
 	$nomepg=$res['nomepg'];
 
-	if ($setetot > $PScorrenti ) {
+	if ($maxps > $PScorrenti ) {
 		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti+1  WHERE idutente=$idutente";
 		$Result=mysqli_query ($db, $Mysql);
 
