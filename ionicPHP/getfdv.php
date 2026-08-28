@@ -25,20 +25,17 @@
 
 
 
-	include ('db2.inc.php');   // NEW MYSQL //
+	require_once __DIR__ . '/db2.inc.php';   // NEW MYSQL //
 
  	$idutente=$_GET['id'];
 
- 	$Mysql="SELECT fdv, fdvmax FROM personaggio  WHERE idutente=$idutente";
+ 	$Mysql="SELECT fdv, fdvmax, PScorrenti, maxps FROM personaggio  
+		LEFT JOIN generazione ON personaggio.generazione=generazione.generazione
+		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result,MYSQLI_ASSOC);
 	$output = json_encode($res);
     echo $output;
-
-
-
-
-
 
 
 ?>

@@ -29,8 +29,10 @@
 	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
  	$idutente=$_GET['id'];
+	$change=$_GET['change'];
 
-	$Mysql="SELECT PScorrenti,   nomepg FROM personaggio
+	$Mysql="SELECT PScorrenti, maxps,  nomepg FROM personaggio
+		LEFT JOIN generazione ON personaggio.generazione=generazione.generazione
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
@@ -38,12 +40,17 @@
 	$PScorrenti=$res['PScorrenti'];
 	$nomepg=$res['nomepg'];
 
-	if ($PScorrenti > 0 ) {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti-1 , lastps=NOW() WHERE idutente=$idutente";
+	if ( ($PScorrenti+$change) >= 0 && ($PScorrenti+$change) <= $res['maxps'] ) {
+		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti+$change , lastps=NOW() WHERE idutente=$idutente";
 		$Result=mysqli_query ($db, $Mysql);
 
 
-		$testo=$nomepg." ha perso 1 livello di sete";
+		if ($change > 0) {
+			$testo=$nomepg." ha recuperato $change livello di Sete";
+		} else {
+			$testo=$nomepg." ha perso ".abs($change)." livello di Sete";
+		}
+
 		$xtesto=mysqli_real_escape_string($db, $testo);
 		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , $idutente ) ";
 		mysqli_query($db, $Mysql);

@@ -1,5 +1,5 @@
 <?php
-	include ('messaggi.inc.php');
+
 
 	header("Access-Control-Allow-Origin: *");
 
@@ -25,42 +25,42 @@
 
 
 
-
-	require_once __DIR__ . '/db2.inc.php';   // NEW MYSQL //
+	include ('messaggi.inc.php');
+	require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
  	$idutente=$_GET['id'];
+	$change=$_GET['change'];
 
- 	$Mysql="SELECT PScorrenti,  maxps, nomepg FROM personaggio
-		LEFT JOIN generazione ON personaggio.generazione = generazione.generazione
+	$Mysql="SELECT fdv, fdvmax, nomepg FROM personaggio
 		WHERE idutente=$idutente";
-	$Result=mysqli_query ($db,$Mysql);
+	$Result=mysqli_query ($db, $Mysql);
 	$res=mysqli_fetch_array($Result);
 
-	$PScorrenti=$res['PScorrenti'];
-	$maxps=$res['maxps'];
+	$fdv=$res['fdv'];
+	$fdvmax=$res['fdvmax'];
 	$nomepg=$res['nomepg'];
 
-	if ($maxps > $PScorrenti ) {
-		$Mysql="UPDATE personaggio SET PScorrenti = $PScorrenti+1  WHERE idutente=$idutente";
+	if ( ($fdv+$change) >= 0 && ($fdv+$change) <= $fdvmax ) {
+		$Mysql="UPDATE personaggio SET fdv = $fdv+$change , lastfdv=NOW() WHERE idutente=$idutente";
 		$Result=mysqli_query ($db, $Mysql);
 
-
-		$testo=$nomepg." ha saziato 1 livello di sete";
+		if ($change > 0) {
+			$testo=$nomepg." ha recuperato $change livello di Fdv";
+		} else {
+			$testo=$nomepg." ha perso ".abs($change)." livello di Fdv";
+		}
 		$xtesto=mysqli_real_escape_string($db, $testo);
 		$Mysql="INSERT INTO dadi ( idutente, nomepg, Ora, Testo, Destinatario) VALUES ( 0, 'NARRAZIONE', NOW(), '$xtesto' , $idutente ) ";
 		mysqli_query($db, $Mysql);
 
-		// set post fields
+
 
 		master2user($idutente, $testo, $db);
-
+		// set post fields
 
 
 
 	}
-
-
-
 
 
 ?>
