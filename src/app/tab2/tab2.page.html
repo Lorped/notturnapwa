@@ -27,7 +27,7 @@
 
   @for (desc of this.userskill.discipline; track desc) {
   <ion-row>
-      <ion-col size="7">{{ desc.nomedisc }}</ion-col>
+      <ion-col size="7">{{ desc.nomedisc }} @if(desc.focus == 1 ){ <i class="fa fa-star mymedicon "></i>}</ion-col>
       <ion-col>
         @for (item of 5|times ; track item; let ix = $index) {
           <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < desc.livello}"></i>

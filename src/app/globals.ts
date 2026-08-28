@@ -51,6 +51,7 @@ export class Disciplina {
     public iddisciplina = 0;
     public nomedisc = '';
     public livello = 0;
+    public focus = 0;
     public poteri: Array<Potere> = [];
 }
 
