@@ -41,6 +41,7 @@
     $curtaum= $res['idtaum'];
     $nometaum= $res['nometaum'];
     $livello= $res['livello'];
+    $focus= $res['focus'];
     $out2 = [];
 
     $MySql2 = "SELECT * from taumaturgie2
@@ -87,6 +88,7 @@
       'idtaum' => $curtaum,
       'nometaum' => $nometaum,
       'livello' => $livello ,
+      'focus' => $focus,
       'poteri'  => $out2
     ];
 
@@ -105,6 +107,7 @@
     $curnecro= $res['idnecro'];
     $nomenecro= $res['nomenecro'];
     $livello= $res['livello'];
+    $focus= $res['focus'];
     $out2 = [];
 
 
@@ -121,6 +124,7 @@
       'idnecro' => $curnecro,
       'nomenecro' => $nomenecro,
       'livello' => $livello ,
+      'focus' => $focus,
       'poteri'  => $out2
     ];
 

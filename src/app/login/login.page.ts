@@ -46,7 +46,6 @@ export class LoginPage implements OnInit {
 
   constructor(
     private router: Router,
-    private http: HttpClient,
     private authentication: AuthserviceService,
     public user: User,
     public userskill: Userskill,
@@ -146,6 +145,7 @@ export class LoginPage implements OnInit {
             this.userskill.contatti = data.contatti;
 
             this.user.pf = (3 + this.user['attutimento']) * 2;
+            console.log("PF calcolato: ", this.user.pf);
 
             this.user.rp = Math.floor(this.user['attutimento'] / 2 );
 
@@ -163,12 +163,16 @@ export class LoginPage implements OnInit {
             const rob = this.userskill.discipline.find ( xx => xx.iddisciplina == 12 ); //robustezza
 
             if ( rob ) {
+              rob.livello = Number(rob.livello);
               this.user.pf += rob.livello;
               this.user.rp = Math.floor( (this.user['attutimento'] + rob.livello) / 2 );
 
               for ( let j= 0 ; j < rob.poteri.length ; j++) {
-                if (rob.poteri[j].idpotere == 70 ) { this.user.pf += (5+rob.livello);}
-                if (rob.poteri[j].idpotere == 74 ) { this.user.pf += 5;}
+                if (rob.poteri[j].idpotere == 70 ) { 
+                  if (rob.focus > 0 ) { this.user.pf += Number(this.user.bonusdisc); }
+                  this.user.pf += (5+rob.livello);
+                }
+                if (rob.poteri[j].idpotere == 74 ) { this.user.pf += 5;} //+5 sono nel potere precedente - che è prerequisito. focus contato una sola volta: la prima
               }
             }
 
