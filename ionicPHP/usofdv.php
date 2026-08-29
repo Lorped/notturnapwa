@@ -23,7 +23,7 @@
  header('Content-Type: text/html; charset=utf-8');
 
 
-include ("db2.inc.php");  // NEW MYSQL //
+require_once __DIR__ . '/db2.inc.php';  // NEW MYSQL //
 
   $postdata = file_get_contents("php://input");
   $request = json_decode($postdata);
@@ -36,12 +36,7 @@ include ("db2.inc.php");  // NEW MYSQL //
 		if ( $res=mysqli_fetch_array(mysqli_query($db, $Mysql)) ) {
 			$nomepg= mysqli_real_escape_string( $db, $res['nomepg'] );
 		} else {
-      $Mysql="SELECT nomepg FROM HUNTERpersonaggio WHERE idutente=$idutente";
-      if ( $res=mysqli_fetch_array(mysqli_query($db, $Mysql)) ) {
-        $nomepg= mysqli_real_escape_string($db,  $res['nomepg'] );
-  		} else {
 			  $nomepg="NARRAZIONE";
-      }
 		}
 
 

@@ -35,14 +35,10 @@
   $Mysql="SELECT nomepg FROM personaggio WHERE idutente=$idutente";
   if ( $res=mysqli_fetch_array(mysqli_query($db, $Mysql)) ) {
     $nomepg= mysqli_real_escape_string( $db, $res['nomepg'] );
-  } else {
-    $Mysql="SELECT nomepg FROM HUNTERpersonaggio WHERE idutente=$idutente";
-    if ( $res=mysqli_fetch_array(mysqli_query($db, $Mysql)) ) {
-      $nomepg= mysqli_real_escape_string($db,  $res['nomepg'] );
-    } else {
+  }  else {
       $nomepg="NARRAZIONE";
-    }
   }
+  
 
 
 

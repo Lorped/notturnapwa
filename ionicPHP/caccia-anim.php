@@ -34,7 +34,7 @@
 
 	
 
- 	$Mysql="SELECT nomepg,  maxps, idlds from personaggio 
+ 	$Mysql="SELECT nomepg,  PScorrenti, maxps, idlds from personaggio 
 		LEFT JOIN generazione ON personaggio.generazione = generazione.generazione
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db, $Mysql);
