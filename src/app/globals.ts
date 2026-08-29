@@ -160,6 +160,7 @@ export class ataum  {
     public idtaum = 0;
     public nometaum = '';
     public livello = 0;
+    public focus = 0;
     public poteri: Array<apottaum> = [ ]; 
 }
 
@@ -177,6 +178,7 @@ export class anecro  {
     public idnecro = 0 ;
     public nomenecro = '';
     public livello = 0;
+    public focus = 0;
     public poteri: Array<apotnecro> = [];
 }
 

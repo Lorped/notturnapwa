@@ -51,7 +51,7 @@
     </ion-row>
     @for ( necro of this.userskill.necro; track necro) {
       <ion-row>
-        <ion-col size="7">{{ necro.nomenecro }}</ion-col>
+        <ion-col size="7">{{ necro.nomenecro }} @if(necro.focus == 1 ){ <i class="fa fa-star mymedicon "></i>}</ion-col>
         <ion-col>
           @for (item of 5|times ; track item; let ix = $index) {
             <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < necro.livello}"></i>
@@ -68,7 +68,7 @@
     </ion-row>
     @for ( taum of this.userskill.taum; track taum) {
       <ion-row>
-        <ion-col size="7">{{ taum.nometaum }}</ion-col>
+        <ion-col size="7">{{ taum.nometaum }} @if(taum.focus == 1 ){ <i class="fa fa-star mymedicon "></i>}</ion-col>
         <ion-col>
           @for (item of 5|times ; track item; let ix = $index) {
             <i class="fa fa-circle-o mysmallicon " [ngClass]="{'fa-circle myred2': ix < taum.livello}"></i>
