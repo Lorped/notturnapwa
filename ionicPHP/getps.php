@@ -29,16 +29,13 @@
 
  	$idutente=$_GET['id'];
 
- 	$Mysql="SELECT PScorrenti FROM personaggio 
+ 	$Mysql="SELECT PScorrenti , fdv FROM personaggio 
 		WHERE idutente=$idutente";
 	$Result=mysqli_query ($db,$Mysql);
 	$res=mysqli_fetch_array($Result,MYSQLI_ASSOC);
+	
 	$output = json_encode($res);
     echo $output;
-
-
-
-
 
 
 

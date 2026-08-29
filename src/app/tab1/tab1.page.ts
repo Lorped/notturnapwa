@@ -6,6 +6,7 @@ import { AuthserviceService } from '../services/authservice.service';
 
 export interface datips {
   PScorrenti: number;
+  fdv: number;
 }
 
 @Component({
@@ -41,6 +42,7 @@ export class Tab1Page implements OnInit{
     setTimeout(() => {
       this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: datips) => {
           this.user.PScorrenti = data.PScorrenti;
+          this.user.fdv = data.fdv;
         });
       event.target.complete();
     }, 2000);
