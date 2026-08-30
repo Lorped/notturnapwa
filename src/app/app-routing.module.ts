@@ -40,6 +40,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./focusattr/focusattr.module').then((m) => m.FocusattrPageModule),
   },
+  {
+    path: 'qrscanner',
+    loadChildren: () =>
+      import('./qrscanner/qrscanner.module').then((m) => m.QrscannerPageModule),
+  },
+  {
+    path: 'oggetto',
+    loadChildren: () =>
+      import('./oggetto/oggetto.module').then((m) => m.OggettoPageModule),
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar color="medium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Scansione QR</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-button expand="full" (click)="startScan()" [disabled]="scanActive">
+    <ion-icon slot="start" name="qr-scanner"></ion-icon>
+    Avvia scansione
+  </ion-button>
+  <video #video [hidden]="!scanActive" width="100%"></video>
+  <canvas #canvas hidden></canvas>
+</ion-content>

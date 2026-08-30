@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="medium">
+    <ion-buttons slot="end"><ion-button (click)="cancel()">Indietro</ion-button></ion-buttons>
+    <ion-title>Analisi</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ oggetto.nomeoggetto }}</ion-card-title>
+      <ion-card-subtitle>{{ oggetto.descrizione }}</ion-card-subtitle>
+    </ion-card-header>
+    @if (oggetto.esito.length > 0) {
+      <ion-card-content><ion-list>
+        @for (esito of oggetto.esito; track esito) {
+          <ion-item><ion-label><ion-text color="primary">{{ esito.motivo }}</ion-text> {{ esito.descrizione }}</ion-label></ion-item>
+        }
+      </ion-list></ion-card-content>
+    }
+  </ion-card>
+  @if (oggetto.domanda) {
+    <ion-card>
+      <ion-card-header><ion-card-title>{{ oggetto.domanda }}</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <ion-button color="success" (click)="risposta('SI')" [disabled]="giarisposto">SI</ion-button>
+        <ion-button color="danger" (click)="risposta('NO')" [disabled]="giarisposto">NO</ion-button>
+        @if (rispostaselezionata === 'SI') { <p>{{ oggetto.R1 }}</p> }
+        @if (rispostaselezionata === 'NO') { <p>{{ oggetto.R2 }}</p> }
+      </ion-card-content>
+    </ion-card>
+  }
+</ion-content>

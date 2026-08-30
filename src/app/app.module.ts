@@ -16,6 +16,7 @@ import {
 import { PipesModule } from './pipes/pipes.module';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Oggetto } from './globals';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
     InAppBrowser,
+    Oggetto,
     provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ],
 })
