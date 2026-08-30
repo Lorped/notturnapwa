@@ -6,23 +6,9 @@ import { AuthserviceService } from '../services/authservice.service';
 
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
-
-import { CapacitorConfig } from '@capacitor/cli';
-import { FCM } from '@capacitor-community/fcm';
-
-
-
-import {
-  ActionPerformed,
-  PushNotificationSchema,
-  PushNotifications,
-  Token,
-} from '@capacitor/push-notifications';
-
-export class Clan {
-  idclan = 0;
-  nomeclan = '';
-}
+import { Capacitor } from '@capacitor/core';
+import { FirebaseMessaging, GetTokenOptions } from '@capacitor-firebase/messaging';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -35,8 +21,6 @@ export class LoginPage implements OnInit {
   username = '';
   userid = 0;
 
-  listaclan: Array<Clan> = [];
-
   isDarkMode = false;
 
   saveme = {
@@ -47,6 +31,7 @@ export class LoginPage implements OnInit {
   constructor(
     private router: Router,
     private authentication: AuthserviceService,
+    private http: HttpClient,
     public user: User,
     public userskill: Userskill,
     private loadingCtrl: LoadingController
@@ -229,84 +214,31 @@ export class LoginPage implements OnInit {
   }
 
 
-  pushsetup() {
-    // Request permission to use push notifications
-
-    PushNotifications.requestPermissions().then((result) => {
-      if (result.receive === 'granted') {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {
-        // Show some error
+  async pushsetup() {
+    try {
+      const permissions = await FirebaseMessaging.requestPermissions();
+      if (permissions.receive === 'granted') {
+        const token = await this.getToken();
+        this.http
+          .get(`https://www.roma-by-night.it/ionicPHP/updateid.php?userid=${this.user.idutente}&id=${token}`)
+          .subscribe();
       }
-    });
+    } catch (error) {
+      console.error('Unable to configure push notifications', error);
+    }
 
-    PushNotifications.createChannel({
-      name: 'Notturna Channel',
-      id: 'PushPluginChannel',
-      description: 'Notturna Channel',
-      importance: 5,
-      sound: 'notturna_sound',
-    });
+    await this.router.navigate(['tabs']);
+  }
 
-    const config: CapacitorConfig = {
-      plugins: {
-        PushNotifications: {
-          presentationOptions: ['badge', 'sound', 'alert'],
-        },
-      },
-    };
-
-    PushNotifications.addListener('registration', (token: Token) => {
-      //alert('Push registration success, token: ' + token.value);
-
-      this.authentication.updateid(this.user.idutente, token.value).subscribe(() => {
-        // updated
-        //alert('Device registered '+token.value);
-      });
-
-    });
-
-    PushNotifications.addListener('registrationError', (error) => {
-      alert('Error on registration: ' + JSON.stringify(error));
-    });
-
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotificationSchema) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-      }
-    );
-
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (notification: ActionPerformed) => {
-        //alert('Push action performed: ' + JSON.stringify(notification));
-      }
-    );
-
-    FCM.subscribeTo({ topic: 'user' })
-      .then(() => console.log(`subscribed to topic: user `))
-      .catch((err) => console.log(err));
-
-    this.authentication.getregistra().subscribe((data) => {
-      this.listaclan = data.clan;
-
-      this.listaclan.forEach((element) => {
-        if (element.idclan != Number(this.user.idclan)) {
-          FCM.unsubscribeFrom({ topic: element.nomeclan });
-          //console.log(`unsubscribed from topic: `, element.nomeclan);
-        }
-      });
-    });
-
-
-    const atopic2 = this.user.nomeclan;
-    FCM.subscribeTo({ topic: atopic2 })
-      .then(() => console.log(`subscribed to topic: `, atopic2))
-      .catch((err) => console.log(err));
-
-    this.router.navigate(['tabs']);
+  private async getToken(): Promise<string> {
+    const options: GetTokenOptions = { vapidKey: environment.firebase.vapidKey };
+    if (Capacitor.getPlatform() === 'web') {
+      options.serviceWorkerRegistration = await navigator.serviceWorker.register(
+        'firebase-messaging-sw.js'
+      );
+    }
+    const { token } = await FirebaseMessaging.getToken(options);
+    return token;
   }
 
 

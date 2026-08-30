@@ -1,4 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
+import { initializeApp } from 'firebase/app';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +11,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    if (!Capacitor.isNativePlatform()) {
+      initializeApp(environment.firebase);
+    }
+  }
 }
