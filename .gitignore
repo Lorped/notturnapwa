@@ -71,3 +71,6 @@ db.inc.php
 db2.inc.php
 google-services.json
 android/app/release
+
+# Backend shared with notturna4
+ionicPHP/
