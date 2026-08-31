@@ -79,13 +79,14 @@ export class Tab3Page {
     this.rispostaselezionata = risposta;
   }
 
-
+  /** NO MODAL IN PWA 
   cancel() {
     this.isModalOpen = false;
     this.authservice.getscan(this.user.idutente).subscribe((data) => {
       this.oldscan = data;
     });
   }
+   ********** */
   
   ionViewWillEnter() {
     this.authservice.getscan(this.user.idutente).subscribe((data) => {
