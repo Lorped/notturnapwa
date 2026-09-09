@@ -5,11 +5,11 @@ describe('NecroPage', () => {
   let component: NecroPage;
   let fixture: ComponentFixture<NecroPage>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(NecroPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
