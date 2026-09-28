@@ -114,6 +114,15 @@
     (didDismiss)="togglealert(false)"
     class="myalert">
   </ion-alert>
+  <ion-alert
+    [isOpen]="isDadoOpen"
+    header="Tiro di dado"
+    subHeader="Tiro di dado generico"
+    message="Il tiro effettuato è {{esito}}. "
+    [buttons]="alertButtons"
+    (didDismiss)="togglealert(false)"
+    class="myalert">
+  </ion-alert>
 
 
   <ion-toast

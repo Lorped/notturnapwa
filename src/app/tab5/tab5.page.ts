@@ -29,6 +29,7 @@ export class Tab5Page implements OnInit {
 
   isResist1Open = false;
   isResist2Open = false;
+  isDadoOpen = false;
   esito = 0;
 
 
@@ -86,7 +87,10 @@ export class Tab5Page implements OnInit {
   }
 
   tiraildado() {
-    this.authservice.lanciadado(this.user['idutente']).subscribe(() => {
+    this.authservice.lanciadado(this.user.idutente).subscribe((res: EsitoResistenza) => {
+      this.esito = res.tiro;
+      this.isDadoOpen = true;
+      this.changeDetectorRef.markForCheck();
       setTimeout(() => this.loadDadi(), 1000);
     });
   }
@@ -158,6 +162,7 @@ export class Tab5Page implements OnInit {
   togglealert(isOpen: boolean) {
     this.isResist1Open = isOpen;
     this.isResist2Open = isOpen;
+    this.isDadoOpen = isOpen;
   }
  
 
