@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { User, Userskill } from '../globals';
+import { IonicModule } from '@ionic/angular';
+import { NgClass } from '@angular/common';
+import { TimesPipe } from '../pipes/times.pipe';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
-
-
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  standalone: false,
+  imports: [IonicModule, NgClass, TimesPipe],
 })
 export class Tab2Page implements OnInit {
-
-  forza = 0; 
+  forza = 0;
   rissa = 0;
   mischia = 0;
   lancio = 0;
@@ -21,19 +21,16 @@ export class Tab2Page implements OnInit {
   potenza = 0;
   artigli = 0;
 
-  fomipot2 = 0;  
+  fomipot2 = 0;
   foripot2 = 0;
   folapot2 = 0;
   treti2 = 0;
   trefuoco2 = 0;
 
-  constructor(
-    public user: User,
-    public userskill: Userskill,
-  ) {}
+  public user = inject(User);
+  public userskill = inject(Userskill);
 
   ngOnInit() {
-
     this.rissa = 0;
     this.mischia = 0;
     this.lancio = 0;
@@ -42,22 +39,26 @@ export class Tab2Page implements OnInit {
     this.potenza = 0;
     this.artigli = 0;
 
-
     for (let i = 0; i < this.userskill.otherskill.length; i++) {
-      if (this.userskill.otherskill[i].idskill == 42) {  //rissa
+      if (this.userskill.otherskill[i].idskill == 42) {
+        //rissa
         // this.rissa = Number(this.userskill.otherskill[i].livello);
-        this.rissa = this.userskill.otherskill[i].livello ;
+        this.rissa = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.otherskill[i].idskill == 43) {  //mischia
+      if (this.userskill.otherskill[i].idskill == 43) {
+        //mischia
         this.mischia = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.otherskill[i].idskill == 46) {  //lancio
+      if (this.userskill.otherskill[i].idskill == 46) {
+        //lancio
         this.lancio = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.otherskill[i].idskill == 45) {  //Armi da tiro
+      if (this.userskill.otherskill[i].idskill == 45) {
+        //Armi da tiro
         this.tiro = this.userskill.otherskill[i].livello;
       }
-      if (this.userskill.otherskill[i].idskill == 44) {  //Armi da fuoco
+      if (this.userskill.otherskill[i].idskill == 44) {
+        //Armi da fuoco
         this.fuoco = this.userskill.otherskill[i].livello;
       }
     }
@@ -68,7 +69,7 @@ export class Tab2Page implements OnInit {
     const prot = this.userskill.discipline.find((xx) => xx.iddisciplina == 18); //proteide
     if (prot && prot.livello > 2) {
       this.artigli = 1;
-    }  
+    }
 
     this.forza = this.user['forza'];
 

@@ -1,9 +1,16 @@
-import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RefresherCustomEvent } from '@ionic/angular';
+import { RefresherCustomEvent, IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { User  } from '../globals';
+import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
+import { NgClass } from '@angular/common';
+import { TimesPipe } from '../pipes/times.pipe';
 
 export interface datips {
   PScorrenti: number;
@@ -14,36 +21,34 @@ export interface datips {
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  standalone: false,
+  imports: [IonicModule, NgClass, TimesPipe],
 })
 export class Tab1Page {
-  constructor(
-    public user: User,
-    private authentication: AuthserviceService,
-    private router: Router,
-    private changeDetectorRef: ChangeDetectorRef,
-    private destroyRef: DestroyRef
-  ) {
+  public user: User = inject(User);
+  private authentication = inject(AuthserviceService);
+  private router = inject(Router);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
+  constructor() {
     this.user.puntiSangueAggiornati
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.changeDetectorRef.markForCheck());
   }
 
-
   ionViewWillEnter() {
     // console.log ("2 user - " , this.user);
-  } 
+  }
 
-  
   public logoutx() {
     this.router.navigate(['login']);
   }
-  
 
-  
-  doRefresh(event: RefresherCustomEvent) {    
+  doRefresh(event: RefresherCustomEvent) {
     setTimeout(() => {
-      this.authentication.loadpscorrenti(this.user.idutente).subscribe((data: datips) => {
+      this.authentication
+        .loadpscorrenti(this.user.idutente)
+        .subscribe((data: datips) => {
           this.user.PScorrenti = data.PScorrenti;
           this.user.fdv = data.fdv;
           this.changeDetectorRef.markForCheck();
@@ -51,5 +56,4 @@ export class Tab1Page {
       event.target.complete();
     }, 2000);
   }
-  
 }

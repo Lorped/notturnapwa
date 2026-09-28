@@ -1,11 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'times',
-    standalone: false
-})
+@Pipe({ name: 'times' })
 export class TimesPipe implements PipeTransform {
-
   transform(value: number): any {
     const iterable: any = {};
     iterable[Symbol.iterator] = function* () {
@@ -16,5 +12,4 @@ export class TimesPipe implements PipeTransform {
     };
     return iterable;
   }
-
 }

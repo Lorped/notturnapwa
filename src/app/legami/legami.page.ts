@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Legame, Utente, User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 export interface fullegami {
   target: Array<Legame>;
@@ -11,9 +13,9 @@ export interface fullegami {
   selector: 'app-legami',
   templateUrl: './legami.page.html',
   styleUrls: ['./legami.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
-export class LegamiPage  {
+export class LegamiPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   listalegami: Array<Legame> = [];
   listautenti: Array<Utente> = [];
@@ -21,17 +23,12 @@ export class LegamiPage  {
   pgscelto: number = 0;
   selected: string = '';
 
-  constructor(
-    public user: User,
-    public authService: AuthserviceService
-  ) {}
-
-
+  private authService = inject(AuthserviceService);
+  public user = inject(User);
 
   ionViewWillEnter() {
     this.loadUtenti(this.user.idutente);
     this.getlegami();
-
   }
 
   loadUtenti(a: number) {
@@ -43,18 +40,21 @@ export class LegamiPage  {
   }
 
   invia() {
-    this.authService.invialegame(this.user.idutente, this.pgscelto).subscribe(() => {
-      this.getlegami();
-    });
+    this.authService
+      .invialegame(this.user.idutente, this.pgscelto)
+      .subscribe(() => {
+        this.getlegami();
+      });
     //console.log(mypost);
   }
 
   getlegami() {
-    this.authService.getlegami(this.user.idutente).subscribe((res: fullegami) => {
-      this.listalegami = res.target;
-      this.changeDetectorRef.markForCheck();
-      //console.log('legami: ', this.listalegami);
-    });
+    this.authService
+      .getlegami(this.user.idutente)
+      .subscribe((res: fullegami) => {
+        this.listalegami = res.target;
+        this.changeDetectorRef.markForCheck();
+        //console.log('legami: ', this.listalegami);
+      });
   }
-
 }

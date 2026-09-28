@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 import { Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-morte',
   templateUrl: './morte.page.html',
   styleUrls: ['./morte.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
 export class MortePage {
-  constructor(
-    public user: User,
-    public authservice: AuthserviceService,
-    public router: Router
-  ) {}
+  private authservice = inject(AuthserviceService);
+  public user = inject(User);
+  private router = inject(Router);
 
   // ngOnInit() {}
 

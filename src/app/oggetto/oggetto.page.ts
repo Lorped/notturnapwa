@@ -2,33 +2,34 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { Oggetto, User } from '../globals';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-oggetto',
   templateUrl: './oggetto.page.html',
   styleUrls: ['./oggetto.page.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
 export class OggettoPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   giarisposto = false;
   rispostaselezionata = '';
 
-  constructor(
-    private user: User,
-    private authservice: AuthserviceService,
-    public oggetto: Oggetto,
-    private router: Router
-  ) {}
+  public user = inject(User);
+  public authservice = inject(AuthserviceService);
+  public oggetto = inject(Oggetto);
+  private router = inject(Router);
 
   ionViewWillEnter() {
     this.oggetto.id = this.oggetto.id.slice(-12);
-    this.authservice.barcode(this.user.idutente, this.oggetto.id).subscribe((data) => {
-      Object.assign(this.oggetto, data);
-      this.giarisposto = false;
-      this.rispostaselezionata = '';
-      this.changeDetectorRef.markForCheck();
-    });
+    this.authservice
+      .barcode(this.user.idutente, this.oggetto.id)
+      .subscribe((data) => {
+        Object.assign(this.oggetto, data);
+        this.giarisposto = false;
+        this.rispostaselezionata = '';
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   risposta(risposta: string) {

@@ -2,33 +2,37 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { RubricaItem, User, ToChange } from '../globals';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-rubrica',
   templateUrl: './rubrica.page.html',
   styleUrls: ['./rubrica.page.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
-export class RubricaPage  {
+export class RubricaPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  constructor(private authservice: AuthserviceService, private user: User, private router: Router, private tochange: ToChange) {}
+  private authservice = inject(AuthserviceService);
+  public user = inject(User);
+  private router = inject(Router);
+  private tochange = inject(ToChange);
 
   rubrica: Array<RubricaItem> = [];
 
-   ionViewWillEnter(){
+  ionViewWillEnter() {
     this.authservice.loadrubrica(this.user.idutente).subscribe((data) => {
       this.rubrica = data;
       this.changeDetectorRef.markForCheck();
     });
-   }
+  }
 
   add() {
     this.router.navigate(['/tabs/addcontatto']);
   }
   edit(id: number) {
-    const tochange=this.rubrica.find((item) => item.idrubrica === id);
-    if(tochange) {
+    const tochange = this.rubrica.find((item) => item.idrubrica === id);
+    if (tochange) {
       this.tochange.idrubrica = tochange.idrubrica;
       this.tochange.contatto = tochange.contatto;
       this.tochange.cell = tochange.cell;
@@ -37,8 +41,6 @@ export class RubricaPage  {
 
       this.router.navigate(['/tabs/changecontatto']);
     }
-
-
   }
 
   delete(id: number) {
@@ -48,5 +50,4 @@ export class RubricaPage  {
       });
     });
   }
-
 }

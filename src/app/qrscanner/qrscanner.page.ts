@@ -1,5 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
-import { LoadingController, Platform } from '@ionic/angular';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import { LoadingController, Platform, IonicModule } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { Router } from '@angular/router';
 import { Oggetto } from '../globals';
@@ -8,7 +16,7 @@ import { Oggetto } from '../globals';
   selector: 'app-qrscanner',
   templateUrl: './qrscanner.page.html',
   styleUrls: ['./qrscanner.page.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
 export class QrscannerPage implements AfterViewInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -30,24 +38,29 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
 
   private loading?: HTMLIonLoadingElement;
 
-  constructor(
-    private loadingCtrl: LoadingController,
-    private oggetto: Oggetto,
-    private router: Router,
-    private platform: Platform
-  ) {
-    const isStandaloneMode = (): boolean => 
-      'standalone' in window.navigator &&  Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
+  private platform = inject(Platform);
+  private router = inject(Router);
+  private loadingCtrl = inject(LoadingController);
+  private oggetto = inject(Oggetto);
+
+  constructor() {
+    const isStandaloneMode = (): boolean =>
+      'standalone' in window.navigator &&
+      Boolean(
+        (window.navigator as Navigator & { standalone?: boolean }).standalone
+      );
 
     if (this.platform.is('ios') && isStandaloneMode()) {
-      console.log ("I'm an iOS PWA!!")
+      console.log("I'm an iOS PWA!!");
     }
   }
 
   ngAfterViewInit() {
     this.canvasElement = this.canvas?.nativeElement;
     this.videoElement = this.video?.nativeElement;
-    this.canvasContext = this.canvasElement?.getContext('2d', { willReadFrequently: true }) ?? undefined;
+    this.canvasContext =
+      this.canvasElement?.getContext('2d', { willReadFrequently: true }) ??
+      undefined;
   }
 
   ngOnDestroy() {
@@ -59,7 +72,7 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
     if (this.scanActive) {
       return;
     }
-    if (!navigator.mediaDevices?.getUserMedia ) {
+    if (!navigator.mediaDevices?.getUserMedia) {
       console.error('Camera is not supported in this browser.');
       return;
     }
@@ -73,7 +86,6 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
       this.loading = await this.loadingCtrl.create();
       await this.loading.present();
 
-
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { ideal: 'environment' },
@@ -82,7 +94,7 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
           width: { ideal: 1280 },
           height: { ideal: 720 },
         },
-        audio: false
+        audio: false,
       });
 
       this.videoElement.srcObject = stream;
@@ -94,7 +106,6 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
       this.lastscantime = 0;
       this.scheduleNextScan();
       this.changeDetectorRef.markForCheck();
-
     } catch (error) {
       console.error('Error starting scan:', error);
       await this.stopScan();
@@ -110,7 +121,7 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
       this.animationFrameId = undefined;
     }
 
-    const stream = this.videoElement?.srcObject ;
+    const stream = this.videoElement?.srcObject;
 
     if (stream instanceof MediaStream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -125,24 +136,31 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
       await this.loading.dismiss().catch(() => undefined);
       this.loading = undefined;
     }
-
   }
 
   scheduleNextScan() {
-    if (!this.scanActive){
+    if (!this.scanActive) {
       return;
     }
-    this.animationFrameId = requestAnimationFrame((timestamp) => this.scan(timestamp));
-    
+    this.animationFrameId = requestAnimationFrame((timestamp) =>
+      this.scan(timestamp)
+    );
   }
 
-
   private async scan(timestamp: number) {
-    if (!this.scanActive || !this.videoElement || !this.canvasElement || !this.canvasContext) {
+    if (
+      !this.scanActive ||
+      !this.videoElement ||
+      !this.canvasElement ||
+      !this.canvasContext
+    ) {
       return;
     }
 
-    if (timestamp - this.lastscantime  < this.scanInterval || this.videoElement.readyState < this.videoElement.HAVE_CURRENT_DATA) {
+    if (
+      timestamp - this.lastscantime < this.scanInterval ||
+      this.videoElement.readyState < this.videoElement.HAVE_CURRENT_DATA
+    ) {
       this.scheduleNextScan();
       return;
     }
@@ -152,26 +170,42 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
     if (this.loading) {
       await this.loading.dismiss().catch(() => undefined);
       this.loading = undefined;
-    } 
+    }
 
     if (!this.scanActive) {
       return;
     }
-      
+
     const targetWidth = 640;
     const scale = targetWidth / this.videoElement.videoWidth;
-    const targetHeight = Math.round (this.videoElement.videoHeight * scale);
+    const targetHeight = Math.round(this.videoElement.videoHeight * scale);
 
-    if (this.canvasElement.width !== targetWidth || this.canvasElement.height !== targetHeight) {
+    if (
+      this.canvasElement.width !== targetWidth ||
+      this.canvasElement.height !== targetHeight
+    ) {
       this.canvasElement.width = targetWidth;
       this.canvasElement.height = targetHeight;
     }
-    
-    this.canvasContext.drawImage(this.videoElement, 0, 0, targetWidth, targetHeight);
 
-    const imagedata = this.canvasContext.getImageData(0, 0, targetWidth, targetHeight);
+    this.canvasContext.drawImage(
+      this.videoElement,
+      0,
+      0,
+      targetWidth,
+      targetHeight
+    );
 
-    const code = jsQR(imagedata.data, imagedata.width, imagedata.height, { inversionAttempts: 'dontInvert' });
+    const imagedata = this.canvasContext.getImageData(
+      0,
+      0,
+      targetWidth,
+      targetHeight
+    );
+
+    const code = jsQR(imagedata.data, imagedata.width, imagedata.height, {
+      inversionAttempts: 'dontInvert',
+    });
 
     if (!code) {
       this.scheduleNextScan();
@@ -191,7 +225,6 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
     await this.stopScan();
 
     await this.router.navigate(['/oggetto']);
-    
   }
 
   isValidIdentifier(value: string): boolean {
@@ -199,6 +232,4 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
     const pattern = /\d{12}$/;
     return pattern.test(value);
   }
-
-
 }

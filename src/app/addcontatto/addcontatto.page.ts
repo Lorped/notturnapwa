@@ -1,38 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-addcontatto',
   templateUrl: './addcontatto.page.html',
   styleUrls: ['./addcontatto.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
-export class AddcontattoPage  {
+export class AddcontattoPage {
   nuovoContatto = new RubricaItem();
 
-  constructor(
-    public router: Router,
-    public user: User,
-    public authservice: AuthserviceService 
-  ) {}
-
-
+  public router = inject(Router);
+  public user = inject(User);
+  public authservice = inject(AuthserviceService);
 
   add() {
     if (this.nuovoContatto.cell === undefined) this.nuovoContatto.cell = 0;
     if (this.nuovoContatto.home === undefined) this.nuovoContatto.home = 0;
 
-    this.authservice.addcontatto(
-      this.user.idutente,
-      this.nuovoContatto.contatto,
-      this.nuovoContatto.cell,
-      this.nuovoContatto.home,
-      this.nuovoContatto.note
-    ).subscribe(() => {
-      this.router.navigate(['/tabs/rubrica']);
-    });
+    this.authservice
+      .addcontatto(
+        this.user.idutente,
+        this.nuovoContatto.contatto,
+        this.nuovoContatto.cell,
+        this.nuovoContatto.home,
+        this.nuovoContatto.note
+      )
+      .subscribe(() => {
+        this.router.navigate(['/tabs/rubrica']);
+      });
   }
 
   ionViewWillEnter() {

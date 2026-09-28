@@ -1,21 +1,21 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { User, Potere, Userskill, Utente } from '../globals';
 import { ActivatedRoute } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { finalize } from 'rxjs';
 import { ResourceActionService } from '../services/resource-action.service';
+import { FormsModule } from '@angular/forms';
 
 export interface EsitoPotere {
   tiro: number;
 }
 
-
 @Component({
   selector: 'app-poteri',
   templateUrl: './poteri.page.html',
   styleUrls: ['./poteri.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
 export class PoteriPage implements OnInit {
   disc = 0;
@@ -24,34 +24,33 @@ export class PoteriPage implements OnInit {
 
   mypoteri: Array<Potere> = [];
 
-  esito: EsitoPotere = { 
-    tiro: 0
+  esito: EsitoPotere = {
+    tiro: 0,
   };
 
-  canDismiss = false;   // per il modal
-  presentingElement: HTMLElement | null = null;   // per il modal
+  canDismiss = false; // per il modal
+  presentingElement: HTMLElement | null = null; // per il modal
   messaggioTelepatico = '';
   isModalOpen = false;
 
   listautenti: Array<Utente> = [];
   pgscelto = 0;
 
+  public user = inject(User);
+  public userskill = inject(Userskill);
+  public alertCtrl = inject(AlertController);
+  public authservice = inject(AuthserviceService);
+  public resourceActions = inject(ResourceActionService);
+  public changeDetectorRef = inject(ChangeDetectorRef);
+  private activatedroute = inject(ActivatedRoute);
 
-  constructor(
-    public user: User,
-    public userskill: Userskill,
-    public activatedroute: ActivatedRoute,
-    public authservice: AuthserviceService,
-    public alertCtrl: AlertController,
-    @Inject(ResourceActionService) public resourceActions: ResourceActionService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
-
-  ngOnInit() { 
-    this.authservice.listautenti(this.user.idutente).subscribe((res: Array<Utente>) => {
-      this.listautenti = res;
-      this.changeDetectorRef.markForCheck();
-    });
+  ngOnInit() {
+    this.authservice
+      .listautenti(this.user.idutente)
+      .subscribe((res: Array<Utente>) => {
+        this.listautenti = res;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   ionViewWillEnter() {
@@ -80,46 +79,48 @@ export class PoteriPage implements OnInit {
         return;
       }
 
-      this.authservice.usopotere(this.user['idutente'], pot, idpotere,  livellopot, this.nomed)
+      this.authservice
+        .usopotere(this.user['idutente'], pot, idpotere, livellopot, this.nomed)
         .pipe(finalize(() => this.resourceActions.finish()))
         .subscribe((res) => {
+          this.esito.tiro = res.tiro;
 
-        this.esito.tiro = res.tiro;
+          // console.log('esito potere: ' + this.esito.tiro);
 
-        // console.log('esito potere: ' + this.esito.tiro);
+          if (livellopot == 5) {
+            this.user.PScorrenti = this.user.PScorrenti - 2;
+          } else {
+            this.user.PScorrenti = this.user.PScorrenti - 1;
+          }
+          this.user.puntiSangueAggiornati.next();
+          if (idpotere == 15) {
+            this.user.nummaesta = this.user.nummaesta - 1;
+          }
 
-        
-        if (livellopot == 5 ) {
-          this.user.PScorrenti = this.user.PScorrenti - 2;
-        } else {
-          this.user.PScorrenti = this.user.PScorrenti - 1;
-        }
-        this.user.puntiSangueAggiornati.next();
-        if (idpotere== 15) {
-          this.user.nummaesta = this.user.nummaesta - 1;
-        }
+          if (
+            this.nomed == 'Ascendente' ||
+            this.nomed == 'Dominazione' ||
+            this.nomed == 'Demenza' ||
+            this.nomed == 'Serpentis'
+          ) {
+            this.showalert(pot, livellopot, 'T');
+          } else {
+            this.showalert(pot, livellopot, 'NT');
+          }
 
-        if (this.nomed == 'Ascendente' || this.nomed == 'Dominazione' || this.nomed == 'Demenza' || this.nomed == 'Serpentis'  ) {
-          this.showalert(pot, livellopot,"T");
-        } else {
-          this.showalert(pot, livellopot, "NT");
-        }
-
-        if (this.user.PScorrenti <= this.user.frenesia) {
-          console.log('a rischio frenesia');
-        } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
-          console.log('in caccia obbligata');
-        } 
-        this.changeDetectorRef.markForCheck();
-
-      });
+          if (this.user.PScorrenti <= this.user.frenesia) {
+            console.log('a rischio frenesia');
+          } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+            console.log('in caccia obbligata');
+          }
+          this.changeDetectorRef.markForCheck();
+        });
     }
   }
 
   async showalert(pot: string, livellopot: number, tipo: string) {
-
     let messaggio = '';
-    if (tipo == "T") {
+    if (tipo == 'T') {
       messaggio = '[Tiro contrapposto: ' + this.esito.tiro + ']';
     } else {
       messaggio = '';
@@ -140,25 +141,26 @@ export class PoteriPage implements OnInit {
       return;
     }
 
-    this.authservice.cacciaanim(this.user['idutente'])
+    this.authservice
+      .cacciaanim(this.user['idutente'])
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe(() => {
-      this.user['PScorrenti'] = this.user['PScorrenti'] + 3 > this.user['maxps'] ? this.user['maxps'] : this.user['PScorrenti'] + 3;
-      this.user.puntiSangueAggiornati.next();
-      this.showalert('Richiamo', 3, "NT");
-      this.CacciaAnimalita = 0;
-      this.changeDetectorRef.markForCheck();
-
-      setTimeout(() => {
-        this.CacciaAnimalita = 1;
+        this.user['PScorrenti'] =
+          this.user['PScorrenti'] + 3 > this.user['maxps']
+            ? this.user['maxps']
+            : this.user['PScorrenti'] + 3;
+        this.user.puntiSangueAggiornati.next();
+        this.showalert('Richiamo', 3, 'NT');
+        this.CacciaAnimalita = 0;
         this.changeDetectorRef.markForCheck();
-      }, 3600000); // 60 minuti in millisecondi 
-      
 
-    });
+        setTimeout(() => {
+          this.CacciaAnimalita = 1;
+          this.changeDetectorRef.markForCheck();
+        }, 3600000); // 60 minuti in millisecondi
+      });
   }
 
-    
   mandaMessaggio() {
     if (!this.resourceActions.tryStart()) {
       return;
@@ -167,22 +169,24 @@ export class PoteriPage implements OnInit {
     this.isModalOpen = false;
     // console.log('mandaMessaggio: ' + this.messaggioTelepatico);
     // console.log('pgscelto: ' + this.pgscelto);
-    this.authservice.inviamessaggiotente(this.user['idutente'], this.pgscelto, this.messaggioTelepatico)
+    this.authservice
+      .inviamessaggiotente(
+        this.user['idutente'],
+        this.pgscelto,
+        this.messaggioTelepatico
+      )
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe(() => {
-      this.user['PScorrenti']--;
-      this.user.puntiSangueAggiornati.next();
-      this.showalert('Telepatia', 1, "NT");
-      this.pgscelto = 0;
-      this.messaggioTelepatico = '';
-      this.changeDetectorRef.markForCheck();
-    });
-
+        this.user['PScorrenti']--;
+        this.user.puntiSangueAggiornati.next();
+        this.showalert('Telepatia', 1, 'NT');
+        this.pgscelto = 0;
+        this.messaggioTelepatico = '';
+        this.changeDetectorRef.markForCheck();
+      });
   }
-
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
-  
 }

@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../globals';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
 export class TabsPage implements OnInit {
   paletteToggle = false;
-  constructor(public router: Router, public user: User) {}
+
+  public user = inject(User);
+  private router = inject(Router);
 
   ngOnInit() {
     let savedDarkMode = window.localStorage.getItem('notturnadarkmode');
@@ -21,21 +25,15 @@ export class TabsPage implements OnInit {
 
     this.paletteToggle = savedDarkMode === 'true';
     this.toggleDarkPalette(this.paletteToggle, false);
-
-
   }
   // Check/uncheck the toggle and update the palette based on isDark
   initializeDarkPalette(isDark: boolean) {
     this.paletteToggle = isDark;
     this.toggleDarkPalette(isDark);
 
-
     // console.log ('Dark mode is ' + (isDark ? 'enabled' : 'disabled'));
 
-    window.localStorage.setItem(
-      'notturnadarkmode',
-      isDark ? 'true' : 'false'
-    );
+    window.localStorage.setItem('notturnadarkmode', isDark ? 'true' : 'false');
   }
 
   // Listen for the toggle check/uncheck to toggle the dark palette
@@ -56,7 +54,7 @@ export class TabsPage implements OnInit {
       return;
     }
 
-        window.localStorage.setItem(
+    window.localStorage.setItem(
       'notturnadarkmode',
       shouldAdd ? 'true' : 'false'
     );
@@ -95,7 +93,7 @@ export class TabsPage implements OnInit {
 
   async openDT() {
     // Implementa la logica per aprire il DT
-    const url = 'https://larp-oracle-1.emergent.host/'; 
+    const url = 'https://larp-oracle-1.emergent.host/';
 
     // const platform = Capacitor.getPlatform();
     // if (platform === 'ios' || platform === 'android') {
@@ -109,13 +107,13 @@ export class TabsPage implements OnInit {
     window.open(url, '_blank');
   }
 
-    async openObiettivi() {
+  async openObiettivi() {
     // Implementa la logica per aprire gli Obiettivi di Clan
     const url = this.user.linkurl;
 
     //const platform = Capacitor.getPlatform();
     //if (platform === 'ios' || platform === 'android') {
-    //  await Browser.open({ 
+    //  await Browser.open({
     //    url: url,
     //    windowName: '_system'
     //  });
@@ -125,5 +123,4 @@ export class TabsPage implements OnInit {
     //}
     window.open(url, '_blank');
   }
-
 }

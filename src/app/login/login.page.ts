@@ -1,20 +1,24 @@
-import { ChangeDetectorRef, Component, OnInit,  inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { User , Userskill} from '../globals';
+import { User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { FirebaseMessaging, GetTokenOptions } from '@capacitor-firebase/messaging';
+import {
+  FirebaseMessaging,
+  GetTokenOptions,
+} from '@capacitor-firebase/messaging';
 import { environment } from '../../environments/environment';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
 export class LoginPage implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -28,14 +32,14 @@ export class LoginPage implements OnInit {
   };
   registerCredentials = { username: '', password: '' };
 
-  constructor(
-    private router: Router,
-    private authentication: AuthserviceService,
-    private http: HttpClient,
-    public user: User,
-    public userskill: Userskill,
-    private loadingCtrl: LoadingController
-  ) {
+  private router = inject(Router);
+  private authentication = inject(AuthserviceService);
+  public user = inject(User);
+  public userskill = inject(Userskill);
+  private loadingCtrl = inject(LoadingController);
+  private http = inject(HttpClient);
+
+  constructor() {
     this.registerCredentials.username =
       window.localStorage.getItem('notturnauserid')!;
     this.registerCredentials.password =
@@ -47,9 +51,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.applyAppPalette();
-
   }
-  
+
   private applyAppPalette() {
     let savedDarkMode = window.localStorage.getItem('notturnadarkmode');
     if (savedDarkMode === null) {
@@ -58,7 +61,10 @@ export class LoginPage implements OnInit {
     }
 
     this.isDarkMode = savedDarkMode === 'true';
-    document.documentElement.classList.toggle('ion-palette-dark', this.isDarkMode);
+    document.documentElement.classList.toggle(
+      'ion-palette-dark',
+      this.isDarkMode
+    );
     document.documentElement.classList.remove('ion-palette-light');
     this.changeDetectorRef.markForCheck();
   }
@@ -67,29 +73,33 @@ export class LoginPage implements OnInit {
     // console.log( this.registerCredentials.username );
     // console.log( this.registerCredentials.password );
 
-    this.authentication.login(this.registerCredentials.username,this.registerCredentials.password).subscribe(
-      (data) => {
-        //save if required
-        if (this.saveme.checked == true) {
-          window.localStorage.setItem(
-            'notturnauserid',
-            this.registerCredentials.username
-          );
-          window.localStorage.setItem(
-            'notturnapasswd',
-            this.registerCredentials.password
-          );
-        } else {
-          window.localStorage.removeItem('notturnauserid');
-          window.localStorage.removeItem('notturnapasswd');
-        }
+    this.authentication
+      .login(
+        this.registerCredentials.username,
+        this.registerCredentials.password
+      )
+      .subscribe(
+        (data) => {
+          //save if required
+          if (this.saveme.checked == true) {
+            window.localStorage.setItem(
+              'notturnauserid',
+              this.registerCredentials.username
+            );
+            window.localStorage.setItem(
+              'notturnapasswd',
+              this.registerCredentials.password
+            );
+          } else {
+            window.localStorage.removeItem('notturnauserid');
+            window.localStorage.removeItem('notturnapasswd');
+          }
 
+          //this.user = data;
+          Object.assign(this.user, data);
 
-        //this.user = data;
-        Object.assign(this.user, data);
-
-        // fix
-        /*
+          // fix
+          /*
         this.user['PScorrenti'] = Number(this.user['PScorrenti']);
         this.user['forza'] = Number(this.user['forza']);
         this.user['destrezza'] = Number(this.user['destrezza']);
@@ -117,89 +127,95 @@ export class LoginPage implements OnInit {
         this.user['rigen'] = Number(this.user['rigen']);
         */
 
-        if (this.user.idlds == 21 ) {
-          // this.user.bonusdisc = Number (this.user.bonusdisc) + 1;
-          this.user.bonusdisc = this.user.bonusdisc + 1;
-        }
+          if (this.user.idlds == 21) {
+            // this.user.bonusdisc = Number (this.user.bonusdisc) + 1;
+            this.user.bonusdisc = this.user.bonusdisc + 1;
+          }
 
+          this.authentication.skill(this.user.idutente).subscribe(
+            (data) => {
+              this.userskill.skill = data.skill;
+              this.userskill.otherskill = data.otherskill;
+              this.userskill.discipline = data.discipline;
+              this.userskill.background = data.background;
+              this.userskill.alleati = data.alleati;
+              this.userskill.contatti = data.contatti;
 
-        this.authentication.skill(this.user.idutente).subscribe(
-          (data) => {
-            this.userskill.skill = data.skill;
-            this.userskill.otherskill = data.otherskill;
-            this.userskill.discipline = data.discipline;
-            this.userskill.background = data.background;
-            this.userskill.alleati = data.alleati;
-            this.userskill.contatti = data.contatti;
+              this.user.pf = (3 + this.user['attutimento']) * 2;
+              console.log('PF calcolato: ', this.user.pf);
 
-            this.user.pf = (3 + this.user['attutimento']) * 2;
-            console.log("PF calcolato: ", this.user.pf);
+              this.user.rp = Math.floor(this.user['attutimento'] / 2);
 
-            this.user.rp = Math.floor(this.user['attutimento'] / 2 );
-
-            /*
+              /*
             for (let i = 0; i < this.userskill.skill.length; i++) {
               this.userskill.skill[i].livello = Number(this.userskill.skill[i].livello);
             }
             */
-            for (let i = 0; i < this.userskill.otherskill.length; i++) {
-              // this.userskill.otherskill[i].livello = Number(this.userskill.otherskill[i].livello);  
-              if (this.userskill.otherskill[i].idskill == 47) {  //schivare
-                this.user.pf += this.userskill.otherskill[i].livello;
-              }
-            }
-
-            const rob = this.userskill.discipline.find ( xx => xx.iddisciplina == 12 ); //robustezza
-
-            if ( rob ) {
-              // rob.livello = Number(rob.livello);
-              this.user.pf += rob.livello;
-              this.user.rp = Math.floor( (this.user['attutimento'] + rob.livello) / 2 );
-
-              for ( let j= 0 ; j < rob.poteri.length ; j++) {
-                if (rob.poteri[j].idpotere == 70 ) { 
-                  // if (rob.focus > 0 ) { this.user.pf += Number(this.user.bonusdisc); }
-                  if (rob.focus > 0 ) { this.user.pf += this.user.bonusdisc; }
-                  this.user.pf += (5+rob.livello);
+              for (let i = 0; i < this.userskill.otherskill.length; i++) {
+                // this.userskill.otherskill[i].livello = Number(this.userskill.otherskill[i].livello);
+                if (this.userskill.otherskill[i].idskill == 47) {
+                  //schivare
+                  this.user.pf += this.userskill.otherskill[i].livello;
                 }
-                if (rob.poteri[j].idpotere == 74 ) { this.user.pf += 5;} //+5 sono nel potere precedente - che è prerequisito. focus contato una sola volta: la prima
               }
-            }
 
-            this.user['rd'] = Math.floor(
-              (this.user['carisma'] +
-                this.user['intelligenza'] +
-                this.user['prontezza'] +
-                this.user['percezione'] +
-                this.user['fdv']) /
-                5
-            );
+              const rob = this.userskill.discipline.find(
+                (xx) => xx.iddisciplina == 12
+              ); //robustezza
 
-            this.authentication.taum(this.user.idutente).subscribe(
-              (data) => {
+              if (rob) {
+                // rob.livello = Number(rob.livello);
+                this.user.pf += rob.livello;
+                this.user.rp = Math.floor(
+                  (this.user['attutimento'] + rob.livello) / 2
+                );
+
+                for (let j = 0; j < rob.poteri.length; j++) {
+                  if (rob.poteri[j].idpotere == 70) {
+                    // if (rob.focus > 0 ) { this.user.pf += Number(this.user.bonusdisc); }
+                    if (rob.focus > 0) {
+                      this.user.pf += this.user.bonusdisc;
+                    }
+                    this.user.pf += 5 + rob.livello;
+                  }
+                  if (rob.poteri[j].idpotere == 74) {
+                    this.user.pf += 5;
+                  } //+5 sono nel potere precedente - che è prerequisito. focus contato una sola volta: la prima
+                }
+              }
+
+              this.user['rd'] = Math.floor(
+                (this.user['carisma'] +
+                  this.user['intelligenza'] +
+                  this.user['prontezza'] +
+                  this.user['percezione'] +
+                  this.user['fdv']) /
+                  5
+              );
+
+              this.authentication.taum(this.user.idutente).subscribe((data) => {
                 this.userskill.taum = data[0].taum;
                 this.userskill.necro = data[0].necro;
                 this.userskill.rituali = data[0].rituali;
-            });
+              });
 
+              // all done
+              this.loadingCtrl.dismiss();
 
-            // all done
-            this.loadingCtrl.dismiss();
+              this.pushsetup(); //  Da verificare se possibile semplificare
 
-            this.pushsetup();    //  Da verificare se possibile semplificare
+              //console.log ("user ", this.user);
+              //console.log ("userskill ", this.userskill);
 
-            //console.log ("user ", this.user);
-            //console.log ("userskill ", this.userskill);
-
-            this.router.navigate(['tabs']);
+              this.router.navigate(['tabs']);
+            },
+            (error) => {
+              this.loadingCtrl.dismiss();
+              alert('Error loading data4'); //SKILL
+              console.log('error', error);
+            }
+          );
         },
-          (error) => {
-            this.loadingCtrl.dismiss();
-            alert('Error loading data4');  //SKILL
-            console.log('error', error);
-          }
-        );
-    },
         (error) => {
           this.loadingCtrl.dismiss();
           //console.log(error);
@@ -218,14 +234,15 @@ export class LoginPage implements OnInit {
       );
   }
 
-
   async pushsetup() {
     try {
       const permissions = await FirebaseMessaging.requestPermissions();
       if (permissions.receive === 'granted') {
         const token = await this.getToken();
         this.http
-          .get(`https://www.roma-by-night.it/ionicPHP/updateid.php?userid=${this.user.idutente}&id=${token}`)
+          .get(
+            `https://www.roma-by-night.it/ionicPHP/updateid.php?userid=${this.user.idutente}&id=${token}`
+          )
           .subscribe();
       }
     } catch (error) {
@@ -236,16 +253,16 @@ export class LoginPage implements OnInit {
   }
 
   private async getToken(): Promise<string> {
-    const options: GetTokenOptions = { vapidKey: environment.firebase.vapidKey };
+    const options: GetTokenOptions = {
+      vapidKey: environment.firebase.vapidKey,
+    };
     if (Capacitor.getPlatform() === 'web') {
-      options.serviceWorkerRegistration = await navigator.serviceWorker.register(
-        'firebase-messaging-sw.js'
-      );
+      options.serviceWorkerRegistration =
+        await navigator.serviceWorker.register('firebase-messaging-sw.js');
     }
     const { token } = await FirebaseMessaging.getToken(options);
     return token;
   }
-
 
   ionViewWillEnter() {
     this.applyAppPalette();

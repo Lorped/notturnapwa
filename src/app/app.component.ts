@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
 export class AppComponent {
   constructor() {

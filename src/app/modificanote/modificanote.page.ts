@@ -1,22 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-modificanote',
   templateUrl: './modificanote.page.html',
   styleUrls: ['./modificanote.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
-export class ModificanotePage  {
-  constructor(
-    public user: User,
-    private authService: AuthserviceService,
-  ) {}
+export class ModificanotePage {
+  private authService = inject(AuthserviceService);
+  public user = inject(User);
 
   noteiniziali = '';
-
- 
 
   ionViewWillEnter() {
     this.noteiniziali = this.user.note;
@@ -27,8 +25,10 @@ export class ModificanotePage  {
   }
 
   modifica() {
-    this.authService.modifcanote(this.user.idutente, this.user.note).subscribe(() => {
-      this.noteiniziali = this.user.note;
-    });
+    this.authService
+      .modifcanote(this.user.idutente, this.user.note)
+      .subscribe(() => {
+        this.noteiniziali = this.user.note;
+      });
   }
 }

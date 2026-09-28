@@ -1,17 +1,21 @@
-import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { User, Oggetto } from '../globals';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AuthserviceService } from '../services/authservice.service';
-import { AlertController } from '@ionic/angular';
-
+import { AlertController, IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [IonicModule],
 })
 export class Tab3Page {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -27,17 +31,14 @@ export class Tab3Page {
 
   oldscan: Array<Oggetto> = [];
 
+  public user = inject(User);
+  private authservice = inject(AuthserviceService);
+  private router = inject(Router);
+  public alertController = inject(AlertController);
 
-  constructor(
-    public user: User,
-    public alertController: AlertController,
-    private authservice: AuthserviceService,
-    private router: Router
-  ) {
-      this.initialstuff();
+  constructor() {
+    this.initialstuff();
   }
-
-
 
   async initialstuff() {
     const granted = await this.requestPermissions();
@@ -88,7 +89,7 @@ export class Tab3Page {
     });
   }
    ********** */
-  
+
   ionViewWillEnter() {
     this.authservice.getscan(this.user.idutente).subscribe((data) => {
       //console.log(data);

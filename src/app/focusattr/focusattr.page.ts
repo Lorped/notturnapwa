@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component,  inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-
+import { IonicModule } from '@ionic/angular';
 
 interface Bonus {
   nomeattr: string;
@@ -18,22 +18,20 @@ interface FocusAttr {
   selector: 'app-focusattr',
   templateUrl: './focusattr.page.html',
   styleUrls: ['./focusattr.page.scss'],
-  standalone: false,  
+  imports: [IonicModule],
 })
 export class FocusattrPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
-  constructor(private authService: AuthserviceService, private user: User) { }
+  private authService = inject(AuthserviceService);
+  public user = inject(User);
 
   listafocusattr: FocusAttr[] = [];
 
   ionViewWillEnter() {
-    this.authService.focusattr(this.user.idutente).subscribe(
-      (data) => {
-        this.listafocusattr = data;
-        this.changeDetectorRef.markForCheck();
-        //console.log('FocusAttr data:', this.listafocusattr);
-      }
-    );
+    this.authService.focusattr(this.user.idutente).subscribe((data) => {
+      this.listafocusattr = data;
+      this.changeDetectorRef.markForCheck();
+      //console.log('FocusAttr data:', this.listafocusattr);
+    });
   }
 }

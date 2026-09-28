@@ -1,28 +1,33 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { IonModal, IonicModule } from '@ionic/angular';
 import { pregiodifetto, User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { finalize } from 'rxjs';
 import { ResourceActionService } from '../services/resource-action.service';
-
+import { FormsModule } from '@angular/forms';
 
 export interface EsitoResistenza {
   tiro: number;
 }
-
 
 @Component({
   selector: 'app-tab5',
   templateUrl: './tab5.page.html',
   styleUrls: ['./tab5.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
 export class Tab5Page implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
-
 
   alertButtons = ['OK'];
   tiridado: Array<FeedItem>;
@@ -32,7 +37,6 @@ export class Tab5Page implements OnInit {
   isDadoOpen = false;
   esito = 0;
 
-
   messaggioArbitro = '';
   isModalOpen = false;
   isSendingArbitro = false;
@@ -41,34 +45,35 @@ export class Tab5Page implements OnInit {
   isToastOpen = false;
 
   messaggioToast = '';
-  
+
   listapregi: Array<pregiodifetto> = [];
-  voldeb = false;  //volontà debole
+  voldeb = false; //volontà debole
 
+  public user = inject(User);
+  public userskill = inject(Userskill);
+  public feed = inject(FeedService);
+  public router = inject(Router);
+  public authservice = inject(AuthserviceService);
+  public resourceActions = inject(ResourceActionService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
-  constructor(
-    public user: User,
-    public userskill: Userskill,
-    public feed: FeedService,
-    public router: Router,
-    public authservice: AuthserviceService,
-    @Inject(ResourceActionService) public resourceActions: ResourceActionService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     this.tiridado = [];
   }
 
   ngOnInit() {
-    this.authservice.getpregi(this.user.idutente).subscribe((data: Array<pregiodifetto>) => {
-      this.listapregi = Array.isArray(data) ? [...data] : [];
+    this.authservice
+      .getpregi(this.user.idutente)
+      .subscribe((data: Array<pregiodifetto>) => {
+        this.listapregi = Array.isArray(data) ? [...data] : [];
 
-      const voldeb = this.listapregi.some(p => p.idpregio == 27); // volontà debole  
-      if (voldeb) {
-        this.voldeb = true;
-      }
-      this.changeDetectorRef.markForCheck();
-      //console.log('Pregi e difetti:', this.listapregi);
-    });
+        const voldeb = this.listapregi.some((p) => p.idpregio == 27); // volontà debole
+        if (voldeb) {
+          this.voldeb = true;
+        }
+        this.changeDetectorRef.markForCheck();
+        //console.log('Pregi e difetti:', this.listapregi);
+      });
   }
 
   /*
@@ -80,19 +85,23 @@ export class Tab5Page implements OnInit {
   */
 
   loadDadi() {
-    this.feed.getDadi(this.user['idutente']).subscribe((res: FeedItem[] | null) => {
-      this.tiridado = res ?? [];
-      this.changeDetectorRef.markForCheck();
-    });
+    this.feed
+      .getDadi(this.user['idutente'])
+      .subscribe((res: FeedItem[] | null) => {
+        this.tiridado = res ?? [];
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   tiraildado() {
-    this.authservice.lanciadado(this.user.idutente).subscribe((res: EsitoResistenza) => {
-      this.esito = res.tiro;
-      this.isDadoOpen = true;
-      this.changeDetectorRef.markForCheck();
-      setTimeout(() => this.loadDadi(), 1000);
-    });
+    this.authservice
+      .lanciadado(this.user.idutente)
+      .subscribe((res: EsitoResistenza) => {
+        this.esito = res.tiro;
+        this.isDadoOpen = true;
+        this.changeDetectorRef.markForCheck();
+        setTimeout(() => this.loadDadi(), 1000);
+      });
   }
 
   usafdv() {
@@ -100,11 +109,12 @@ export class Tab5Page implements OnInit {
       return;
     }
 
-    this.authservice.usofdv(this.user['idutente'])
+    this.authservice
+      .usofdv(this.user['idutente'])
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe(() => {
-      setTimeout(() => this.loadDadi(), 1000);
-    });
+        setTimeout(() => this.loadDadi(), 1000);
+      });
 
     this.user['fdv']--;
     this.user['rd'] = Math.floor(
@@ -123,49 +133,60 @@ export class Tab5Page implements OnInit {
       return;
     }
 
-    this.authservice.menops(this.user['idutente'])
+    this.authservice
+      .menops(this.user['idutente'])
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe(() => {
-      this.user.PScorrenti--;
-      this.user.puntiSangueAggiornati.next();
-      this.checkToast();
-      this.changeDetectorRef.markForCheck();
+        this.user.PScorrenti--;
+        this.user.puntiSangueAggiornati.next();
+        this.checkToast();
+        this.changeDetectorRef.markForCheck();
 
-      setTimeout(() => this.loadDadi(), 1000);
-    });
-  }
-
-
-  resistidisc(){
-
-    this.authservice.tiroresistenza(this.user['idutente'], 0).subscribe((res: EsitoResistenza) => {
-      this.esito = res.tiro;
-      this.isResist1Open = true;
-      this.changeDetectorRef.markForCheck();
-      this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Disciplina: ' + this.esito ).subscribe(() => {
         setTimeout(() => this.loadDadi(), 1000);
-        });
-    });
+      });
   }
 
-  resistidisc2(){
-    this.authservice.tiroresistenza(this.user['idutente'], this.user.rd).subscribe((res: EsitoResistenza) => {
-      this.esito = res.tiro;
-      this.isResist2Open = true;
-      this.changeDetectorRef.markForCheck();
-      this.authservice.msgtomaster(this.user['idutente'], 'Tiro di resistenza a Dominazione: ' + this.esito ).subscribe(() => {
-        setTimeout(() => this.loadDadi(), 1000);
-        });
-    });
+  resistidisc() {
+    this.authservice
+      .tiroresistenza(this.user['idutente'], 0)
+      .subscribe((res: EsitoResistenza) => {
+        this.esito = res.tiro;
+        this.isResist1Open = true;
+        this.changeDetectorRef.markForCheck();
+        this.authservice
+          .msgtomaster(
+            this.user['idutente'],
+            'Tiro di resistenza a Disciplina: ' + this.esito
+          )
+          .subscribe(() => {
+            setTimeout(() => this.loadDadi(), 1000);
+          });
+      });
   }
-    
+
+  resistidisc2() {
+    this.authservice
+      .tiroresistenza(this.user['idutente'], this.user.rd)
+      .subscribe((res: EsitoResistenza) => {
+        this.esito = res.tiro;
+        this.isResist2Open = true;
+        this.changeDetectorRef.markForCheck();
+        this.authservice
+          .msgtomaster(
+            this.user['idutente'],
+            'Tiro di resistenza a Dominazione: ' + this.esito
+          )
+          .subscribe(() => {
+            setTimeout(() => this.loadDadi(), 1000);
+          });
+      });
+  }
 
   togglealert(isOpen: boolean) {
     this.isResist1Open = isOpen;
     this.isResist2Open = isOpen;
     this.isDadoOpen = isOpen;
   }
- 
 
   godisciplina(disc: number, nomed: string) {
     if (disc == 98) {
@@ -179,7 +200,6 @@ export class Tab5Page implements OnInit {
       this.router.navigate(['/tabs/poteri', disc, nomed]);
     }
   }
-
 
   mandaArbitro() {
     if (this.isSendingArbitro) {
@@ -249,14 +269,14 @@ export class Tab5Page implements OnInit {
   checkToast() {
     this.isToastOpen = false;
     if (this.user.PScorrenti <= this.user.frenesia) {
-        //console.log('a rischio frenesia');
-        this.messaggioToast = 'Attenzione! Sei a rischio frenesia!!';
-        this.setToastOpen(true);
+      //console.log('a rischio frenesia');
+      this.messaggioToast = 'Attenzione! Sei a rischio frenesia!!';
+      this.setToastOpen(true);
     } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
-        //console.log('in caccia obbligata');
-        this.messaggioToast = 'Attenzione! Devi andare a Caccia al più presto!!';
-        this.setToastOpen(true);
-    } 
+      //console.log('in caccia obbligata');
+      this.messaggioToast = 'Attenzione! Devi andare a Caccia al più presto!!';
+      this.setToastOpen(true);
+    }
   }
 
   usabol() {
@@ -264,16 +284,16 @@ export class Tab5Page implements OnInit {
       return;
     }
 
-    this.authservice.usabol(this.user.idutente)
+    this.authservice
+      .usabol(this.user.idutente)
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe(() => {
-      this.user.PScorrenti -= this.user.bol;
-      this.user.puntiSangueAggiornati.next();
-      this.checkToast();
-      this.changeDetectorRef.markForCheck();
-      setTimeout(() => this.loadDadi(), 1000);
-    });  
+        this.user.PScorrenti -= this.user.bol;
+        this.user.puntiSangueAggiornati.next();
+        this.checkToast();
+        this.changeDetectorRef.markForCheck();
+        setTimeout(() => this.loadDadi(), 1000);
+      });
     console.log(`Hai usato ${this.user.bol} PS per Sussurro di Vita.`);
   }
-
 }

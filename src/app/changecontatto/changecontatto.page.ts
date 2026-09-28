@@ -1,32 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ToChange } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-changecontatto',
   templateUrl: './changecontatto.page.html',
   styleUrls: ['./changecontatto.page.scss'],
-  standalone: false,
+  imports: [IonicModule, FormsModule],
 })
-export class ChangecontattoPage  {
+export class ChangecontattoPage {
   cell = {
     checked: true,
   };
-
 
   home = {
     checked: true,
   };
 
-
-
-  constructor(
-
-    public tochange: ToChange,
-    public router: Router,
-    public authservice: AuthserviceService
-  ) {}
+  public router = inject(Router);
+  public authservice = inject(AuthserviceService);
+  public tochange = inject(ToChange);
 
   change() {
     this.tochange.cell = 1;
@@ -38,18 +34,17 @@ export class ChangecontattoPage  {
       this.tochange.home = 0;
     }
 
-   
-    this.authservice.changerubrica(
-      this.tochange.idrubrica,
-      this.tochange.contatto, 
-      this.tochange.cell,
-      this.tochange.home,
-      this.tochange.note
-    ).subscribe(() => {
-      this.router.navigate(['/tabs/rubrica']);
-    });
-
-  
+    this.authservice
+      .changerubrica(
+        this.tochange.idrubrica,
+        this.tochange.contatto,
+        this.tochange.cell,
+        this.tochange.home,
+        this.tochange.note
+      )
+      .subscribe(() => {
+        this.router.navigate(['/tabs/rubrica']);
+      });
   }
 
   ionViewWillEnter() {

@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { finalize } from 'rxjs';
 import { ResourceActionService } from '../services/resource-action.service';
 
@@ -13,59 +13,57 @@ export interface EsitoPotere {
   selector: 'app-necro',
   templateUrl: './necro.page.html',
   styleUrls: ['./necro.page.scss'],
-  standalone: false,
+  imports: [IonicModule],
 })
 export class NecroPage {
-  
-  esito: EsitoPotere = { 
-    tiro: 0
+  esito: EsitoPotere = {
+    tiro: 0,
   };
 
-
-  constructor(
-    public user: User,
-    public userskill: Userskill,
-    public alertCtrl: AlertController,
-    public authService: AuthserviceService,
-    @Inject(ResourceActionService) public resourceActions: ResourceActionService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
-
-
+  public user: User = inject(User);
+  public userskill: Userskill = inject(Userskill);
+  public alertCtrl: AlertController = inject(AlertController);
+  public authService: AuthserviceService = inject(AuthserviceService);
+  public resourceActions: ResourceActionService = inject(ResourceActionService);
+  private changeDetectorRef: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   gonecro(livellopot: number, pot: string, necro: string, idnecro2: number) {
     if (!this.resourceActions.tryStart()) {
       return;
     }
 
-    this.authService.usonecrotaum(this.user['idutente'], pot, idnecro2,  livellopot, necro, 'N')
+    this.authService
+      .usonecrotaum(
+        this.user['idutente'],
+        pot,
+        idnecro2,
+        livellopot,
+        necro,
+        'N'
+      )
       .pipe(finalize(() => this.resourceActions.finish()))
       .subscribe((res) => {
+        this.esito.tiro = res.tiro;
 
-    this.esito.tiro = res.tiro;
+        // console.log('esito potere: ' + this.esito.tiro);
 
-    // console.log('esito potere: ' + this.esito.tiro);
+        if (livellopot == 5) {
+          this.user.PScorrenti = this.user.PScorrenti - 2;
+        } else {
+          this.user.PScorrenti = this.user.PScorrenti - 1;
+        }
+        this.user.puntiSangueAggiornati.next();
 
+        this.showalert(necro, pot, livellopot);
+        this.changeDetectorRef.markForCheck();
 
-    if (livellopot == 5 ) {
-      this.user.PScorrenti = this.user.PScorrenti - 2;
-    } else {
-      this.user.PScorrenti = this.user.PScorrenti - 1;
-    }
-    this.user.puntiSangueAggiornati.next();
-
-    this.showalert(necro, pot, livellopot);
-    this.changeDetectorRef.markForCheck();
-
-      if (this.user.PScorrenti <= this.user.frenesia) {
-        // console.log('a rischio frenesia');
-      } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
-        // console.log('in caccia obbligata');
-      } 
-    });
-
+        if (this.user.PScorrenti <= this.user.frenesia) {
+          // console.log('a rischio frenesia');
+        } else if (this.user.PScorrenti <= this.user.cacciaobbligata) {
+          // console.log('in caccia obbligata');
+        }
+      });
   }
-
 
   async showalert(necro: string, pot: string, livellopot: number) {
     const alert = await this.alertCtrl.create({
