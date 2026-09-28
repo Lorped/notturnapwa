@@ -4,7 +4,7 @@ import { Component,  ChangeDetectionStrategy } from '@angular/core';
   selector: 'app-dadi',
   templateUrl: './dadi.page.html',
   styleUrls: ['./dadi.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class DadiPage  {

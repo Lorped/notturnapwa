@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { DestroyRef, ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { pregiodifetto, User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -6,10 +7,11 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-caccia',
   templateUrl: './caccia.page.html',
   styleUrls: ['./caccia.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class CacciaPage implements OnInit {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   duratacaccia = 600; /* base 10 minuti */
   minuti = 10;
   secondi = 0;
@@ -31,11 +33,18 @@ export class CacciaPage implements OnInit {
 
   timestart = 0;
 
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     public user: User,
     public userskill: Userskill,
     public authservice: AuthserviceService,
-  ) {}
+  ) {
+        this.user.puntiSangueAggiornati
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.cdr.markForCheck());
+  }
 
   ngOnInit() {
     const pot = this.userskill.discipline.find((d) => d.iddisciplina == 17);  // potenza
@@ -73,6 +82,7 @@ export class CacciaPage implements OnInit {
         //console.log('nuovo tempo rimanente: ' + this.duratacaccia + ' secondi');
 
         this.StartTimer();
+        this.changeDetectorRef.markForCheck();
       }
   }
 
@@ -136,6 +146,7 @@ export class CacciaPage implements OnInit {
       this.authservice.msgtomaster(this.user['idutente'], 'ha iniziato la caccia').subscribe();
 
       this.StartTimer();
+      this.changeDetectorRef.markForCheck();
 
     });
   }
@@ -209,6 +220,7 @@ export class CacciaPage implements OnInit {
         window.localStorage.removeItem('NotturnaDurataCaccia');
         this.msgfine();
       }
+      this.changeDetectorRef.markForCheck();
     }, 1000);
   }
 

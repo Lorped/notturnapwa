@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -18,10 +18,12 @@ interface FocusAttr {
   selector: 'app-focusattr',
   templateUrl: './focusattr.page.html',
   styleUrls: ['./focusattr.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,  
 })
 export class FocusattrPage {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   constructor(private authService: AuthserviceService, private user: User) { }
 
   listafocusattr: FocusAttr[] = [];
@@ -30,6 +32,7 @@ export class FocusattrPage {
     this.authService.focusattr(this.user.idutente).subscribe(
       (data) => {
         this.listafocusattr = data;
+        this.changeDetectorRef.markForCheck();
         //console.log('FocusAttr data:', this.listafocusattr);
       }
     );

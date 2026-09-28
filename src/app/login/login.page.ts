@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { User , Userskill} from '../globals';
@@ -14,10 +14,11 @@ import { environment } from '../../environments/environment';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class LoginPage implements OnInit {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   username = '';
   userid = 0;
 
@@ -60,6 +61,7 @@ export class LoginPage implements OnInit {
     this.isDarkMode = savedDarkMode === 'true';
     document.documentElement.classList.toggle('ion-palette-dark', this.isDarkMode);
     document.documentElement.classList.remove('ion-palette-light');
+    this.changeDetectorRef.markForCheck();
   }
 
   public login() {

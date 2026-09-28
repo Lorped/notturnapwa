@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { RubricaItem, User, ToChange } from '../globals';
@@ -7,10 +7,12 @@ import { RubricaItem, User, ToChange } from '../globals';
   selector: 'app-rubrica',
   templateUrl: './rubrica.page.html',
   styleUrls: ['./rubrica.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class RubricaPage  {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   constructor(private authservice: AuthserviceService, private user: User, private router: Router, private tochange: ToChange) {}
 
   rubrica: Array<RubricaItem> = [];
@@ -18,6 +20,7 @@ export class RubricaPage  {
    ionViewWillEnter(){
     this.authservice.loadrubrica(this.user.idutente).subscribe((data) => {
       this.rubrica = data;
+      this.changeDetectorRef.markForCheck();
     });
    }
 

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Legame, Utente, User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -11,10 +11,11 @@ export interface fullegami {
   selector: 'app-legami',
   templateUrl: './legami.page.html',
   styleUrls: ['./legami.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class LegamiPage  {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   listalegami: Array<Legame> = [];
   listautenti: Array<Utente> = [];
 
@@ -37,6 +38,7 @@ export class LegamiPage  {
   loadUtenti(a: number) {
     this.authService.listautenti(a).subscribe((res: Array<Utente>) => {
       this.listautenti = res;
+      this.changeDetectorRef.markForCheck();
       //console.log('utenti: ', this.listautenti);
     });
   }
@@ -51,6 +53,7 @@ export class LegamiPage  {
   getlegami() {
     this.authService.getlegami(this.user.idutente).subscribe((res: fullegami) => {
       this.listalegami = res.target;
+      this.changeDetectorRef.markForCheck();
       //console.log('legami: ', this.listalegami);
     });
   }

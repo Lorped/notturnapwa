@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-morte',
   templateUrl: './morte.page.html',
   styleUrls: ['./morte.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class MortePage {

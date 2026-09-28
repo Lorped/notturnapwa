@@ -7,7 +7,7 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-changecontatto',
   templateUrl: './changecontatto.page.html',
   styleUrls: ['./changecontatto.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class ChangecontattoPage  {

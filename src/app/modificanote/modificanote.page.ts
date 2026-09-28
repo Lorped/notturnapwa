@@ -6,7 +6,7 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-modificanote',
   templateUrl: './modificanote.page.html',
   styleUrls: ['./modificanote.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class ModificanotePage  {

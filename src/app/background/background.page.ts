@@ -5,7 +5,7 @@ import { User, Userskill } from '../globals';
   selector: 'app-background',
   templateUrl: './background.page.html',
   styleUrls: ['./background.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class BackgroundPage  {

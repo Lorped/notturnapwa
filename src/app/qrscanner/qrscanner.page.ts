@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { Router } from '@angular/router';
@@ -8,10 +8,12 @@ import { Oggetto } from '../globals';
   selector: 'app-qrscanner',
   templateUrl: './qrscanner.page.html',
   styleUrls: ['./qrscanner.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class QrscannerPage implements AfterViewInit, OnDestroy {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   @ViewChild('video') video?: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvas?: ElementRef<HTMLCanvasElement>;
 
@@ -92,6 +94,7 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
       this.scanActive = true;
       this.lastscantime = 0;
       this.scheduleNextScan();
+      this.changeDetectorRef.markForCheck();
 
     } catch (error) {
       console.error('Error starting scan:', error);
@@ -101,6 +104,7 @@ export class QrscannerPage implements AfterViewInit, OnDestroy {
 
   async stopScan() {
     this.scanActive = false;
+    this.changeDetectorRef.markForCheck();
 
     if (this.animationFrameId !== undefined) {
       cancelAnimationFrame(this.animationFrameId);

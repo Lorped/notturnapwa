@@ -115,6 +115,7 @@ export class Tab5Page implements OnInit {
         this.user['fdv']) /
         5
     );
+    this.user.puntiSangueAggiornati.next();
   }
 
   menops() {

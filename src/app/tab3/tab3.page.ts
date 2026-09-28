@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, Oggetto } from '../globals';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
@@ -10,10 +10,11 @@ import { AlertController } from '@ionic/angular';
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class Tab3Page {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   public barcodes: Barcode[] = [];
   public isPermissionGranted = false;
@@ -92,6 +93,7 @@ export class Tab3Page {
     this.authservice.getscan(this.user.idutente).subscribe((data) => {
       //console.log(data);
       this.oldscan = data;
+      this.changeDetectorRef.markForCheck();
       // console.log("odscan : ", this.oldscan);
     });
   }

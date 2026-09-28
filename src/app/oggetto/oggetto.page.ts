@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { Oggetto, User } from '../globals';
@@ -7,10 +7,11 @@ import { Oggetto, User } from '../globals';
   selector: 'app-oggetto',
   templateUrl: './oggetto.page.html',
   styleUrls: ['./oggetto.page.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class OggettoPage {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   giarisposto = false;
   rispostaselezionata = '';
 
@@ -27,6 +28,7 @@ export class OggettoPage {
       Object.assign(this.oggetto, data);
       this.giarisposto = false;
       this.rispostaselezionata = '';
+      this.changeDetectorRef.markForCheck();
     });
   }
 
