@@ -1,4 +1,4 @@
-import { DestroyRef, ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { DestroyRef, ChangeDetectorRef, Component, OnInit,  inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { pregiodifetto, User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
@@ -7,7 +7,6 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-caccia',
   templateUrl: './caccia.page.html',
   styleUrls: ['./caccia.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class CacciaPage implements OnInit {

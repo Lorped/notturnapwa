@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { RubricaItem, User, ToChange } from '../globals';
@@ -7,7 +7,6 @@ import { RubricaItem, User, ToChange } from '../globals';
   selector: 'app-rubrica',
   templateUrl: './rubrica.page.html',
   styleUrls: ['./rubrica.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class RubricaPage  {

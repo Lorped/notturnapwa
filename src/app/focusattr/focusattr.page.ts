@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component,  inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -18,7 +18,6 @@ interface FocusAttr {
   selector: 'app-focusattr',
   templateUrl: './focusattr.page.html',
   styleUrls: ['./focusattr.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,  
 })
 export class FocusattrPage {

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { Router } from '@angular/router';
@@ -8,7 +8,6 @@ import { Oggetto } from '../globals';
   selector: 'app-qrscanner',
   templateUrl: './qrscanner.page.html',
   styleUrls: ['./qrscanner.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class QrscannerPage implements AfterViewInit, OnDestroy {

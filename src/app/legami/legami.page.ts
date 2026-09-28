@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Legame, Utente, User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -11,7 +11,6 @@ export interface fullegami {
   selector: 'app-legami',
   templateUrl: './legami.page.html',
   styleUrls: ['./legami.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class LegamiPage  {

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
@@ -7,7 +7,6 @@ import { environment } from '../environments/environment';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class AppComponent {

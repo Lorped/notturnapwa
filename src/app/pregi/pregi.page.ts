@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { User, pregiodifetto } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -6,7 +6,6 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-pregi',
   templateUrl: './pregi.page.html',
   styleUrls: ['./pregi.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class PregiPage {

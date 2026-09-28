@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
@@ -6,7 +6,6 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-modificanote',
   templateUrl: './modificanote.page.html',
   styleUrls: ['./modificanote.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class ModificanotePage  {

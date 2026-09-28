@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit,  inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { User , Userskill} from '../globals';
@@ -14,7 +14,6 @@ import { environment } from '../../environments/environment';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class LoginPage implements OnInit {

@@ -1,4 +1,4 @@
-import { Component,  ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToChange } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
@@ -7,7 +7,6 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-changecontatto',
   templateUrl: './changecontatto.page.html',
   styleUrls: ['./changecontatto.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class ChangecontattoPage  {

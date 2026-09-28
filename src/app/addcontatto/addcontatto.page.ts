@@ -1,4 +1,4 @@
-import { Component,  ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
@@ -7,7 +7,6 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-addcontatto',
   templateUrl: './addcontatto.page.html',
   styleUrls: ['./addcontatto.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class AddcontattoPage  {

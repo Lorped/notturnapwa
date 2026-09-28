@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User, Userskill } from '../globals';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 
@@ -8,7 +8,6 @@ import { User, Userskill } from '../globals';
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class Tab2Page implements OnInit {
