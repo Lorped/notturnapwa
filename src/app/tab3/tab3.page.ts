@@ -3,12 +3,14 @@ import {
   Component,
   ChangeDetectionStrategy,
   inject,
+  OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, Oggetto } from '../globals';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AuthserviceService } from '../services/authservice.service';
 import { AlertController, IonicModule } from '@ionic/angular';
+import { MenopsRoutineService } from '../services/menops-routine.service';
 
 @Component({
   selector: 'app-tab3',
@@ -17,7 +19,7 @@ import { AlertController, IonicModule } from '@ionic/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [IonicModule],
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   public barcodes: Barcode[] = [];
@@ -35,9 +37,14 @@ export class Tab3Page {
   private authservice = inject(AuthserviceService);
   private router = inject(Router);
   public alertController = inject(AlertController);
+  private menopsRoutine = inject(MenopsRoutineService);
 
   constructor() {
     this.initialstuff();
+  }
+
+  ngOnInit() {
+    this.menopsRoutine.ripristina(this.user);
   }
 
   async initialstuff() {

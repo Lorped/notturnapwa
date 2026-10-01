@@ -13,6 +13,7 @@ import {
 } from '@capacitor-firebase/messaging';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { MenopsRoutineService } from '../services/menops-routine.service';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,7 @@ export class LoginPage implements OnInit {
   public userskill = inject(Userskill);
   private loadingCtrl = inject(LoadingController);
   private http = inject(HttpClient);
+  private menopsRoutine = inject(MenopsRoutineService);
 
   constructor() {
     this.registerCredentials.username =
@@ -97,6 +99,8 @@ export class LoginPage implements OnInit {
 
           //this.user = data;
           Object.assign(this.user, data);
+
+          this.menopsRoutine.riconciliaAlLogin(this.user);
 
           // fix
           /*
