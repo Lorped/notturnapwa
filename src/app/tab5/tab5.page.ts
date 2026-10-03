@@ -1,19 +1,52 @@
+import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { IonModal, IonicModule } from '@ionic/angular';
+  IonAlert,
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonModal,
+  IonRow,
+  IonText,
+  IonTitle,
+  IonToast,
+  IonToolbar,
+} from '@ionic/angular/standalone';
 import { pregiodifetto, User, Userskill } from '../globals';
 import { FeedService, FeedItem } from '../services/feed.service';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { finalize } from 'rxjs';
 import { ResourceActionService } from '../services/resource-action.service';
-import { FormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import {
+  diceOutline,
+  handLeftOutline,
+  handRightOutline,
+  heartCircleOutline,
+  leafOutline,
+  logoAppflow,
+  schoolOutline,
+} from 'ionicons/icons';
+
+addIcons({
+  'hand-right-outline': handRightOutline,
+  'hand-left-outline': handLeftOutline,
+  'school-outline': schoolOutline,
+  'leaf-outline': leafOutline,
+  'dice-outline': diceOutline,
+  'heart-circle-outline': heartCircleOutline,
+  'logo-appflow': logoAppflow,
+});
+
 
 export interface EsitoResistenza {
   tiro: number;
@@ -23,8 +56,27 @@ export interface EsitoResistenza {
   selector: 'app-tab5',
   templateUrl: './tab5.page.html',
   styleUrls: ['./tab5.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IonicModule, FormsModule],
+  imports: [
+    FormsModule,
+    IonAlert,
+    IonButton,
+    IonButtons,
+    IonCol,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonMenuButton,
+    IonModal,
+    IonRow,
+    IonText,
+    IonTitle,
+    IonToast,
+    IonToolbar,
+  ],
 })
 export class Tab5Page implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
@@ -67,7 +119,7 @@ export class Tab5Page implements OnInit {
       .subscribe((data: Array<pregiodifetto>) => {
         this.listapregi = Array.isArray(data) ? [...data] : [];
 
-        const voldeb = this.listapregi.some((p) => p.idpregio == 27); // volontà debole
+        const voldeb = this.listapregi.some((p) => p.idpregio === 27); // volontà debole
         if (voldeb) {
           this.voldeb = true;
         }
@@ -189,10 +241,10 @@ export class Tab5Page implements OnInit {
   }
 
   godisciplina(disc: number, nomed: string) {
-    if (disc == 98) {
+    if (disc === 98) {
       // go TAUM
       this.router.navigate(['/tabs/taum']);
-    } else if (disc == 99) {
+    } else if (disc === 99) {
       // go NECRO
       this.router.navigate(['/tabs/necro']);
     } else {
