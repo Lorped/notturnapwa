@@ -91,36 +91,15 @@ export class TabsPage implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  async openDT() {
+  openDT() {
     // Implementa la logica per aprire il DT
     const url = 'https://larp-oracle-1.emergent.host/';
-
-    // const platform = Capacitor.getPlatform();
-    // if (platform === 'ios' || platform === 'android') {
-    //   await InAppBrowser.openInExternalBrowser({
-    //     url: url
-    //   });
-    // }
-    // else {
-    //   window.open(url, '_blank');
-    // }
     window.open(url, '_blank');
   }
 
-  async openObiettivi() {
+  openObiettivi() {
     // Implementa la logica per aprire gli Obiettivi di Clan
     const url = this.user.linkurl;
-
-    //const platform = Capacitor.getPlatform();
-    //if (platform === 'ios' || platform === 'android') {
-    //  await Browser.open({
-    //    url: url,
-    //    windowName: '_system'
-    //  });
-    //}
-    // else {
-    //  window.open(url, '_blank');
-    //}
     window.open(url, '_blank');
   }
 }

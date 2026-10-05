@@ -6,7 +6,6 @@ import { AuthserviceService } from '../services/authservice.service';
 
 import { LoadingController, IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Capacitor } from '@capacitor/core';
 import {
   FirebaseMessaging,
   GetTokenOptions,
@@ -259,11 +258,10 @@ export class LoginPage implements OnInit {
   private async getToken(): Promise<string> {
     const options: GetTokenOptions = {
       vapidKey: environment.firebase.vapidKey,
+      serviceWorkerRegistration: await navigator.serviceWorker.register(
+        'firebase-messaging-sw.js'
+      ),
     };
-    if (Capacitor.getPlatform() === 'web') {
-      options.serviceWorkerRegistration =
-        await navigator.serviceWorker.register('firebase-messaging-sw.js');
-    }
     const { token } = await FirebaseMessaging.getToken(options);
     return token;
   }

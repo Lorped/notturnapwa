@@ -3,7 +3,6 @@ import { User, Userskill } from '../globals';
 import { IonicModule } from '@ionic/angular';
 import { NgClass } from '@angular/common';
 import { TimesPipe } from '../pipes/times.pipe';
-// import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 
 @Component({
   selector: 'app-tab2',

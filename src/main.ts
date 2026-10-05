@@ -7,8 +7,6 @@ import {
 import { environment } from './environments/environment';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicRouteStrategy, IonicModule } from '@ionic/angular';
-import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Oggetto } from './app/globals';
 import {
   provideHttpClient,
@@ -36,8 +34,6 @@ bootstrapApplication(AppComponent, {
       })
     ),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    BarcodeScanner,
-    InAppBrowser,
     Oggetto,
     provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ],

@@ -3,13 +3,15 @@
   "compileOnSave": false,
   "compilerOptions": {
     "skipLibCheck": true,
-    "ignoreDeprecations": "6.0" ,
-    "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "strict": true,
-    "types": ["jasmine", "node"],
+    "types": [
+      "jasmine",
+      "node"
+    ],
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,

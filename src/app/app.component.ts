@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
 import { IonicModule } from '@ionic/angular';
@@ -12,8 +11,6 @@ import { IonicModule } from '@ionic/angular';
 })
 export class AppComponent {
   constructor() {
-    if (!Capacitor.isNativePlatform()) {
-      initializeApp(environment.firebase);
-    }
+    initializeApp(environment.firebase);
   }
 }
