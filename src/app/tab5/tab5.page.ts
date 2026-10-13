@@ -82,7 +82,7 @@ export class Tab5Page implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
   alertButtons = ['OK'];
-  tiridado: Array<FeedItem>;
+  tiridado: FeedItem[];
 
   isResist1Open = false;
   isResist2Open = false;
@@ -98,7 +98,7 @@ export class Tab5Page implements OnInit {
 
   messaggioToast = '';
 
-  listapregi: Array<pregiodifetto> = [];
+  listapregi: pregiodifetto[] = [];
   voldeb = false; //volontà debole
 
   public user = inject(User);
@@ -116,7 +116,7 @@ export class Tab5Page implements OnInit {
   ngOnInit() {
     this.authservice
       .getpregi(this.user.idutente)
-      .subscribe((data: Array<pregiodifetto>) => {
+      .subscribe((data: pregiodifetto[]) => {
         this.listapregi = Array.isArray(data) ? [...data] : [];
 
         const voldeb = this.listapregi.some((p) => p.idpregio === 27); // volontà debole

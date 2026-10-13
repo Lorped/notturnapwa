@@ -11,7 +11,7 @@ interface Bonus {
 
 interface FocusAttr {
   attr: string;
-  bonus: Array<Bonus>;
+  bonus: Bonus[];
 }
 
 @Component({

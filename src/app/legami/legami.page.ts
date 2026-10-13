@@ -5,8 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 export interface fullegami {
-  target: Array<Legame>;
-  domitor: Array<Utente>;
+  target: Legame[];
+  domitor: Utente[];
 }
 
 @Component({
@@ -17,11 +17,11 @@ export interface fullegami {
 })
 export class LegamiPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  listalegami: Array<Legame> = [];
-  listautenti: Array<Utente> = [];
+  listalegami: Legame[] = [];
+  listautenti: Utente[] = [];
 
-  pgscelto: number = 0;
-  selected: string = '';
+  pgscelto = 0;
+  selected = '';
 
   private authService = inject(AuthserviceService);
   public user = inject(User);
@@ -32,7 +32,7 @@ export class LegamiPage {
   }
 
   loadUtenti(a: number) {
-    this.authService.listautenti(a).subscribe((res: Array<Utente>) => {
+    this.authService.listautenti(a).subscribe((res: Utente[]) => {
       this.listautenti = res;
       this.changeDetectorRef.markForCheck();
       //console.log('utenti: ', this.listautenti);

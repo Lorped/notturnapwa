@@ -14,12 +14,12 @@ export class PregiPage {
   public auth = inject(AuthserviceService);
   public user = inject(User);
 
-  listapregi: Array<pregiodifetto> = [];
+  listapregi: pregiodifetto[] = [];
 
   ionViewWillEnter() {
     this.auth
       .getpregi(this.user.idutente)
-      .subscribe((data: Array<pregiodifetto>) => {
+      .subscribe((data: pregiodifetto[]) => {
         this.listapregi = Array.isArray(data) ? [...data] : [];
         this.changeDetectorRef.markForCheck();
         //console.log('Pregi e difetti:', this.listapregi);
