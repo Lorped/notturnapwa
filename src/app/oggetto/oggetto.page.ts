@@ -12,6 +12,12 @@ import { MenopsRoutineService } from '../services/menops-routine.service';
   imports: [IonicModule],
 })
 export class OggettoPage {
+
+  rispcorretta = 0;
+  rispostaenigma = ''; // Risposta utente all'enigma
+  numrisposte = 0; // Numero di risposte inviate all'enigma
+
+
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   giarisposto = false;
   rispostaselezionata = '';
@@ -28,6 +34,11 @@ export class OggettoPage {
       .barcode(this.user.idutente, this.oggetto.id)
       .subscribe((data) => {
         Object.assign(this.oggetto, data);
+
+        this.numrisposte = 0; // Reset the number of attempts for the new scan
+        this.rispcorretta = 0; // Reset the correctness of the enigma response for the new scan
+        this.rispostaenigma = ''; // Reset the enigma response for the new scan
+
         this.giarisposto = false;
         this.rispostaselezionata = '';
         this.changeDetectorRef.markForCheck();
@@ -45,5 +56,24 @@ export class OggettoPage {
 
   cancel() {
     this.router.navigate(['/tabs/tab3']);
+  }
+
+  async RispostaEnigma() {
+    // Logica per gestire la risposta all'enigma
+    console.log('Risposta all\'enigma:', this.rispostaenigma);
+    if ( this.rispostaenigma.trim().toUpperCase() === this.oggetto.soluzione.trim().toUpperCase()) {
+      await this.authservice.writeenigma(this.user.idutente, this.oggetto.idoggetto).subscribe();
+      this.rispcorretta = 1; // Risposta corretta sblocco enigma su frontend
+      this.authservice.msgtomaster(this.user.idutente,'Risolto enigma ' + this.oggetto.nomeoggetto).subscribe();
+
+    } else {
+      this.rispcorretta = 0; // Risposta errata
+      this.numrisposte++;
+      if (this.numrisposte >= 10) {
+        //this.rispcorretta = -1; // Blocco dopo 10 tentativi
+        this.authservice.msgtomaster(this.user.idutente,'Tentativi esauriti per enigma ' + this.oggetto.nomeoggetto).subscribe();
+        this.cancel();
+      }
+    }
   }
 }
