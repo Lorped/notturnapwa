@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
-import { IonicModule } from '@ionic/angular';
+import { IonApp, IonRouterOutlet } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  imports: [IonicModule],
+  imports: [IonApp, IonApp, IonRouterOutlet],
 })
 export class AppComponent {
   constructor() {

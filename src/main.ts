@@ -8,7 +8,7 @@ import {
 
 import { environment } from './environments/environment';
 import { RouteReuseStrategy } from '@angular/router';
-import { IonicRouteStrategy, IonicModule } from '@ionic/angular';
+import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
 import { Oggetto } from './app/globals';
 import {
   provideHttpClient,
@@ -29,13 +29,13 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
       BrowserModule,
-      IonicModule.forRoot(),
       AppRoutingModule,
       ServiceWorkerModule.register('ngsw-worker.js', {
         enabled: !isDevMode(),
         registrationStrategy: 'registerWhenStable:30000',
       })
     ),
+    provideIonicAngular(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Oggetto,
     provideAppInitializer(() => inject(UpdateService).init()),

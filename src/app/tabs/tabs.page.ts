@@ -1,14 +1,85 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { addIcons } from 'ionicons';
 import { Router } from '@angular/router';
 import { User } from '../globals';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenu,
+  IonMenuToggle,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonTitle,
+  IonToast,
+  IonToggle,
+  IonToolbar,
+} from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+
+
+import {
+  bulbOutline,
+  cellularOutline,
+  contractOutline,
+  flash,
+  flameOutline,
+  gitCompareOutline,
+  globeOutline,
+  keypadOutline,
+  logOutOutline,
+  peopleOutline,
+  personOutline,
+  readerOutline,
+  skullOutline,
+  waterOutline,
+} from 'ionicons/icons';
+
+addIcons({
+  'people-outline': peopleOutline,
+  flash,
+  'git-compare-outline': gitCompareOutline,
+  'water-outline': waterOutline,
+  'reader-outline': readerOutline,
+  'cellular-outline': cellularOutline,
+  'flame-outline': flameOutline,
+  'skull-outline': skullOutline,
+  'contract-outline': contractOutline,
+  'globe-outline': globeOutline,
+  'log-out-outline': logOutOutline,
+  'person-outline': personOutline,
+  'bulb-outline': bulbOutline,
+  'keypad-outline': keypadOutline,
+});
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [
+    IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonToggle,
+    IonIcon,
+    IonMenuToggle,
+    IonButton,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonLabel,
+    IonToast,
+    FormsModule,
+  ],
 })
 export class TabsPage implements OnInit {
   paletteToggle = false;

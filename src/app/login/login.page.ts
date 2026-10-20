@@ -4,7 +4,23 @@ import { HttpClient } from '@angular/common/http';
 import { User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 
-import { LoadingController, IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonCheckbox,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonInputPasswordToggle,
+  IonItem,
+  IonList,
+  IonLoading,
+  IonRow,
+  IonText,
+  IonTitle,
+  IonToolbar,
+  LoadingController,
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import {
   FirebaseMessaging,
@@ -18,7 +34,23 @@ import { MenopsRoutineService } from '../services/menops-routine.service';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonList,
+    IonItem,
+    IonInput,
+    IonInputPasswordToggle,
+    IonButton,
+    IonLoading,
+    IonCheckbox,
+    IonText,
+    FormsModule,
+  ],
 })
 export class LoginPage implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

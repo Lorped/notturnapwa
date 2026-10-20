@@ -2,13 +2,47 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
 import { RubricaItem, User, ToChange } from '../globals';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonAvatar,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-rubrica',
   templateUrl: './rubrica.page.html',
   styleUrls: ['./rubrica.page.scss'],
-  imports: [IonicModule],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonList,
+    IonItemSliding,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonIcon,
+    IonItemOptions,
+    IonButton,
+    IonFab,
+    IonFabButton,
+  ],
 })
 export class RubricaPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

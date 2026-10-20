@@ -2,14 +2,41 @@ import { Component, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonText,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-morte',
   templateUrl: './morte.page.html',
   styleUrls: ['./morte.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonText,
+    IonButton,
+    FormsModule,
+  ],
 })
 export class MortePage {
   private authservice = inject(AuthserviceService);

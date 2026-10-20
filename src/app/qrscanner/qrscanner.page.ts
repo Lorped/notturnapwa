@@ -7,7 +7,18 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { LoadingController, Platform, IonicModule } from '@ionic/angular';
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonTitle,
+  IonToolbar,
+  LoadingController,
+  Platform,
+} from '@ionic/angular';
 import jsQR from 'jsqr';
 import { Router } from '@angular/router';
 import { Oggetto } from '../globals';
@@ -16,7 +27,16 @@ import { Oggetto } from '../globals';
   selector: 'app-qrscanner',
   templateUrl: './qrscanner.page.html',
   styleUrls: ['./qrscanner.page.scss'],
-  imports: [IonicModule],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonIcon,
+  ],
 })
 export class QrscannerPage implements AfterViewInit, OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

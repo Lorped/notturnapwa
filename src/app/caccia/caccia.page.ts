@@ -8,13 +8,39 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { pregiodifetto, User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonRow,
+  IonText,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-caccia',
   templateUrl: './caccia.page.html',
   styleUrls: ['./caccia.page.scss'],
-  imports: [IonicModule],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonItem,
+    IonLabel,
+    IonRow,
+    IonCol,
+    IonText,
+    IonButton,
+  ],
 })
 export class CacciaPage implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

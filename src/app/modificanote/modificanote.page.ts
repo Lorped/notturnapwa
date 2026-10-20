@@ -1,14 +1,37 @@
 import { Component, inject } from '@angular/core';
 import { User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonItem,
+  IonMenuButton,
+  IonTextarea,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-modificanote',
   templateUrl: './modificanote.page.html',
   styleUrls: ['./modificanote.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonItem,
+    IonTextarea,
+    IonFooter,
+    IonButton,
+    FormsModule,
+  ],
 })
 export class ModificanotePage {
   private authService = inject(AuthserviceService);

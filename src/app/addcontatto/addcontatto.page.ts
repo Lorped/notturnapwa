@@ -2,14 +2,45 @@ import { Component, inject } from '@angular/core';
 import { User, RubricaItem } from '../globals';
 import { Router } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonAvatar,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCheckbox,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonMenuButton,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-addcontatto',
   templateUrl: './addcontatto.page.html',
   styleUrls: ['./addcontatto.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonBackButton,
+    IonRow,
+    IonCol,
+    IonAvatar,
+    IonItem,
+    IonInput,
+    IonCheckbox,
+    IonButton,
+    FormsModule,
+  ],
 })
 export class AddcontattoPage {
   nuovoContatto = new RubricaItem();

@@ -8,7 +8,24 @@ import {
 import { Router } from '@angular/router';
 import { User, Oggetto } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonMenuButton,
+  IonRow,
+  IonText,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { MenopsRoutineService } from '../services/menops-routine.service';
 
 @Component({
@@ -16,7 +33,24 @@ import { MenopsRoutineService } from '../services/menops-routine.service';
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IonicModule],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonButton,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardContent,
+    IonItem,
+    IonText,
+  ],
 })
 export class Tab3Page implements OnInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

@@ -1,7 +1,18 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { AlertController, IonicModule } from '@ionic/angular';
+import {
+  AlertController,
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { finalize } from 'rxjs';
 import { ResourceActionService } from '../services/resource-action.service';
 
@@ -13,7 +24,17 @@ export interface EsitoPotere {
   selector: 'app-taum',
   templateUrl: './taum.page.html',
   styleUrls: ['./taum.page.scss'],
-  imports: [IonicModule],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonButton,
+  ],
 })
 export class TaumPage {
   FurtoVitae = 1;

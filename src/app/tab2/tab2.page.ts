@@ -1,6 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { User, Userskill } from '../globals';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonAccordion,
+  IonAccordionGroup,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { NgClass } from '@angular/common';
 import { TimesPipe } from '../pipes/times.pipe';
 
@@ -8,7 +21,22 @@ import { TimesPipe } from '../pipes/times.pipe';
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  imports: [IonicModule, NgClass, TimesPipe],
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonAccordionGroup,
+    IonAccordion,
+    IonItem,
+    IonLabel,
+    NgClass,
+    TimesPipe,
+  ],
 })
 export class Tab2Page implements OnInit {
   forza = 0;

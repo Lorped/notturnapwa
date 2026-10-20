@@ -1,8 +1,25 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Legame, Utente, User } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
-import { IonicModule } from '@ionic/angular';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+
 
 export interface fullegami {
   target: Legame[];
@@ -13,7 +30,24 @@ export interface fullegami {
   selector: 'app-legami',
   templateUrl: './legami.page.html',
   styleUrls: ['./legami.page.scss'],
-  imports: [IonicModule, FormsModule],
+  imports: [IonContent, 
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonMenuButton,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonSelect,
+    IonIcon,
+    IonSelectOption,
+    IonRow,
+    IonCol,
+    IonButton,
+    FormsModule,
+  ],
 })
 export class LegamiPage {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
