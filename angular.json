@@ -17,7 +17,7 @@
               "base": "www"
             },
             "index": "src/index.html",
-            "polyfills": ["src/polyfills.ts", "zone.js"],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -82,7 +82,7 @@
               "aot": false,
               "optimization": false,
               "extractLicenses": false,
-              "polyfills": ["src/polyfills.ts", "zone.js"]
+              "polyfills": ["src/polyfills.ts"]
             },
             "testing-ci": {
               "aot": false,

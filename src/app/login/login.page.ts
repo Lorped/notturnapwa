@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom, Subject } from 'rxjs';
 
 import { User, Userskill } from '../globals';
 import { AuthserviceService } from '../services/authservice.service';
@@ -22,13 +23,11 @@ import {
   LoadingController,
 } from '@ionic/angular';
 import { Router } from '@angular/router';
-import {
-  FirebaseMessaging,
-  GetTokenOptions,
-} from '@capacitor-firebase/messaging';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { MenopsRoutineService } from '../services/menops-routine.service';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, isSupported, onMessage } from 'firebase/messaging';
 
 @Component({
   selector: 'app-login',
@@ -71,6 +70,10 @@ export class LoginPage implements OnInit {
   private loadingCtrl = inject(LoadingController);
   private http = inject(HttpClient);
   private menopsRoutine = inject(MenopsRoutineService);
+
+  private messageReceived = new Subject();
+  // emette ad ogni notifica push ricevuta in foreground
+  message$ = this.messageReceived.asObservable();
 
   constructor() {
     this.registerCredentials.username =
@@ -266,32 +269,47 @@ export class LoginPage implements OnInit {
 
   async pushsetup() {
     try {
-      const permissions = await FirebaseMessaging.requestPermissions();
-      if (permissions.receive === 'granted') {
-        const token = await this.getToken();
-        this.http
-          .get(
-            `https://www.roma-by-night.it/ionicPHP/updateid.php?userid=${this.user.idutente}&id=${token}`
-          )
-          .subscribe();
+      if (!(await isSupported())) {
+        console.warn('Le notifiche push non sono supportate su questo browser/dispositivo');
+        return;
       }
+
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.warn('Permesso per le notifiche push negato dall\'utente');
+        return;
+      }
+
+      const app = initializeApp(environment.firebase);
+      const messaging = getMessaging(app);
+
+      onMessage(messaging, (payload) => {
+        //alert('Notifica push ricevuta in foreground: ' + JSON.stringify(payload));
+        //console.log('Notifica push ricevuta in foreground', payload);
+        this.messageReceived.next(payload);
+      });
+
+      const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
+        scope: '/firebase-messaging-scope/',
+      });
+
+      const token = await getToken(messaging, {
+        vapidKey: environment.firebase.vapidKey,
+        serviceWorkerRegistration: registration,
+      });
+
+      const updateIdUrl = new URL('https://www.roma-by-night.it/ionicPHP/updateid.php');
+      updateIdUrl.searchParams.set('userid', String(this.user.idutente));
+      updateIdUrl.searchParams.set('id', token);
+      updateIdUrl.searchParams.set('pwa', 'pwa');
+      await firstValueFrom(this.http.get(updateIdUrl.toString()));
     } catch (error) {
-      console.error('Unable to configure push notifications', error);
+      console.error('Impossibile configurare le notifiche push', error);
     }
 
-    await this.router.navigate(['tabs']);
+    // await this.router.navigate(['tabs']);
   }
 
-  private async getToken(): Promise<string> {
-    const options: GetTokenOptions = {
-      vapidKey: environment.firebase.vapidKey,
-      serviceWorkerRegistration: await navigator.serviceWorker.register(
-        'firebase-messaging-sw.js'
-      ),
-    };
-    const { token } = await FirebaseMessaging.getToken(options);
-    return token;
-  }
 
   ionViewWillEnter() {
     this.applyAppPalette();
